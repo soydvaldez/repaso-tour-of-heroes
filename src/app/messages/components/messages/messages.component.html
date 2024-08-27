@@ -1,0 +1,17 @@
+<div class="message-container">
+  <h3>{{ title | uppercase }}</h3>
+  <div class="messages">
+    <div class="scrollable-div" #scrollContainer>
+      <span *ngFor="let log of messages$ | async"
+        >[{{log.severity}}] <strong>{{ log.source }}</strong
+        >: {{ log.message }} </span
+      >
+    </div>
+    <div style="display: inline-block">
+      <button type="button" (click)="publishMessage()">
+        Publish a message
+      </button>
+      <button type="button" (click)="clear()">Clear messages</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+h2,
+span,
+input,
+label {
+  margin: 0;
+}
+
+.hero-detail {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 30px;
+}
+
+
+#hero-name {
+    padding: 10px;
+    border: solid 1px #ccc;
+    border-radius: 5px;
+}

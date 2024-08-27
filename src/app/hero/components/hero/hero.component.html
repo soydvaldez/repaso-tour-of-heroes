@@ -1,0 +1,10 @@
+<h2>My Heroes</h2>
+<div style="border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; padding: 20px;">
+  <ul class="heroes">
+    <li *ngFor="let hero of heroes">
+      <a routerLink="/detail/{{ hero.id }}">
+        <span class="badge">{{ hero.id }}</span> {{ hero.name }}
+      </a>
+    </li>
+  </ul>
+</div>

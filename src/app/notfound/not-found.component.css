@@ -1,0 +1,16 @@
+.not-found{
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    color: rgb(118, 116, 116);
+    
+    /* flexbox */
+    display: flex;
+    flex-direction: column;   
+    justify-content: center;
+    align-items: center;
+}
