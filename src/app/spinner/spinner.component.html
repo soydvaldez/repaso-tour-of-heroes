@@ -1,0 +1,9 @@
+<div
+  class="spinner-overlay"
+  *ngIf="(this.loading$ | async)?.isLoading"
+  style="display: flex; flex-direction: column">
+  <div class="spinner"></div>
+  <span style="margin-left: 5px; margin-top: 5px">{{
+    (this.loading$ | async)?.message
+  }}</span>
+</div>
