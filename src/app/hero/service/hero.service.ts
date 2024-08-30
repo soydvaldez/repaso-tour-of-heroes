@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { delay, Observable, tap } from 'rxjs';
 import { Hero } from '../interface/hero';
 import { MessageService } from '../../messages/service/message.service';
 import { Message } from '../../messages/interface/message';
@@ -19,6 +19,7 @@ export class HeroService {
 
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl).pipe(
+      delay(1000),
       tap({
         next: (heroes) => {
           this.log({
@@ -46,7 +47,7 @@ export class HeroService {
           this.log({
             source: 'HeroService',
             message: `fetched heroe with id=${id}`,
-            severity: 'INFO'
+            severity: 'INFO',
           });
         },
         error: (err) => {
@@ -54,7 +55,7 @@ export class HeroService {
           this.log({
             source: 'HeroService',
             message: `error when try fetched heroe with id=${id}`,
-            severity: 'ERROR'
+            severity: 'ERROR',
           });
         },
       })
