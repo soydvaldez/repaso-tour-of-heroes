@@ -3,7 +3,7 @@
 
 module.exports = function (config) {
   config.set({
-    singleRun: true,
+    singleRun: false,
     basePath: "",
     frameworks: ["jasmine", "@angular-devkit/build-angular"],
     plugins: [
@@ -26,13 +26,21 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true, // removes the duplicated traces
     },
+    port:9222,
     coverageReporter: {
-      dir: require("path").join(__dirname, "./coverage/repaso-tour-of-heores"),
+      dir: require("path").join(__dirname, "./coverage/repaso-tour-of-heroes"),
       subdir: ".",
       reporters: [{ type: "html" }, { type: "text-summary" }],
     },
     reporters: ["progress", "kjhtml"],
-    browsers: ["ChromeHeadless"],
+    browsers: ["Chrome"],
     restartOnFileChange: true,
+    // customLaunchers: {
+    //   ChromeDebugging: {
+    //     base: "Chrome",
+    //     flags: ["--remote-debugging-port=9222"],
+    //   },
+    // },
+    autoWatch: true,
   });
 };

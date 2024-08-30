@@ -1,7 +1,15 @@
-<h2>Top Heroes</h2>
-<div class="heroes-menu">
-  <a *ngFor="let hero of heroes"
-    routerLink="/detail/{{hero.id}}">
-    {{hero.name}}
-  </a>
+<div class="dashboard-topheroes">
+  <h2>Top Heroes</h2>
+  <div
+    class="heroes-menu"
+    style="height: auto; min-height: 100px; position: relative"
+  >
+    <a *ngFor="let hero of heroes" routerLink="/detail/{{ hero.id }}">
+      {{ hero.name }}
+    </a>
+    <app-spinner
+      [isLoading]="isLoadingSpinner"
+      [message]="spinnerMessage"
+    ></app-spinner>
+  </div>
 </div>

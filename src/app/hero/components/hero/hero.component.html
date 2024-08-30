@@ -1,11 +1,23 @@
-<h2>My Heroes</h2>
-<div class="my-heroes-container">
-  <ul class="heroes" *ngIf="true">
-    <li *ngFor="let hero of heroes">
-      <a routerLink="/detail/{{ hero.id }}">
-        <span class="badge">{{ hero.id }}</span> {{ hero.name }}
-      </a>
-    </li>
-  </ul>
-  <app-spinner></app-spinner>
+<div class="hero-component-container">
+  <h2>List of Heroes</h2>
+  <app-search-bar></app-search-bar>
+  <div
+    class="my-heroes-container"
+    *ngIf="this.heroes.length > 0; else noHeroes"
+  >
+    <ul class="heroes">
+      <li *ngFor="let hero of this.heroes">
+        <a routerLink="/detail/{{ hero.id }}">
+          <span class="badge">{{ hero.id }}</span> {{ hero.name }}
+        </a>
+      </li>
+    </ul>
+    <app-spinner [isLoading]="isLoadingSpinner" [message]="spinnerMessage"></app-spinner>
+  </div>
 </div>
+
+<ng-template #noHeroes>
+  <div class="my-heroes-container notFoundHero">
+    <p>Not found Heroes</p>
+  </div>
+</ng-template>

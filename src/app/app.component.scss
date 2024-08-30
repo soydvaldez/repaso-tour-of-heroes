@@ -1,0 +1,74 @@
+/* AppComponent's private CSS styles */
+* {
+  box-sizing: border-box;
+}
+nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  h1 {
+    margin-bottom: 0;
+    font-size: 25px;
+    text-align: center;
+    align-items: center;
+    padding: 12px 0;
+    display: block;
+  }
+
+  a {
+    padding: 10px 10px;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+    background-color: none;
+    color: #000;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+
+    &:hover {
+      color: #5e5e5e;
+      background-color: transparent;
+    }
+  }
+}
+
+.router-outlet-container {
+  height: auto;
+}
+
+@media screen and (min-width: 600px) {
+  nav {
+    /* flexbox */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: space-around;
+    align-items: center;
+
+    // Reinicia los valores
+    h1,
+    a {
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 0;
+      font-size: 26px;
+      text-align: center;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    a {
+      font-size: 23px;
+    }
+  }
+
+  .router-outlet-container {
+    height: auto;
+  }
+}

@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { delay, Subject, tap } from 'rxjs';
 import { Message } from '../interface/message';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  messages: Message[] = [];
   private messagesSubject = new Subject<Message[]>();
   messages$ = this.messagesSubject.asObservable();
+  messages: Message[] = [];
 
-  constructor() {}
+  constructor() {
+    this.filledMessage();
+  }
 
   add(message: Message): void {
     this.messages.push(message);
@@ -20,5 +22,27 @@ export class MessageService {
   clear(): void {
     this.messages = [];
     this.messagesSubject.next(this.messages);
+  }
+
+  filledMessage() {
+    let message: Message[] = [
+      {
+        source: 'Testing',
+        message: 'Testing message1',
+      },
+      {
+        source: 'Testing',
+        message: 'Testing message2',
+      },
+      {
+        source: 'Testing',
+        message: 'Testing message3',
+      },
+      {
+        source: 'Testing',
+        message: 'Testing message4',
+      },
+    ];
+    this.messagesSubject.next(message);
   }
 }

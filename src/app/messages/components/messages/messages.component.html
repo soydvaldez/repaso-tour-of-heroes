@@ -1,17 +1,20 @@
-<div class="message-container">
-  <h3>{{ title | uppercase }}</h3>
+<div class="message-container" style="position: relative">
+  <h3>{{ title }}</h3>
   <div class="messages">
     <div class="scrollable-div" #scrollContainer>
-      <span *ngFor="let log of messages$ | async"
-        >[{{log.severity}}] <strong>{{ log.source }}</strong
-        >: {{ log.message }} </span
-      >
+      <p *ngFor="let log of messages$ | async">
+        <span [ngClass]="setSeverityStyle(log.severity)"
+          >[{{ log.severity }}] </span
+        ><strong>{{ log.source }}</strong
+        >: {{ log.message }}
+      </p>
     </div>
-    <div style="display: inline-block">
+    <div class="action-message">
       <button type="button" (click)="publishMessage()">
-        Publish a message
+        Publish a Message
       </button>
-      <button type="button" (click)="clear()">Clear messages</button>
+      <button type="button" (click)="clear()">Clear Messages</button>
     </div>
   </div>
+  <app-spinner [isLoading]="isLoading" [message]="message"></app-spinner>
 </div>

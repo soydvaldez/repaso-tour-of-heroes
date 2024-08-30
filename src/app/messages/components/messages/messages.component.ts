@@ -1,42 +1,60 @@
 import { CommonModule, UpperCasePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from '../../service/message.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../interface/message';
+import { SpinnerService } from '../../../spinner/service/spinner.service';
+import { SpinnerComponent } from '../../../spinner/spinner.component';
 
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule, UpperCasePipe],
+  imports: [CommonModule, UpperCasePipe, SpinnerComponent],
   templateUrl: './messages.component.html',
-  styleUrl: './messages.component.css',
+  styleUrl: './messages.component.scss',
 })
 export class MessagesComponent implements OnInit {
-  title: string = 'messages';
-  messages: string[] = [];
+  title: string = 'History Messages';
+  messages: Message[] = [];
   messages$: Observable<Message[]>;
 
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  isLoading: boolean = false;
+  message: string = 'Loading Messages...';
 
-  constructor(public messageService: MessageService) {
-    this.messages$ = messageService.messages$;
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  type: 'info' | 'warning' | 'error' = 'info';
+
+  constructor(
+    public messageService: MessageService,
+    public spinnerService: SpinnerService
+  ) {
+    this.messages$ = this.messageService.messages$;
   }
 
   ngOnInit(): void {
-    // this.getMessage();
+    this.isLoading = true;
+
+    this.messages$.subscribe((message) => {
+      this.messages = message;
+      this.messages.forEach((m) => {
+        this.type = this.setSeverityStyle(m.severity);
+      });
+    });
+    
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
   }
 
   clear() {
-    // Manda a limpiear en el servicio
     this.messageService.clear();
-    //Actualiza los mensajes
   }
 
   publishMessage() {
     this.messageService.add({
       source: 'MessageComponent',
       message: 'new message has been publish!',
-      severity: 'INFO'
+      severity: 'INFO',
     });
   }
 
@@ -51,5 +69,19 @@ export class MessagesComponent implements OnInit {
 
   ngAfterViewChecked() {
     this.scrollToBottom(); // Asegura que el scroll esté siempre al final después de cada cambio en la vista
+  }
+
+  // El componente message debe de tener su propio estado <p><span></span></p>
+  // Ahorita el type coordina el estado en todos los <span></span>
+  setSeverityStyle(severity: string = 'INFO'): 'info' | 'warning' | 'error' {
+    if (severity === 'INFO') {
+      return 'info';
+    }
+
+    if (severity === 'WARNING') {
+      return 'warning';
+    }
+
+    return 'error';
   }
 }

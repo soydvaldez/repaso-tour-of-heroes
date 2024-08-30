@@ -1,0 +1,62 @@
+.actions {
+  list-style: none;
+  text-decoration: none;
+  padding: 10px 30px;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+  // background-color: #3f525c;
+
+  a {
+    &:hover {
+      opacity: 0.5;
+    }
+
+    padding: 10px 20px;
+    background-color: none;
+    color: #000;
+    font-size: 15px;
+    text-decoration: none;
+    border-radius: 8px;
+
+    // flex: 1 1 50%; /* Permite que cada div ocupe el 45% del ancho del contenedor */
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      width: 25px;
+      // min-height: 14px;
+      // max-width: 20px;
+    }
+
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .actions {
+    padding: 10px 30px;
+
+    a {
+  
+      svg {
+        width: 40px;
+        min-height: 24px;
+        max-width: 32px;
+      }
+
+      span {
+        font-size: 15px;
+      }
+    }
+  }
+}

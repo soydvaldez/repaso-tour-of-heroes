@@ -2,7 +2,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { HeroService } from './hero.service';
-import { Hero } from '../interface/hero';
+import { Hero, NewHero } from '../interface/hero';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -11,7 +11,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from '../../in-memory-data-service.service';
 
 describe('HeroService', () => {
-  let service: HeroService;
+  let heroService: HeroService;
   let httpMock: HttpTestingController;
 
   /*beforeEach(() => {
@@ -31,12 +31,12 @@ describe('HeroService', () => {
       providers: [HeroService],
     });
 
-    service = TestBed.inject(HeroService);
+    heroService = TestBed.inject(HeroService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should retrieve heroes from the API via GET', (done) => {
-    service.getHeroes().subscribe((heroes) => {
+    heroService.getHeroes().subscribe((heroes) => {
       expect(heroes).toBeTruthy();
       expect(heroes.length).toBeGreaterThan(0);
       expect(heroes[0].id).toBeDefined();
@@ -52,14 +52,14 @@ describe('HeroService', () => {
   });
 
   it('should return exactly nine heroes', (done) => {
-    service.getHeroes().subscribe((heroes) => {
+    heroService.getHeroes().subscribe((heroes) => {
       expect(heroes.length).toBe(9);
       done();
     });
   });
 
   it('should return heroes with id and name as strings', (done) => {
-    service.getHeroes().subscribe((heroes) => {
+    heroService.getHeroes().subscribe((heroes) => {
       heroes.forEach((hero: Hero) => {
         expect(hero.id).toBeDefined();
         expect(hero.name).toBeDefined();
@@ -73,7 +73,7 @@ describe('HeroService', () => {
   it('should return correct hero names and ids', (done) => {
     const expectedListHeroes: Hero[] = getExpectedHeroes();
 
-    service.getHeroes().subscribe((heroes) => {
+    heroService.getHeroes().subscribe((heroes) => {
       heroes.forEach((hero, index) => {
         expect(hero.id).toBe(expectedListHeroes[index].id);
         expect(hero.name).toBe(expectedListHeroes[index].name);
@@ -86,7 +86,7 @@ describe('HeroService', () => {
     let unexpectedListHeroes: Hero[] = getUnexpectedHeroes();
     let lengthList = unexpectedListHeroes.length - 1;
     //
-    service.getHeroes().subscribe((heroes) => {
+    heroService.getHeroes().subscribe((heroes) => {
       heroes.forEach((hero, index) => {
         if (index < lengthList) {
           expect(hero.id).not.toBe(unexpectedListHeroes[index].id);
@@ -98,12 +98,24 @@ describe('HeroService', () => {
   });
 
   // it('should handle error when API fails', (done) => {});
+  it('should be saved a new hero', (done) => {
+    let saveHero: Hero = {
+      id: 21,
+      name: 'Hero Name Testing',
+    };
+
+    heroService.add(saveHero).subscribe((hero) => {
+      expect(hero.id).not.toBeNull();
+      expect(hero.name).toBe('Hero Name Testing');
+      done();
+    });
+  });
 });
 
 // Expected list of heroes to compare with api response
 function getExpectedHeroes(): Hero[] {
   return [
-    { id: 12, name: 'Dr. Nice' },
+    { id: 12, name: 'Dr. Nice', },
     { id: 13, name: 'Bombasto' },
     { id: 14, name: 'Celeritas' },
     { id: 15, name: 'Magneta' },

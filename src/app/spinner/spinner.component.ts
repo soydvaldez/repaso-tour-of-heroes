@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SpinnerService } from './service/spinner.service';
 import { Observable } from 'rxjs';
 import { LoadingState } from './interface/loading-state';
@@ -9,19 +9,17 @@ import { LoadingState } from './interface/loading-state';
   standalone: true,
   imports: [NgIf, CommonModule],
   templateUrl: './spinner.component.html',
-  styleUrl: './spinner.component.css',
+  styleUrl: './spinner.component.scss',
 })
-export class SpinnerComponent implements OnInit {
-  loading$: Observable<LoadingState>;
+export class SpinnerComponent {
+  public isSpinnerVisible$: Observable<LoadingState>;
 
+  @Input() isLoading: boolean = false;
+  @Input() message: string = 'Cargando...';
+
+  // Default properties
   constructor(private spinnerService: SpinnerService) {
-    this.spinnerService.setMessage('renderizando...');
-    this.spinnerService.show();
-    this.loading$ = spinnerService.loading$;
-  }
-
-  ngOnInit(): void {
-    // this.spinnerService.setMessage('Cargando...');
+    this.isSpinnerVisible$ = spinnerService.spinnerState$;
   }
 
   setMessage(message: string) {

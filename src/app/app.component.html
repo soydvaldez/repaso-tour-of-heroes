@@ -1,7 +1,13 @@
-<h1>{{ title }}</h1>
 <nav>
+  <h1 (click)="goHome()">{{ title }}</h1>
   <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/heroes">Héroes</a>
+  <!-- <a routerLink="/heroes">Heroes</a> -->
 </nav>
-<router-outlet />
+<div class="router-outlet-container">
+  <div style="border: 1px solid #d4d4d4; border-radius: 8px; padding: 15px;">
+    <span style="margin-left: 30px; font-weight: bold">Heroes Management</span>
+    <app-actions> </app-actions>
+  </div>
+  <router-outlet />
+</div>
 <app-messages></app-messages>
