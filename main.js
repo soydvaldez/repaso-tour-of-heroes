@@ -43099,7 +43099,7 @@ var HeroComponent = class _HeroComponent {
     if (rf & 2) {
       const noHeroes_r3 = \u0275\u0275reference(6);
       \u0275\u0275advance(4);
-      \u0275\u0275property("ngIf", ctx.heroes.length < 0)("ngIfElse", noHeroes_r3);
+      \u0275\u0275property("ngIf", ctx.heroes.length > 0)("ngIfElse", noHeroes_r3);
     }
   }, dependencies: [
     FormsModule,
