@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/hero/components/dashboard/dashboard.component.scss"],
+  "sourcesContent": ["/* DashboardComponent's private CSS styles */\n\nh2 {\n  text-align: center;\n}\n\n.heroes-menu {\n  border: 1px solid #e9e9e9;\n  border-radius: 5px;\n  padding: 10px;\n  /* margin: auto; */\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n\n  /* flexbox */\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n\na {\n  background-color: #3f525c;\n  border-radius: 2px;\n  padding: 1rem;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 100%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  box-sizing: border-box;\n\n  /* flexbox */\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n\n@media (min-width: 600px) {\n  a {\n    width: 18%;\n    box-sizing: content-box;\n  }\n}\n\na:hover {\n  background-color: #000;\n}\n"],
+  "mappings": ";AAEA;AACE,cAAA;;AAGF,CAAA;AACE,UAAA,IAAA,MAAA;AACA,iBAAA;AACA,WAAA;AAEA,iBAAA;AACA,aAAA;AACA,UAAA;AAGA,WAAA;AACA,kBAAA;AACA,aAAA;AACA,mBAAA;AACA,iBAAA;AACA,eAAA;;AAGF;AACE,oBAAA;AACA,iBAAA;AACA,WAAA;AACA,aAAA;AACA,mBAAA;AACA,WAAA;AACA,SAAA;AACA,cAAA;AACA,SAAA;AACA,aAAA;AACA,UAAA,OAAA;AACA,cAAA;AAGA,SAAA;AACA,QAAA,EAAA,EAAA;AACA,cAAA;;AAGF,OAAA,CAAA,SAAA,EAAA;AACE;AACE,WAAA;AACA,gBAAA;;;AAIJ,CAAA;AACE,oBAAA;;",
+  "names": []
+}

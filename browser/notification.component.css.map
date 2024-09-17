@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/hero/components/notification/notification.component.scss"],
+  "sourcesContent": [".notification {\n  // opacity: 1;\n  // visibility: visible;\n  transition: opacity 0.5s ease-in-out;\n\n  margin: 0 30px;\n  padding: 1rem;\n  border-radius: 5px;\n  margin: 1rem 0;\n  text-align: center;\n\n  &.success {\n    // opacity: 1;\n    // visibility: visible;\n    background-color: #d4edda;\n    color: #155724;\n  }\n\n  &.error {\n    // opacity: 1;\n    // visibility: visible;\n    background-color: #f8d7da;\n    color: #721c24;\n  }\n}\n"],
+  "mappings": ";AAAA,CAAA;AAGE,cAAA,QAAA,KAAA;AAEA,UAAA,EAAA;AACA,WAAA;AACA,iBAAA;AACA,UAAA,KAAA;AACA,cAAA;;AAEA,CAXF,YAWE,CAAA;AAGE,oBAAA;AACA,SAAA;;AAGF,CAlBF,YAkBE,CAAA;AAGE,oBAAA;AACA,SAAA;;",
+  "names": []
+}
