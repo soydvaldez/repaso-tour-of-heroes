@@ -42156,17 +42156,17 @@ var ReactiveFormsModule = _ReactiveFormsModule;
 
 // src/app/spinner/service/spinner.service.ts
 var SpinnerService = class _SpinnerService {
+  spinnerHeroForm = false;
   spinnerSubject = new BehaviorSubject({
-    isLoading: true,
+    isLoading: false,
     message: "Loading..."
   });
   spinnerState$ = this.spinnerSubject.asObservable();
-  loadingState;
+  loadingState = {
+    isLoading: false,
+    message: "Loading..."
+  };
   constructor() {
-    this.loadingState = {
-      isLoading: false,
-      message: "Loading..."
-    };
   }
   setMessage(messageLoading) {
     this.loadingState.message = messageLoading;
@@ -42193,19 +42193,19 @@ function SpinnerComponent_div_0_Template(rf, ctx) {
     \u0275\u0275element(1, "div", 2);
     \u0275\u0275elementStart(2, "span", 3);
     \u0275\u0275text(3);
-    \u0275\u0275pipe(4, "async");
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
-    let tmp_1_0;
     const ctx_r0 = \u0275\u0275nextContext();
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate((tmp_1_0 = \u0275\u0275pipeBind1(4, 1, ctx_r0.isSpinnerVisible$)) == null ? null : tmp_1_0.message);
+    \u0275\u0275textInterpolate(ctx_r0.message);
   }
 }
 var SpinnerComponent = class _SpinnerComponent {
   spinnerService;
   isSpinnerVisible$;
+  isLoading = false;
+  message = "Cargando...";
   // Default properties
   constructor(spinnerService) {
     this.spinnerService = spinnerService;
@@ -42217,16 +42217,14 @@ var SpinnerComponent = class _SpinnerComponent {
   static \u0275fac = function SpinnerComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _SpinnerComponent)(\u0275\u0275directiveInject(SpinnerService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _SpinnerComponent, selectors: [["app-spinner"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 2, vars: 3, consts: [["class", "spinner-overlay", "style", "display: flex; flex-direction: column", 4, "ngIf"], [1, "spinner-overlay", 2, "display", "flex", "flex-direction", "column"], [1, "spinner"], [2, "margin-left", "5px", "margin-top", "5px"]], template: function SpinnerComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _SpinnerComponent, selectors: [["app-spinner"]], inputs: { isLoading: "isLoading", message: "message" }, standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "spinner-overlay", "style", "display: flex; flex-direction: column", 4, "ngIf"], [1, "spinner-overlay", 2, "display", "flex", "flex-direction", "column"], [1, "spinner"], [2, "margin-left", "5px", "margin-top", "5px"]], template: function SpinnerComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, SpinnerComponent_div_0_Template, 5, 3, "div", 0);
-      \u0275\u0275pipe(1, "async");
+      \u0275\u0275template(0, SpinnerComponent_div_0_Template, 4, 1, "div", 0);
     }
     if (rf & 2) {
-      let tmp_0_0;
-      \u0275\u0275property("ngIf", (tmp_0_0 = \u0275\u0275pipeBind1(1, 1, ctx.isSpinnerVisible$)) == null ? null : tmp_0_0.isLoading);
+      \u0275\u0275property("ngIf", ctx.isLoading);
     }
-  }, dependencies: [NgIf, CommonModule, AsyncPipe], styles: ["\n\n.spinner-overlay[_ngcontent-%COMP%] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(255, 255, 255, 0.8);\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: center;\n  z-index: 2;\n}\n.spinner-overlay[_ngcontent-%COMP%]   .spinner[_ngcontent-%COMP%] {\n  width: 50px;\n  height: 50px;\n  border: 6px solid #f3f3f3;\n  border-top: 6px solid #3498db;\n  border-radius: 50%;\n  animation: _ngcontent-%COMP%_spin 1s linear infinite;\n}\n@keyframes _ngcontent-%COMP%_spin {\n  0% {\n    transform: rotate(0deg);\n  }\n  100% {\n    transform: rotate(360deg);\n  }\n}\n/*# sourceMappingURL=spinner.component.css.map */"] });
+  }, dependencies: [NgIf, CommonModule], styles: ["\n\n.spinner-overlay[_ngcontent-%COMP%] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(255, 255, 255, 0.8);\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: center;\n  z-index: 2;\n}\n.spinner-overlay[_ngcontent-%COMP%]   .spinner[_ngcontent-%COMP%] {\n  width: 50px;\n  height: 50px;\n  border: 6px solid #f3f3f3;\n  border-top: 6px solid #3498db;\n  border-radius: 50%;\n  animation: _ngcontent-%COMP%_spin 1s linear infinite;\n}\n@keyframes _ngcontent-%COMP%_spin {\n  0% {\n    transform: rotate(0deg);\n  }\n  100% {\n    transform: rotate(360deg);\n  }\n}\n/*# sourceMappingURL=spinner.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(SpinnerComponent, { className: "SpinnerComponent" });
@@ -42719,7 +42717,7 @@ var HeroService = class _HeroService {
 // src/app/hero/components/hero-form/hero-form.component.ts
 function HeroFormComponent_option_15_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "option", 16);
+    \u0275\u0275elementStart(0, "option", 17);
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
@@ -42736,6 +42734,8 @@ var HeroFormComponent = class _HeroFormComponent {
   publisherService;
   location;
   heroForm;
+  isLoading = false;
+  message = "Loading Hero Form...";
   spinnerState$;
   notificationMessage = "";
   notificationType = "success";
@@ -42767,8 +42767,7 @@ var HeroFormComponent = class _HeroFormComponent {
     this.heroCreated$ = heroService.heroCreated$;
   }
   ngOnInit() {
-    this.spinnerService.setMessage("Loading Hero Form...");
-    this.spinnerService.show();
+    this.isLoading = true;
     this.heroForm = new FormGroup({
       name: new FormControl(""),
       year: new FormControl(2024),
@@ -42780,7 +42779,7 @@ var HeroFormComponent = class _HeroFormComponent {
       message: "Hero Form rendered"
     });
     setTimeout(() => {
-      this.spinnerService.hide();
+      this.isLoading = false;
     }, 1e3);
   }
   ngOnDestroy() {
@@ -42789,10 +42788,10 @@ var HeroFormComponent = class _HeroFormComponent {
     }
   }
   onSubmit() {
+    this.isLoading = true;
+    this.message = "Saving a Hero...";
     const newHero = this.createHero();
     const publisherId = this.heroForm.get("publisher")?.value;
-    this.spinnerService.show();
-    this.spinnerService.setMessage("Save a Hero...");
     this.checkHeroExists(newHero.name).pipe(
       tap((exists) => {
         if (exists) {
@@ -42810,10 +42809,8 @@ var HeroFormComponent = class _HeroFormComponent {
       }),
       switchMap((publisher) => this.heroService.add(__spreadProps(__spreadValues({}, newHero), { publisher }))),
       tap(() => this.setNotification("\xA1H\xE9roe creado con \xE9xito!", "success")),
-      finalize(() => this.spinnerService.hide()),
-      // Ocultar el spinner al finalizar el proceso
+      // finalize(() => this.isLoading = false), // Ocultar el spinner al finalizar el proceso
       catchError((error) => {
-        this.spinnerService.hide();
         this.log({
           source: "HeroFormComponent",
           message: "Hero Already Exists",
@@ -42821,7 +42818,9 @@ var HeroFormComponent = class _HeroFormComponent {
         });
         return of();
       })
-    ).subscribe();
+    ).subscribe(() => {
+      this.isLoading = false;
+    });
   }
   // Método para crear un nuevo héroe a partir del formulario
   createHero() {
@@ -42856,7 +42855,7 @@ var HeroFormComponent = class _HeroFormComponent {
   static \u0275fac = function HeroFormComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _HeroFormComponent)(\u0275\u0275directiveInject(MessageService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(Location));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroFormComponent, selectors: [["app-hero-form"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 23, vars: 5, consts: [[1, "form-container"], [1, "my-heroes-container"], [3, "message", "type"], [3, "ngSubmit", "formGroup"], [1, "name-field"], ["for", "name"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"], ["id", "name", "type", "text", "formControlName", "name", "placeholder", "Hero name"], [1, "year-field"], ["for", "year"], ["id", "year", "formControlName", "year"], ["value", "y", 4, "ngFor", "ngForOf"], [3, "control"], ["type", "submit"], ["type", "button", 3, "click"], ["value", "y"]], template: function HeroFormComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroFormComponent, selectors: [["app-hero-form"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 23, vars: 7, consts: [[1, "form-container"], [1, "my-heroes-container"], [3, "message", "type"], [3, "ngSubmit", "formGroup"], [1, "name-field"], ["for", "name"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"], ["id", "name", "type", "text", "formControlName", "name", "placeholder", "Hero name"], [1, "year-field"], ["for", "year"], ["id", "year", "formControlName", "year"], ["value", "y", 4, "ngFor", "ngForOf"], [3, "control"], ["type", "submit"], ["type", "button", 3, "click"], [3, "isLoading", "message"], ["value", "y"]], template: function HeroFormComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0)(1, "div", 1);
       \u0275\u0275element(2, "app-notification", 2);
@@ -42891,7 +42890,7 @@ var HeroFormComponent = class _HeroFormComponent {
       });
       \u0275\u0275text(21, "Cancel");
       \u0275\u0275elementEnd()()()();
-      \u0275\u0275element(22, "app-spinner");
+      \u0275\u0275element(22, "app-spinner", 16);
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
@@ -42903,6 +42902,8 @@ var HeroFormComponent = class _HeroFormComponent {
       \u0275\u0275property("ngForOf", ctx.years);
       \u0275\u0275advance();
       \u0275\u0275property("control", ctx.getPublisherControl());
+      \u0275\u0275advance(6);
+      \u0275\u0275property("isLoading", ctx.isLoading)("message", ctx.message);
     }
   }, dependencies: [
     SpinnerComponent,
@@ -45204,7 +45205,7 @@ var appConfig = {
 var _c0 = ["scrollContainer"];
 function MessagesComponent_p_6_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "p")(1, "span", 7);
+    \u0275\u0275elementStart(0, "p")(1, "span", 8);
     \u0275\u0275text(2);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(3, "strong");
@@ -45232,6 +45233,8 @@ var MessagesComponent = class _MessagesComponent {
   title = "History Messages";
   messages = [];
   messages$;
+  isLoading = false;
+  message = "Loading Messages...";
   scrollContainer;
   type = "info";
   constructor(messageService, spinnerService) {
@@ -45240,15 +45243,16 @@ var MessagesComponent = class _MessagesComponent {
     this.messages$ = this.messageService.messages$;
   }
   ngOnInit() {
-    this.spinnerService.setMessage("Loading Messages...");
-    this.spinnerService.show();
+    this.isLoading = true;
     this.messages$.subscribe((message) => {
       this.messages = message;
       this.messages.forEach((m) => {
         this.type = this.setSeverityStyle(m.severity);
       });
     });
-    this.spinnerService.hide();
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2e3);
   }
   clear() {
     this.messageService.clear();
@@ -45292,7 +45296,7 @@ var MessagesComponent = class _MessagesComponent {
       let _t;
       \u0275\u0275queryRefresh(_t = \u0275\u0275loadQuery()) && (ctx.scrollContainer = _t.first);
     }
-  }, standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 14, vars: 4, consts: [["scrollContainer", ""], [1, "message-container", 2, "position", "relative"], [1, "messages"], [1, "scrollable-div"], [4, "ngFor", "ngForOf"], [1, "action-message"], ["type", "button", 3, "click"], [3, "ngClass"]], template: function MessagesComponent_Template(rf, ctx) {
+  }, standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 14, vars: 6, consts: [["scrollContainer", ""], [1, "message-container", 2, "position", "relative"], [1, "messages"], [1, "scrollable-div"], [4, "ngFor", "ngForOf"], [1, "action-message"], ["type", "button", 3, "click"], [3, "isLoading", "message"], [3, "ngClass"]], template: function MessagesComponent_Template(rf, ctx) {
     if (rf & 1) {
       const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275elementStart(0, "div", 1)(1, "h3");
@@ -45316,14 +45320,16 @@ var MessagesComponent = class _MessagesComponent {
       });
       \u0275\u0275text(12, "Clear Messages");
       \u0275\u0275elementEnd()()();
-      \u0275\u0275element(13, "app-spinner");
+      \u0275\u0275element(13, "app-spinner", 7);
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
       \u0275\u0275advance(2);
       \u0275\u0275textInterpolate(ctx.title);
       \u0275\u0275advance(4);
-      \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(7, 2, ctx.messages$));
+      \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(7, 4, ctx.messages$));
+      \u0275\u0275advance(7);
+      \u0275\u0275property("isLoading", ctx.isLoading)("message", ctx.message);
     }
   }, dependencies: [CommonModule, NgClass, NgForOf, AsyncPipe, SpinnerComponent], styles: ["\n\n.message-container[_ngcontent-%COMP%] {\n  margin-top: 50px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n}\n.message-container[_ngcontent-%COMP%]   h3[_ngcontent-%COMP%] {\n  margin: 0;\n  color: #747474;\n  display: block;\n  padding: 20px 35px;\n  font-weight: 300;\n}\n.message-container[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: block;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%] {\n  align-items: center;\n  padding-left: 30px;\n  padding-right: 30px;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%] {\n  padding: 15px 15px;\n  border-radius: 5px;\n  width: 100%;\n  box-sizing: border-box;\n  max-height: 200px;\n  height: 200px;\n  overflow-y: scroll;\n  border: 1px solid #d4d4d4;\n  padding: 10px;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  display: inline-block;\n  width: 100%;\n  font-size: 14px;\n  margin: 0;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .error[_ngcontent-%COMP%] {\n  color: red;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .info[_ngcontent-%COMP%] {\n  color: green;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .warning[_ngcontent-%COMP%] {\n  color: #e2db00;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: inline;\n  font-size: 12px;\n  color: #616161;\n  font-weight: 300;\n  margin: 0;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%] {\n  display: inline-block;\n  width: 100%;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 0;\n  margin: 0;\n  height: 35px;\n  margin: 10px 0;\n  border-radius: 5px;\n  color: #fff;\n  background-color: #104781;\n  width: 100%;\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%], \n   .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    display: inline-block;\n    font-size: 15px;\n    color: #616161;\n    font-weight: 300;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%] {\n    text-align: right;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 20%;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:nth-child(2) {\n    background-color: #c0c0c0;\n    margin-left: 20px;\n  }\n}\n/*# sourceMappingURL=messages.component.css.map */"] });
 };
