@@ -43016,7 +43016,7 @@ var SearchBarComponent = class _SearchBarComponent {
   static \u0275fac = function SearchBarComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _SearchBarComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(SearchBarService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _SearchBarComponent, selectors: [["app-search-bar"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 5, vars: 3, consts: [[1, "search-bar"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"], ["type", "text", "placeholder", "Search a Hero by Name or Type Id", 1, "input-search", 3, "ngModelChange", "input", "keydown.esc", "keydown.enter", "ngModel"], [3, "isLoading", "message"]], template: function SearchBarComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _SearchBarComponent, selectors: [["app-search-bar"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 4, vars: 1, consts: [[1, "search-bar"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"], ["type", "text", "placeholder", "Search a Hero by Name or Type Id", 1, "input-search", 3, "ngModelChange", "input", "keydown.esc", "keydown.enter", "ngModel"]], template: function SearchBarComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0);
       \u0275\u0275namespaceSVG();
@@ -43036,17 +43036,13 @@ var SearchBarComponent = class _SearchBarComponent {
       })("keydown.enter", function SearchBarComponent_Template_input_keydown_enter_3_listener($event) {
         return ctx.onEnter($event);
       });
-      \u0275\u0275elementEnd();
-      \u0275\u0275element(4, "app-spinner", 4);
-      \u0275\u0275elementEnd();
+      \u0275\u0275elementEnd()();
     }
     if (rf & 2) {
       \u0275\u0275advance(3);
       \u0275\u0275twoWayProperty("ngModel", ctx.value);
-      \u0275\u0275advance();
-      \u0275\u0275property("isLoading", ctx.isLoadingSpinner)("message", ctx.spinnerMessage);
     }
-  }, dependencies: [FormsModule, DefaultValueAccessor, NgControlStatus, NgModel, CommonModule, SpinnerComponent], styles: ["\n\n.search-bar[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  border: 1px solid #a6a6a6;\n  padding: 5px;\n  border-radius: 20px;\n  height: auto;\n  outline: green;\n  margin: 10px 30px;\n}\n.search-bar[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 15px;\n  margin: 10px 10px;\n}\n.search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%] {\n  border: none;\n  width: 90%;\n  height: 5px;\n  padding: 15px;\n  outline: none;\n  border-left: 1px solid #d4d4d4;\n}\n.search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%]::placeholder {\n  color: #a6a6a6;\n  font-size: 12px;\n  font-weight: 300;\n}\n@media (min-width: 600px) {\n  .search-bar[_ngcontent-%COMP%] {\n    outline: green;\n    border: 2px solid #e9e9e9;\n  }\n  .search-bar[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 18px;\n    margin: 0;\n    padding: 5px;\n  }\n  .search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%] {\n    background-color: rgb(255, 255, 255);\n    border-radius: 0;\n  }\n  .search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%]::placeholder {\n    font-size: 14px;\n    font-weight: 300;\n  }\n}\n/*# sourceMappingURL=search-bar.component.css.map */"] });
+  }, dependencies: [FormsModule, DefaultValueAccessor, NgControlStatus, NgModel, CommonModule], styles: ["\n\n.search-bar[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: space-evenly;\n  border: 1px solid #a6a6a6;\n  padding: 5px;\n  border-radius: 20px;\n  height: auto;\n  outline: green;\n  margin: 10px 30px;\n}\n.search-bar[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 15px;\n  margin: 10px 10px;\n}\n.search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%] {\n  border: none;\n  width: 90%;\n  height: 5px;\n  padding: 15px;\n  outline: none;\n  border-left: 1px solid #d4d4d4;\n}\n.search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%]::placeholder {\n  color: #a6a6a6;\n  font-size: 12px;\n  font-weight: 300;\n}\n@media (min-width: 600px) {\n  .search-bar[_ngcontent-%COMP%] {\n    outline: green;\n    border: 2px solid #e9e9e9;\n  }\n  .search-bar[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 18px;\n    margin: 0;\n    padding: 5px;\n  }\n  .search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%] {\n    background-color: rgb(255, 255, 255);\n    border-radius: 0;\n  }\n  .search-bar[_ngcontent-%COMP%]   .input-search[_ngcontent-%COMP%]::placeholder {\n    font-size: 14px;\n    font-weight: 300;\n  }\n}\n/*# sourceMappingURL=search-bar.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(SearchBarComponent, { className: "SearchBarComponent" });
@@ -43055,7 +43051,7 @@ var SearchBarComponent = class _SearchBarComponent {
 // src/app/hero/components/hero/hero.component.ts
 function HeroComponent_div_4_li_2_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "li")(1, "a", 6)(2, "span", 7);
+    \u0275\u0275elementStart(0, "li")(1, "a", 7)(2, "span", 8);
     \u0275\u0275text(3);
     \u0275\u0275elementEnd();
     \u0275\u0275text(4);
@@ -43075,17 +43071,21 @@ function HeroComponent_div_4_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 3)(1, "ul", 4);
     \u0275\u0275template(2, HeroComponent_div_4_li_2_Template, 5, 4, "li", 5);
-    \u0275\u0275elementEnd()();
+    \u0275\u0275elementEnd();
+    \u0275\u0275element(3, "app-spinner", 6);
+    \u0275\u0275elementEnd();
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275advance(2);
     \u0275\u0275property("ngForOf", ctx_r1.heroes);
+    \u0275\u0275advance();
+    \u0275\u0275property("isLoading", ctx_r1.isLoadingSpinner)("message", ctx_r1.spinnerMessage);
   }
 }
 function HeroComponent_ng_template_5_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 8)(1, "p");
+    \u0275\u0275elementStart(0, "div", 9)(1, "p");
     \u0275\u0275text(2, "Not found Heroes");
     \u0275\u0275elementEnd()();
   }
@@ -43121,13 +43121,13 @@ var HeroComponent = class _HeroComponent {
   static \u0275fac = function HeroComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [3, "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"]], template: function HeroComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"]], template: function HeroComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 1)(1, "h2");
       \u0275\u0275text(2, "Heroes");
       \u0275\u0275elementEnd();
       \u0275\u0275element(3, "app-search-bar");
-      \u0275\u0275template(4, HeroComponent_div_4_Template, 3, 1, "div", 2);
+      \u0275\u0275template(4, HeroComponent_div_4_Template, 4, 3, "div", 2);
       \u0275\u0275elementEnd();
       \u0275\u0275template(5, HeroComponent_ng_template_5_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
     }
@@ -43141,6 +43141,7 @@ var HeroComponent = class _HeroComponent {
     NgIf,
     NgForOf,
     RouterLink,
+    SpinnerComponent,
     SearchBarComponent,
     CommonModule
   ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding: 20px;\n  margin: 20px 0;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  padding-left: 18px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  background-color: azure;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .hero-component-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 25em;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n    width: 100%;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
