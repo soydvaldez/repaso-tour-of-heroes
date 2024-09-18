@@ -42418,7 +42418,15 @@ var HeroActions;
 var ActionsService = class _ActionsService {
   options = [];
   default = HeroActions.List;
+  optionsSubject = new Subject();
+  optionsObs$ = this.optionsSubject.asObservable();
   constructor() {
+  }
+  getOptions() {
+    return this.options;
+  }
+  setOptions(action) {
+    this.optionsSubject.next(action);
   }
   static \u0275fac = function ActionsService_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ActionsService)();
@@ -42458,18 +42466,33 @@ function ActionsComponent_a_2_Template(rf, ctx) {
 var ActionsComponent = class _ActionsComponent {
   actionsService;
   router;
-  action = HeroActions.List;
+  action;
   HeroActions = HeroActions;
+  optionsObs$;
   constructor(actionsService, router) {
     this.actionsService = actionsService;
     this.router = router;
+    this.optionsObs$ = this.actionsService.optionsObs$;
   }
   ngOnInit() {
     this.actionsService.default;
     this.router.url;
+    this.renderOptions();
   }
   setAction(action) {
     this.action = action;
+  }
+  renderOptions() {
+    this.optionsObs$.subscribe((options) => {
+      switch (options) {
+        case "list":
+          this.action = HeroActions.List;
+          break;
+        case "create":
+          this.action = HeroActions.Create;
+          break;
+      }
+    });
   }
   static \u0275fac = function ActionsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ActionsComponent)(\u0275\u0275directiveInject(ActionsService), \u0275\u0275directiveInject(Router));
@@ -42482,9 +42505,9 @@ var ActionsComponent = class _ActionsComponent {
     }
     if (rf & 2) {
       \u0275\u0275advance();
-      \u0275\u0275property("ngIf", ctx.action === ctx.HeroActions.List);
+      \u0275\u0275property("ngIf", !(ctx.action === ctx.HeroActions.List));
       \u0275\u0275advance();
-      \u0275\u0275property("ngIf", ctx.action === ctx.HeroActions.Create);
+      \u0275\u0275property("ngIf", !(ctx.action === ctx.HeroActions.Create));
     }
   }, dependencies: [RouterLink, CommonModule, NgIf], styles: ["\n\n.actions[_ngcontent-%COMP%] {\n  list-style: none;\n  text-decoration: none;\n  padding: 10px 30px;\n  margin: 0;\n  text-align: left;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  gap: 10px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 10px 20px;\n  background-color: none;\n  color: #000;\n  font-size: 15px;\n  text-decoration: none;\n  border-radius: 8px;\n  border: 1px solid #d4d4d4;\n  text-align: center;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  min-height: 24px;\n  max-width: 32px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%]:hover {\n  opacity: 0.7;\n}\n.actions[_ngcontent-%COMP%]   [_ngcontent-%COMP%]:nth-child(2) {\n  margin-left: 20px;\n}\n@media (min-width: 600px) {\n  .actions[_ngcontent-%COMP%] {\n    padding: 10px 30px;\n  }\n}\n/*# sourceMappingURL=actions.component.css.map */"] });
 };
@@ -42746,6 +42769,7 @@ var HeroFormComponent = class _HeroFormComponent {
   heroService;
   publisherService;
   location;
+  actionsService;
   heroForm;
   isLoading = false;
   message = "Loading Hero Form...";
@@ -42754,6 +42778,7 @@ var HeroFormComponent = class _HeroFormComponent {
   notificationType = "success";
   heroCreated$;
   saveHeroSubscription;
+  checkHeroExistsSub$;
   years = [
     2024,
     2023,
@@ -42771,16 +42796,18 @@ var HeroFormComponent = class _HeroFormComponent {
   ];
   defaultYear = 2024;
   publishers$;
-  constructor(messageService, spinnerService, heroService, publisherService, location2) {
+  constructor(messageService, spinnerService, heroService, publisherService, location2, actionsService) {
     this.messageService = messageService;
     this.spinnerService = spinnerService;
     this.heroService = heroService;
     this.publisherService = publisherService;
     this.location = location2;
+    this.actionsService = actionsService;
     this.spinnerState$ = this.spinnerService.spinnerState$;
     this.heroCreated$ = heroService.heroCreated$;
   }
   ngOnInit() {
+    this.actionsService.setOptions(HeroActions.Create);
     this.publishers$ = this.publisherService.getPublishers();
     this.isLoading = true;
     this.heroForm = new FormGroup({
@@ -42801,13 +42828,16 @@ var HeroFormComponent = class _HeroFormComponent {
     if (this.saveHeroSubscription) {
       this.saveHeroSubscription.unsubscribe();
     }
+    if (this.checkHeroExistsSub$) {
+      this.checkHeroExistsSub$.unsubscribe();
+    }
   }
   onSubmit() {
     this.isLoading = true;
     this.message = "Saving a Hero...";
     const newHero = this.createHero();
     const publisherId = this.heroForm.get("publisher")?.value;
-    this.checkHeroExists(newHero.name).pipe(
+    this.checkHeroExistsSub$ = this.checkHeroExists(newHero.name).pipe(
       tap((exists) => {
         if (exists) {
           this.setNotification("\xA1H\xE9roe ya registrado. Escoge otro nombre!", "error");
@@ -42858,7 +42888,7 @@ var HeroFormComponent = class _HeroFormComponent {
     this.notificationType = type;
   }
   goBack() {
-    this.location.back();
+    return this.location.back();
   }
   // En el componente padre
   getPublisherControl() {
@@ -42868,7 +42898,7 @@ var HeroFormComponent = class _HeroFormComponent {
     this.messageService.add(message);
   }
   static \u0275fac = function HeroFormComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _HeroFormComponent)(\u0275\u0275directiveInject(MessageService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(Location));
+    return new (__ngFactoryType__ || _HeroFormComponent)(\u0275\u0275directiveInject(MessageService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(Location), \u0275\u0275directiveInject(ActionsService));
   };
   static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroFormComponent, selectors: [["app-hero-form"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 33, vars: 7, consts: [[1, "form-container"], [1, "my-heroes-container"], [3, "message", "type"], [3, "ngSubmit", "formGroup"], [1, "form-control"], ["for", "name"], [1, "name-field"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"], ["id", "name", "type", "text", "formControlName", "name", "placeholder", "Hero name"], ["for", "year"], [1, "year-field"], ["d", "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"], ["id", "year", "formControlName", "year"], ["value", "y", 4, "ngFor", "ngForOf"], [1, "form-control", 2, "outline", "darkolivegreen"], ["for", "editorial", 2, "display", "block", "outline", "darkolivegreen"], [1, "publisher-field"], ["d", "M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"], ["formControlName", "publisher"], [3, "value", 4, "ngFor", "ngForOf"], ["type", "submit"], ["type", "button", 3, "click"], ["value", "y"], [3, "value"]], template: function HeroFormComponent_Template(rf, ctx) {
     if (rf & 1) {
@@ -43093,16 +43123,19 @@ function HeroComponent_ng_template_5_Template(rf, ctx) {
 var HeroComponent = class _HeroComponent {
   heroService;
   spinnerService;
+  actionsService;
   heroesObservable$;
   filteredHeroes = [];
   heroes;
   isLoadingSpinner = false;
   spinnerMessage = "";
-  constructor(heroService, spinnerService) {
+  constructor(heroService, spinnerService, actionsService) {
     this.heroService = heroService;
     this.spinnerService = spinnerService;
+    this.actionsService = actionsService;
   }
   ngOnInit() {
+    this.actionsService.setOptions(HeroActions.List);
     this.isLoadingSpinner = true;
     this.spinnerMessage = "Loading H\xE9roes...";
     this.heroService.getHeroes(true).subscribe((heroes) => {
@@ -43119,7 +43152,7 @@ var HeroComponent = class _HeroComponent {
   getHeroes() {
   }
   static \u0275fac = function HeroComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService));
+    return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
   static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"]], template: function HeroComponent_Template(rf, ctx) {
     if (rf & 1) {
