@@ -36,7 +36,7 @@
             />
           </svg>
           <select id="year" formControlName="year">
-            <option *ngFor="let y of years" value="y">
+            <option *ngFor="let y of years" [value]="y">
               {{ y }}
             </option>
           </select>
