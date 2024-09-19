@@ -11,6 +11,10 @@
   // background-color: #3f525c;
 
   a {
+    &.selected {
+      opacity: 0.4;
+    }
+
     &:hover {
       opacity: 0.5;
     }

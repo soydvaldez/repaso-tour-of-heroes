@@ -1,8 +1,7 @@
 <div class="actions">
-  <!-- Por defecto que esten todas prendidas, y la que llegue que se desactive-->
-   <a
+  <a
+    [class.selected]="optionSelected === 'listtopheroes'"
     (click)="setAction(HeroActions.ListTopHeroes)"
-    *ngIf="!(action === HeroActions.ListTopHeroes)"
     routerLink="/dashboard"
   >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -14,8 +13,8 @@
     <span>Top Heroes</span>
   </a>
   <a
-    (click)="setAction(HeroActions.Create)"
-    *ngIf="!(action === HeroActions.List)"
+    [class.selected]="optionSelected === HeroActions.List"
+    (click)="setAction(HeroActions.List)"
     routerLink="/heroes"
     ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path
@@ -25,8 +24,8 @@
     <span>list heroes</span>
   </a>
   <a
-    (click)="setAction(HeroActions.List)"
-    *ngIf="!(action === HeroActions.Create)"
+    [class.selected]="optionSelected === HeroActions.Create"
+    (click)="setAction(HeroActions.Create)"
     routerLink="/heroes/new"
   >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
