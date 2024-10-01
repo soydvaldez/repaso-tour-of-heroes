@@ -23,6 +23,8 @@ import {
 import { SelectComponent } from '../hero-form/select/select.component';
 import { PublisherService } from '../hero-form/service/publisher.service';
 import { NotificationComponent } from '../notification/notification.component';
+import { HeroActions } from '../../../actions/enums/hero-actions.enum';
+import { ActionsService } from '../../../actions/services/actions.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -68,10 +70,12 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
     private heroService: HeroService,
     private publisherService: PublisherService,
     private route: ActivatedRoute,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    private actionsService: ActionsService
   ) {}
 
   ngOnInit(): void {
+    this.actionsService.setOptions('');
     this.publishers$ = this.publisherService.getPublishers();
 
     // this.spinnerService.setMessage('Loading Details...');
@@ -128,7 +132,7 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
       this.subcription$.unsubscribe();
     }
   }
-  
+
   onSubmit() {
     this.spinnerMessage = 'updating hero...';
     this.isLoadingSpinner = true;

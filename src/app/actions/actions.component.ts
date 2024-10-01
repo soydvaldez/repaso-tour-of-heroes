@@ -52,9 +52,12 @@ export class ActionsComponent implements OnInit, OnDestroy {
           this.action = HeroActions.Create;
           this.optionSelected = HeroActions.Create;
           break;
-        default:
+        case 'listtopheroes':
           this.action = HeroActions.ListTopHeroes;
-          this.optionSelected = HeroActions.ListTopHeroes;
+          this.action = HeroActions.ListTopHeroes;
+          break;
+        default:
+          this.optionSelected = '';
       }
     });
   }

@@ -7,7 +7,14 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
 import { SpinnerService } from '../../../spinner/service/spinner.service';
 import { HeroFormComponent } from '../hero-form/hero-form.component';
-import { catchError, delay, finalize, Observable, tap } from 'rxjs';
+import {
+  catchError,
+  delay,
+  finalize,
+  Observable,
+  Subscription,
+  tap,
+} from 'rxjs';
 import { ActionsComponent } from '../../../actions/actions.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { ActionsService } from '../../../actions/services/actions.service';
@@ -40,6 +47,9 @@ export class HeroComponent implements OnInit, OnDestroy {
 
   isLoadingSpinner: boolean = false;
   spinnerMessage: string = '';
+  totalRegisters: number = 0;
+
+  heroesSubcription?: Subscription;
 
   constructor(
     private heroService: HeroService,
@@ -54,13 +64,15 @@ export class HeroComponent implements OnInit, OnDestroy {
     this.isLoadingSpinner = true;
     this.spinnerMessage = 'Loading Héroes...';
 
-    // this.heroesObservable$ = this.heroService
-    this.heroService.getHeroes(true).subscribe((heroes) => {
-      this.heroes = heroes;
-      setTimeout(() => {
-        this.isLoadingSpinner = false;
-      }, 1000);
-    });
+    this.heroesSubcription = this.heroService
+      .getHeroes(true)
+      .subscribe((heroes) => {
+        this.totalRegisters = heroes.length;
+        this.heroes = heroes;
+        setTimeout(() => {
+          this.isLoadingSpinner = false;
+        }, 1000);
+      });
     // this.getHeroes();
   }
 
@@ -68,6 +80,13 @@ export class HeroComponent implements OnInit, OnDestroy {
     console.log('restaurando valores');
     const refreshData: boolean = true;
     // this.heroService.getHeroes(refreshData);
+    if (this.heroesSubcription) {
+      this.heroesSubcription.unsubscribe();
+    }
+  }
+
+  searchHero(){
+    
   }
 
   getHeroes() {}

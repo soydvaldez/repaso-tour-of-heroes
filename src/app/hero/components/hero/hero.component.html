@@ -12,7 +12,13 @@
         </a>
       </li>
     </ul>
-    <app-spinner [isLoading]="isLoadingSpinner" [message]="spinnerMessage"></app-spinner>
+    <p style="padding: 10px; font-size: 14px; color: black">
+      Total Registers: <span>{{ totalRegisters }}</span>
+    </p>
+    <app-spinner
+      [isLoading]="isLoadingSpinner"
+      [message]="spinnerMessage"
+    ></app-spinner>
   </div>
 </div>
 
@@ -20,4 +26,7 @@
   <div class="my-heroes-container notFoundHero">
     <p>Not found Heroes</p>
   </div>
+  <p style="padding: 20px 0; padding-left: 45px; font-size: 14px; color: #353535;font-weight: bold;">
+    Total registers: <span>{{ totalRegisters }}</span>
+  </p>
 </ng-template>

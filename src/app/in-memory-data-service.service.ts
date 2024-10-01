@@ -11,23 +11,66 @@ export class InMemoryDataService implements InMemoryDbService {
   createDb(): {} {
     // { id: 11, name: 'Iceman' },
     const heroes = [
-      { id: 12, name: 'Dr. Nice',year:2010, publisher: { id: 3, name: 'Image Comics' } },
-      { id: 13, name: 'Bombasto',year:2010, publisher: { id: 1, name: 'Marvel Comics' } },
       {
-        id: 14,
-        name: 'Celeritas',year:2010,
-        publisher: { id: 1, name: 'Marvel Comics' },
-      },
-      { id: 15, name: 'Magneta',year:2010, publisher: { id: 3, name: 'Image Comics' } },
-      {
-        id: 16,
-        name: 'RubberMan',year:2000,
+        id: 12,
+        name: 'Dr. Nice',
+        year: 2010,
         publisher: { id: 3, name: 'Image Comics' },
       },
-      { id: 17, name: 'Dynama',year:2024, publisher: { id: 1, name: 'Marvel Comics' } },
-      { id: 18, name: 'Dr. IQ',year:2024, publisher: { id: 1, name: 'Marvel Comics' } },
-      { id: 19, name: 'Magma',year:2024, publisher: { id: 2, name: 'DC Comics' } },
-      { id: 20, name: 'Tornado',year:2024, publisher: { id: 2, name: 'DC Comics' } },
+      {
+        id: 13,
+        name: 'Bombasto',
+        year: 2010,
+        publisher: { id: 1, name: 'Marvel Comics' },
+      },
+      {
+        id: 14,
+        name: 'Celeritas',
+        year: 2010,
+        publisher: { id: 1, name: 'Marvel Comics' },
+      },
+      {
+        id: 15,
+        name: 'Magneta',
+        year: 2010,
+        publisher: { id: 3, name: 'Image Comics' },
+      },
+      {
+        id: 16,
+        name: 'RubberMan',
+        year: 2000,
+        publisher: { id: 3, name: 'Image Comics' },
+      },
+      {
+        id: 17,
+        name: 'Dynama',
+        year: 2024,
+        publisher: { id: 1, name: 'Marvel Comics' },
+      },
+      {
+        id: 18,
+        name: 'Dr. IQ',
+        year: 2024,
+        publisher: { id: 1, name: 'Marvel Comics' },
+      },
+      {
+        id: 19,
+        name: 'Magma',
+        year: 2024,
+        publisher: { id: 2, name: 'DC Comics' },
+      },
+      {
+        id: 20,
+        name: 'Tornado',
+        year: 2024,
+        publisher: { id: 2, name: 'DC Comics' },
+      },
+      {
+        id: 21,
+        name: 'Magneto',
+        year: 2024,
+        publisher: { id: 1, name: 'Marvel Comics' },
+      },
     ];
 
     // Nueva colección de editoriales de cómics
