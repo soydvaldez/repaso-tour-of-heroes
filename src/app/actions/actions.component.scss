@@ -1,13 +1,22 @@
 .actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: #fff;
+  border-top: 1px solid #d4d4d4;
+
   list-style: none;
   text-decoration: none;
-  padding: 10px 30px;
+  width: 100%;
   margin: 0;
   text-align: left;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 10px;
+
+  justify-content: center;
+  align-items: center;
+
   // background-color: #3f525c;
 
   a {
@@ -15,7 +24,7 @@
       opacity: 0.5;
 
       svg {
-        width: 30px;
+        width: 21px;
       }
     }
 
@@ -39,9 +48,7 @@
     align-items: center;
 
     svg {
-      width: 25px;
-      // min-height: 14px;
-      // max-width: 20px;
+      width: 20px;
     }
 
     span {
@@ -52,14 +59,31 @@
 
 @media (min-width: 600px) {
   .actions {
+    border-top: none;
     padding: 10px 30px;
+    box-sizing: border-box;
+    position: static;
+    background-color: transparent;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    justify-content: flex-start;
 
     a {
-  
+      &.selected {
+        opacity: 0.5;
+
+        svg {
+          width: 29px;
+        }
+      }
+
+      &:hover {
+        opacity: 0.5;
+      }
+
       svg {
-        width: 40px;
-        min-height: 24px;
-        max-width: 32px;
+        width: 30px;
       }
 
       span {
