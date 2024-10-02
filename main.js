@@ -42473,9 +42473,12 @@ var ActionsComponent = class _ActionsComponent {
           this.action = HeroActions.Create;
           this.optionSelected = HeroActions.Create;
           break;
-        default:
+        case "listtopheroes":
           this.action = HeroActions.ListTopHeroes;
-          this.optionSelected = HeroActions.ListTopHeroes;
+          this.action = HeroActions.ListTopHeroes;
+          break;
+        default:
+          this.optionSelected = "";
       }
     });
   }
@@ -42541,7 +42544,7 @@ var ActionsComponent = class _ActionsComponent {
       \u0275\u0275advance(5);
       \u0275\u0275classProp("selected", ctx.optionSelected === ctx.HeroActions.Create);
     }
-  }, dependencies: [RouterLink, CommonModule], styles: ["\n\n.actions[_ngcontent-%COMP%] {\n  list-style: none;\n  text-decoration: none;\n  padding: 10px 30px;\n  margin: 0;\n  text-align: left;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  gap: 10px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 20px;\n  background-color: none;\n  color: #000;\n  font-size: 15px;\n  text-decoration: none;\n  border-radius: 8px;\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n  opacity: 0.4;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 25px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .actions[_ngcontent-%COMP%] {\n    padding: 10px 30px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 40px;\n    min-height: 24px;\n    max-width: 32px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    font-size: 15px;\n  }\n}\n/*# sourceMappingURL=actions.component.css.map */"] });
+  }, dependencies: [RouterLink, CommonModule], styles: ["\n\n.actions[_ngcontent-%COMP%] {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  z-index: 999;\n  background-color: #fff;\n  border-top: 1px solid #d4d4d4;\n  list-style: none;\n  text-decoration: none;\n  width: 100%;\n  margin: 0;\n  text-align: left;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 20px;\n  background-color: none;\n  color: #000;\n  font-size: 15px;\n  text-decoration: none;\n  border-radius: 8px;\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 21px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .actions[_ngcontent-%COMP%] {\n    border-top: none;\n    padding: 10px 30px;\n    box-sizing: border-box;\n    position: static;\n    background-color: transparent;\n    flex-wrap: wrap;\n    gap: 10px;\n    justify-content: flex-start;\n  }\n  .actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n    opacity: 0.5;\n  }\n  .actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 29px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n    opacity: 0.5;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 30px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    font-size: 15px;\n  }\n}\n/*# sourceMappingURL=actions.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ActionsComponent, { className: "ActionsComponent" });
@@ -42575,7 +42578,7 @@ var NotificationComponent = class _NotificationComponent {
     if (rf & 2) {
       \u0275\u0275property("ngIf", ctx.message);
     }
-  }, dependencies: [NgIf, NgClass], styles: ["\n\n.notification[_ngcontent-%COMP%] {\n  transition: opacity 0.5s ease-in-out;\n  margin: 0 30px;\n  padding: 1rem;\n  border-radius: 5px;\n  margin: 1rem 0;\n  text-align: center;\n}\n.notification.success[_ngcontent-%COMP%] {\n  background-color: #d4edda;\n  color: #155724;\n}\n.notification.error[_ngcontent-%COMP%] {\n  background-color: #f8d7da;\n  color: #721c24;\n}\n/*# sourceMappingURL=notification.component.css.map */"] });
+  }, dependencies: [NgIf, NgClass], styles: ["\n\n.notification[_ngcontent-%COMP%] {\n  opacity: 0;\n  visibility: none;\n  transition: opacity 0.5s ease-in-out;\n  margin-top: 1rem;\n  padding: 1rem;\n  border-radius: 5px;\n  text-align: center;\n  animation: _ngcontent-%COMP%_notification 2s linear;\n}\n.notification.success[_ngcontent-%COMP%] {\n  background-color: #d4edda;\n}\n@keyframes _ngcontent-%COMP%_notification {\n  0% {\n    opacity: 1;\n    visibility: visible;\n    background-color: #d4edda;\n    color: #155724;\n  }\n  100% {\n    height: 0;\n    opacity: 0;\n    display: none;\n    visibility: hidden;\n    background-color: #f8d7da;\n  }\n}\n.notification.error[_ngcontent-%COMP%] {\n  opacity: 1;\n  visibility: visible;\n  background-color: #f8d7da;\n  color: #721c24;\n}\n/*# sourceMappingURL=notification.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(NotificationComponent, { className: "NotificationComponent" });
@@ -42776,9 +42779,9 @@ var HeroService = class _HeroService {
 
 // src/app/hero/components/hero-form/hero-form.component.ts
 var _c0 = (a0) => ({ "background-color": a0 });
-function HeroFormComponent_option_18_Template(rf, ctx) {
+function HeroFormComponent_option_23_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "option", 23);
+    \u0275\u0275elementStart(0, "option", 28);
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
@@ -42789,9 +42792,9 @@ function HeroFormComponent_option_18_Template(rf, ctx) {
     \u0275\u0275textInterpolate1(" ", y_r1, " ");
   }
 }
-function HeroFormComponent_option_26_Template(rf, ctx) {
+function HeroFormComponent_option_31_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "option", 23);
+    \u0275\u0275elementStart(0, "option", 28);
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
@@ -42963,75 +42966,87 @@ var HeroFormComponent = class _HeroFormComponent {
   static \u0275fac = function HeroFormComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _HeroFormComponent)(\u0275\u0275directiveInject(MessageService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(Location), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroFormComponent, selectors: [["app-hero-form"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 34, vars: 13, consts: [[1, "form-container"], [3, "message", "type"], [1, "my-heroes-container"], [3, "ngSubmit", "formGroup"], [1, "form-control"], ["for", "name"], [1, "name-field"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"], ["id", "name", "type", "text", "formControlName", "name", "autofocus", "", "placeholder", "Hero name"], ["for", "year"], [1, "year-field"], ["d", "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"], ["id", "year", "formControlName", "year"], [3, "value", 4, "ngFor", "ngForOf"], [1, "form-control", 2, "outline", "darkolivegreen"], ["for", "editorial", 2, "display", "block", "outline", "darkolivegreen"], [1, "publisher-field"], ["d", "M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"], ["formControlName", "publisher"], ["type", "submit"], ["type", "button", 3, "click", "ngStyle"], [3, "isLoading", "message"], [3, "value"]], template: function HeroFormComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroFormComponent, selectors: [["app-hero-form"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 39, vars: 13, consts: [[1, "form-container"], [3, "message", "type"], [1, "close-container"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 384 512", 1, "xmark", 3, "click"], ["fill", "white", "d", "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"], [2, "text-align", "center", "margin", "0px", "margin-bottom", "15px", "font-size", "20px", "display", "block", "text-align", "center"], [1, "my-heroes-container"], [3, "ngSubmit", "formGroup"], [1, "form-control"], ["for", "name"], [1, "name-field"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464l349.5 0c-8.9-63.3-63.3-112-129-112l-91.4 0c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3z"], ["id", "name", "type", "text", "formControlName", "name", "autofocus", "", "placeholder", "Hero name"], ["for", "year"], [1, "year-field"], ["d", "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"], ["id", "year", "formControlName", "year"], [3, "value", 4, "ngFor", "ngForOf"], [1, "form-control", 2, "outline", "darkolivegreen"], ["for", "editorial", 2, "display", "block", "outline", "darkolivegreen"], [1, "publisher-field"], ["d", "M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"], ["formControlName", "publisher"], [1, "action-form"], ["type", "submit"], ["type", "button", 3, "click", "ngStyle"], [3, "isLoading", "message"], [3, "value"]], template: function HeroFormComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0);
       \u0275\u0275element(1, "app-notification", 1);
-      \u0275\u0275elementStart(2, "div", 2)(3, "form", 3);
-      \u0275\u0275listener("ngSubmit", function HeroFormComponent_Template_form_ngSubmit_3_listener() {
-        return ctx.onSubmit();
-      });
-      \u0275\u0275elementStart(4, "div", 4)(5, "label", 5);
-      \u0275\u0275text(6, "Hero name");
-      \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(7, "div", 6);
+      \u0275\u0275elementStart(2, "div", 2);
       \u0275\u0275namespaceSVG();
-      \u0275\u0275elementStart(8, "svg", 7);
-      \u0275\u0275element(9, "path", 8);
-      \u0275\u0275elementEnd();
-      \u0275\u0275namespaceHTML();
-      \u0275\u0275element(10, "input", 9);
-      \u0275\u0275elementEnd()();
-      \u0275\u0275elementStart(11, "div", 4)(12, "label", 10);
-      \u0275\u0275text(13, "Year");
-      \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(14, "div", 11);
-      \u0275\u0275namespaceSVG();
-      \u0275\u0275elementStart(15, "svg", 7);
-      \u0275\u0275element(16, "path", 12);
-      \u0275\u0275elementEnd();
-      \u0275\u0275namespaceHTML();
-      \u0275\u0275elementStart(17, "select", 13);
-      \u0275\u0275template(18, HeroFormComponent_option_18_Template, 2, 2, "option", 14);
-      \u0275\u0275elementEnd()()();
-      \u0275\u0275elementStart(19, "div", 15)(20, "label", 16);
-      \u0275\u0275text(21, "Publisher Name");
-      \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(22, "div", 17);
-      \u0275\u0275namespaceSVG();
-      \u0275\u0275elementStart(23, "svg", 7);
-      \u0275\u0275element(24, "path", 18);
-      \u0275\u0275elementEnd();
-      \u0275\u0275namespaceHTML();
-      \u0275\u0275elementStart(25, "select", 19);
-      \u0275\u0275template(26, HeroFormComponent_option_26_Template, 2, 2, "option", 14);
-      \u0275\u0275pipe(27, "async");
-      \u0275\u0275elementEnd()()();
-      \u0275\u0275elementStart(28, "div")(29, "button", 20);
-      \u0275\u0275text(30, "Save");
-      \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(31, "button", 21);
-      \u0275\u0275listener("click", function HeroFormComponent_Template_button_click_31_listener() {
+      \u0275\u0275elementStart(3, "svg", 3);
+      \u0275\u0275listener("click", function HeroFormComponent_Template_svg_click_3_listener() {
         return ctx.goBack();
       });
-      \u0275\u0275text(32);
+      \u0275\u0275element(4, "path", 4);
+      \u0275\u0275elementEnd()();
+      \u0275\u0275namespaceHTML();
+      \u0275\u0275elementStart(5, "span", 5);
+      \u0275\u0275text(6, "New Hero");
+      \u0275\u0275elementEnd();
+      \u0275\u0275elementStart(7, "div", 6)(8, "form", 7);
+      \u0275\u0275listener("ngSubmit", function HeroFormComponent_Template_form_ngSubmit_8_listener() {
+        return ctx.onSubmit();
+      });
+      \u0275\u0275elementStart(9, "div", 8)(10, "label", 9);
+      \u0275\u0275text(11, "Hero name");
+      \u0275\u0275elementEnd();
+      \u0275\u0275elementStart(12, "div", 10);
+      \u0275\u0275namespaceSVG();
+      \u0275\u0275elementStart(13, "svg", 11);
+      \u0275\u0275element(14, "path", 12);
+      \u0275\u0275elementEnd();
+      \u0275\u0275namespaceHTML();
+      \u0275\u0275element(15, "input", 13);
+      \u0275\u0275elementEnd()();
+      \u0275\u0275elementStart(16, "div", 8)(17, "label", 14);
+      \u0275\u0275text(18, "Year");
+      \u0275\u0275elementEnd();
+      \u0275\u0275elementStart(19, "div", 15);
+      \u0275\u0275namespaceSVG();
+      \u0275\u0275elementStart(20, "svg", 11);
+      \u0275\u0275element(21, "path", 16);
+      \u0275\u0275elementEnd();
+      \u0275\u0275namespaceHTML();
+      \u0275\u0275elementStart(22, "select", 17);
+      \u0275\u0275template(23, HeroFormComponent_option_23_Template, 2, 2, "option", 18);
+      \u0275\u0275elementEnd()()();
+      \u0275\u0275elementStart(24, "div", 19)(25, "label", 20);
+      \u0275\u0275text(26, "Publisher Name");
+      \u0275\u0275elementEnd();
+      \u0275\u0275elementStart(27, "div", 21);
+      \u0275\u0275namespaceSVG();
+      \u0275\u0275elementStart(28, "svg", 11);
+      \u0275\u0275element(29, "path", 22);
+      \u0275\u0275elementEnd();
+      \u0275\u0275namespaceHTML();
+      \u0275\u0275elementStart(30, "select", 23);
+      \u0275\u0275template(31, HeroFormComponent_option_31_Template, 2, 2, "option", 18);
+      \u0275\u0275pipe(32, "async");
+      \u0275\u0275elementEnd()()();
+      \u0275\u0275elementStart(33, "div", 24)(34, "button", 25);
+      \u0275\u0275text(35, "Save");
+      \u0275\u0275elementEnd();
+      \u0275\u0275elementStart(36, "button", 26);
+      \u0275\u0275listener("click", function HeroFormComponent_Template_button_click_36_listener() {
+        return ctx.goBack();
+      });
+      \u0275\u0275text(37);
       \u0275\u0275elementEnd()()()();
-      \u0275\u0275element(33, "app-spinner", 22);
+      \u0275\u0275element(38, "app-spinner", 27);
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
       \u0275\u0275advance();
       \u0275\u0275property("message", ctx.notificationMessage)("type", ctx.notificationType);
-      \u0275\u0275advance(2);
+      \u0275\u0275advance(7);
       \u0275\u0275property("formGroup", ctx.heroForm);
       \u0275\u0275advance(15);
       \u0275\u0275property("ngForOf", ctx.years);
       \u0275\u0275advance(8);
-      \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(27, 9, ctx.publishers$));
+      \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(32, 9, ctx.publishers$));
       \u0275\u0275advance(5);
       \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(11, _c0, ctx.buttonColor));
       \u0275\u0275advance();
-      \u0275\u0275textInterpolate(ctx.btnText);
+      \u0275\u0275textInterpolate1(" ", ctx.btnText, " ");
       \u0275\u0275advance();
       \u0275\u0275property("isLoading", ctx.isLoadingSpinner)("message", ctx.messageSpinner);
     }
@@ -43052,7 +43067,7 @@ var HeroFormComponent = class _HeroFormComponent {
     CommonModule,
     NgForOf,
     NgStyle
-  ], styles: ["\n\n.form-container[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  position: relative;\n  border: 1px solid #d4d4d4;\n  padding: 10px 20px;\n  margin-top: 20px;\n  border-radius: 5px;\n  width: 100%;\n  min-height: 200px;\n  height: auto;\n}\n.form-container[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  margin-left: 30px;\n  font-weight: bold;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%] {\n  padding: 20px;\n  margin: 0;\n  text-align: left;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  display: inline-block;\n  padding: 10px 20px;\n  background-color: #104781;\n  color: white;\n  font-size: 15px;\n  text-align: center;\n  text-decoration: none;\n  border-radius: 5px;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  background-color: #0056b3;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%]   [_ngcontent-%COMP%]:nth-child(2) {\n  margin-left: 20px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n  padding: 0 30px;\n  border-radius: 8px;\n  width: 100%;\n  height: auto;\n  box-sizing: border-box;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n  width: 100%;\n  height: auto;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  margin-bottom: 10px;\n  width: 20%;\n  align-content: center;\n  width: 100%;\n  width: 100%;\n  display: block;\n  font-weight: 300;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n  width: 99%;\n  height: 50px;\n  display: flex;\n  justify-items: center;\n  align-items: center;\n  border: 1px solid #d4d4d4;\n  border-radius: 5px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 10%;\n  height: 20px;\n  padding-right: 10px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n  padding: 8px;\n  font-size: 16px;\n  border: 1px solid #ccc;\n  color: #264d73;\n  border-radius: 4px;\n  width: 100%;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   app-select[_ngcontent-%COMP%] {\n  max-width: 415px;\n  width: 45%;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  font-weight: 300;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 100%;\n  padding: 1px;\n  transition: outline 0.3s ease;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n  outline: 1px solid #0056b3;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  cursor: inherit;\n  width: 100%;\n  height: 50px;\n  border-radius: 5px;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  padding-left: 10px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%]:hover {\n  background-color: inherit;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%] {\n  width: 100%;\n  box-sizing: border-box;\n  padding-right: 10px;\n  transition: outline 0.3s ease;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n  outline: 1px solid #0056b3;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]:focus {\n  cursor: pointer;\n  outline: 2px solid #264d73;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 100%;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  width: 100%;\n  padding: 10px;\n  background-color: #104781;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  font-size: 1rem;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #375069;\n  color: #ecf0f1;\n}\n@media (min-width: 600px) {\n  .form-container[_ngcontent-%COMP%] {\n    padding: 20px 20px;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n    width: 50%;\n    padding: 10px 0;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n    font-weight: 300;\n    align-content: center;\n    text-align: center;\n    width: 50%;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .name-field[_ngcontent-%COMP%] {\n    width: 90%;\n    padding: 1px;\n    transition: outline 0.3s ease;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .name-field[_ngcontent-%COMP%]:hover {\n    outline: 1px solid #0056b3;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .name-field[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n    height: 100%;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n    width: 100%;\n    font-weight: bold;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    border-radius: 0;\n    width: 100%;\n    height: 50px;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%] {\n    width: 90%;\n    box-sizing: border-box;\n    padding-right: 10px;\n    outline: green;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    width: 100%;\n    height: 100%;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%]:hover {\n    cursor: pointer;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   app-select[_ngcontent-%COMP%] {\n    max-width: 415px;\n    width: 45%;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 20%;\n    padding: 10px;\n    background-color: #104781;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #0056b3;\n    color: #ecf0f1;\n  }\n  .form-container[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n    width: 100%;\n    height: auto;\n    display: flex;\n    justify-content: flex-end;\n  }\n}\n/*# sourceMappingURL=hero-form.component.css.map */"] });
+  ], styles: ["\n\n.form-container[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  position: relative;\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  padding: 10px 10px;\n  margin-top: 20px;\n  border-radius: 5px;\n  width: 100%;\n  min-height: 200px;\n  height: auto;\n}\n.form-container[_ngcontent-%COMP%]   .close-container[_ngcontent-%COMP%] {\n  height: auto;\n  border-radius: 5px;\n}\n.form-container[_ngcontent-%COMP%]   .close-container[_ngcontent-%COMP%]   .xmark[_ngcontent-%COMP%] {\n  width: 15px;\n  float: right;\n}\n.form-container[_ngcontent-%COMP%]   .close-container[_ngcontent-%COMP%]   .xmark[_ngcontent-%COMP%]   path[_ngcontent-%COMP%] {\n  fill: #000;\n}\n.form-container[_ngcontent-%COMP%]   .close-container[_ngcontent-%COMP%]   .xmark[_ngcontent-%COMP%]:hover {\n  opacity: 0.6;\n}\n.form-container[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  margin-left: 30px;\n  font-weight: bold;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%] {\n  padding: 20px;\n  margin: 0;\n  text-align: left;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  display: inline-block;\n  padding: 10px 20px;\n  background-color: #104781;\n  color: white;\n  font-size: 15px;\n  text-align: center;\n  text-decoration: none;\n  border-radius: 5px;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  background-color: #0056b3;\n}\n.form-container[_ngcontent-%COMP%]   .actions[_ngcontent-%COMP%]   [_ngcontent-%COMP%]:nth-child(2) {\n  margin-left: 20px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n  padding: 0 30px;\n  border-radius: 8px;\n  width: 100%;\n  height: auto;\n  box-sizing: border-box;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n  width: 100%;\n  height: auto;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  margin-bottom: 10px;\n  width: 20%;\n  align-content: center;\n  width: 100%;\n  width: 100%;\n  display: block;\n  font-weight: 300;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n  width: 99%;\n  height: 50px;\n  display: flex;\n  justify-items: center;\n  align-items: center;\n  border: 1px solid #d4d4d4;\n  border-radius: 5px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 10%;\n  height: 20px;\n  padding-right: 10px;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   div[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n  padding: 8px;\n  font-size: 16px;\n  border: 1px solid #ccc;\n  color: #264d73;\n  border-radius: 4px;\n  width: 100%;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   app-select[_ngcontent-%COMP%] {\n  max-width: 415px;\n  width: 45%;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  font-weight: 300;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 100%;\n  padding: 1px;\n  transition: outline 0.3s ease;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n  outline: 1px solid #0056b3;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  cursor: inherit;\n  width: 100%;\n  height: 50px;\n  border-radius: 5px;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  padding-left: 10px;\n  background-color: transparent;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%]:hover {\n  background-color: inherit;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%] {\n  width: 100%;\n  box-sizing: border-box;\n  transition: outline 0.3s ease;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n  outline: 1px solid #0056b3;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]:focus {\n  cursor: pointer;\n  outline: 2px solid #264d73;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 100%;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  background-color: transparent;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .action-form[_ngcontent-%COMP%] {\n  padding: 25px 0;\n  display: flex;\n  justify-content: flex-end;\n  flex-direction: row;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .action-form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  width: 100%;\n  padding: 10px;\n  background-color: #104781;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  font-size: 1rem;\n}\n.form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .action-form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #375069;\n  color: #ecf0f1;\n}\n@media (min-width: 600px) {\n  .form-container[_ngcontent-%COMP%] {\n    padding: 20px 20px;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n    width: 50%;\n    padding: 10px 0;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n    font-weight: 300;\n    align-content: center;\n    text-align: center;\n    width: 50%;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .name-field[_ngcontent-%COMP%] {\n    width: 90%;\n    padding: 1px;\n    transition: outline 0.3s ease;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .name-field[_ngcontent-%COMP%]:hover {\n    outline: 1px solid #0056b3;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .name-field[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n    height: 100%;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n    width: 100%;\n    font-weight: bold;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .year-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    border-radius: 0;\n    width: 100%;\n    height: 50px;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%] {\n    width: 90%;\n    box-sizing: border-box;\n    padding-right: 10px;\n    outline: green;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    width: 100%;\n    height: 100%;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .publisher-field[_ngcontent-%COMP%]   select[_ngcontent-%COMP%]:hover {\n    cursor: pointer;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   app-select[_ngcontent-%COMP%] {\n    max-width: 415px;\n    width: 45%;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .action-form[_ngcontent-%COMP%] {\n    padding: 25px;\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .action-form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 20%;\n    padding: 10px;\n    background-color: #104781;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n  }\n  .form-container[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .action-form[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #0056b3;\n    color: #ecf0f1;\n  }\n  .form-container[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n    width: 100%;\n    height: auto;\n    display: flex;\n    justify-content: flex-end;\n  }\n}\n/*# sourceMappingURL=hero-form.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HeroFormComponent, { className: "HeroFormComponent" });
@@ -43154,7 +43169,7 @@ var SearchBarComponent = class _SearchBarComponent {
 // src/app/hero/components/hero/hero.component.ts
 function HeroComponent_div_4_li_2_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "li")(1, "a", 7)(2, "span", 8);
+    \u0275\u0275elementStart(0, "li")(1, "a", 8)(2, "span", 9);
     \u0275\u0275text(3);
     \u0275\u0275elementEnd();
     \u0275\u0275text(4);
@@ -43175,22 +43190,41 @@ function HeroComponent_div_4_Template(rf, ctx) {
     \u0275\u0275elementStart(0, "div", 3)(1, "ul", 4);
     \u0275\u0275template(2, HeroComponent_div_4_li_2_Template, 5, 4, "li", 5);
     \u0275\u0275elementEnd();
-    \u0275\u0275element(3, "app-spinner", 6);
+    \u0275\u0275elementStart(3, "p", 6);
+    \u0275\u0275text(4, " Total Registers: ");
+    \u0275\u0275elementStart(5, "span");
+    \u0275\u0275text(6);
+    \u0275\u0275elementEnd()();
+    \u0275\u0275element(7, "app-spinner", 7);
     \u0275\u0275elementEnd();
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275advance(2);
     \u0275\u0275property("ngForOf", ctx_r1.heroes);
+    \u0275\u0275advance(4);
+    \u0275\u0275textInterpolate(ctx_r1.totalRegisters);
     \u0275\u0275advance();
     \u0275\u0275property("isLoading", ctx_r1.isLoadingSpinner)("message", ctx_r1.spinnerMessage);
   }
 }
 function HeroComponent_ng_template_5_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 9)(1, "p");
+    \u0275\u0275elementStart(0, "div", 10)(1, "p");
     \u0275\u0275text(2, "Not found Heroes");
     \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(3, "p", 11);
+    \u0275\u0275text(4, " Total registers: ");
+    \u0275\u0275elementStart(5, "span");
+    \u0275\u0275text(6);
+    \u0275\u0275elementEnd();
+    \u0275\u0275text(7, " finded ");
+    \u0275\u0275elementEnd();
+  }
+  if (rf & 2) {
+    const ctx_r1 = \u0275\u0275nextContext();
+    \u0275\u0275advance(6);
+    \u0275\u0275textInterpolate(ctx_r1.totalRegisters);
   }
 }
 var HeroComponent = class _HeroComponent {
@@ -43202,6 +43236,8 @@ var HeroComponent = class _HeroComponent {
   heroes;
   isLoadingSpinner = false;
   spinnerMessage = "";
+  totalRegisters = 0;
+  heroesSubcription;
   constructor(heroService, spinnerService, actionsService) {
     this.heroService = heroService;
     this.spinnerService = spinnerService;
@@ -43211,7 +43247,8 @@ var HeroComponent = class _HeroComponent {
     this.actionsService.setOptions(HeroActions.List);
     this.isLoadingSpinner = true;
     this.spinnerMessage = "Loading H\xE9roes...";
-    this.heroService.getHeroes(true).subscribe((heroes) => {
+    this.heroesSubcription = this.heroService.getHeroes(true).subscribe((heroes) => {
+      this.totalRegisters = heroes.length;
       this.heroes = heroes;
       setTimeout(() => {
         this.isLoadingSpinner = false;
@@ -43221,21 +43258,26 @@ var HeroComponent = class _HeroComponent {
   ngOnDestroy() {
     console.log("restaurando valores");
     const refreshData = true;
+    if (this.heroesSubcription) {
+      this.heroesSubcription.unsubscribe();
+    }
+  }
+  searchHero() {
   }
   getHeroes() {
   }
   static \u0275fac = function HeroComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"]], template: function HeroComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [2, "padding", "10px", "font-size", "14px", "color", "black"], [3, "isLoading", "message"], [3, "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"], [2, "padding", "20px 0", "padding-left", "45px", "font-size", "14px", "color", "#353535", "font-weight", "bold"]], template: function HeroComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 1)(1, "h2");
       \u0275\u0275text(2, "List of Heroes");
       \u0275\u0275elementEnd();
       \u0275\u0275element(3, "app-search-bar");
-      \u0275\u0275template(4, HeroComponent_div_4_Template, 4, 3, "div", 2);
+      \u0275\u0275template(4, HeroComponent_div_4_Template, 8, 4, "div", 2);
       \u0275\u0275elementEnd();
-      \u0275\u0275template(5, HeroComponent_ng_template_5_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
+      \u0275\u0275template(5, HeroComponent_ng_template_5_Template, 8, 1, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
     }
     if (rf & 2) {
       const noHeroes_r3 = \u0275\u0275reference(6);
@@ -43250,16 +43292,16 @@ var HeroComponent = class _HeroComponent {
     SpinnerComponent,
     SearchBarComponent,
     CommonModule
-  ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding: 20px;\n  margin-top: 20px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 0;\n  text-align: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  background-color: azure;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .hero-component-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 25em;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n    width: 100%;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
+  ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding-bottom: 20px;\n  margin-top: 20px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 20px 0;\n  text-align: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 100px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  background-color: azure;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .hero-component-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 25em;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n    width: 100%;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HeroComponent, { className: "HeroComponent" });
 })();
 
 // src/app/hero/components/hero-detail/hero-detail.component.ts
-function HeroDetailComponent_div_0_div_18_option_4_Template(rf, ctx) {
+function HeroDetailComponent_div_0_div_21_option_4_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "option", 30);
+    \u0275\u0275elementStart(0, "option", 34);
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
@@ -43270,16 +43312,16 @@ function HeroDetailComponent_div_0_div_18_option_4_Template(rf, ctx) {
     \u0275\u0275textInterpolate1(" ", y_r3, " ");
   }
 }
-function HeroDetailComponent_div_0_div_18_Template(rf, ctx) {
+function HeroDetailComponent_div_0_div_21_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 27);
+    \u0275\u0275elementStart(0, "div", 31);
     \u0275\u0275namespaceSVG();
-    \u0275\u0275elementStart(1, "svg", 11);
-    \u0275\u0275element(2, "path", 28);
+    \u0275\u0275elementStart(1, "svg", 15);
+    \u0275\u0275element(2, "path", 32);
     \u0275\u0275elementEnd();
     \u0275\u0275namespaceHTML();
-    \u0275\u0275elementStart(3, "select", 29);
-    \u0275\u0275template(4, HeroDetailComponent_div_0_div_18_option_4_Template, 2, 2, "option", 22);
+    \u0275\u0275elementStart(3, "select", 33);
+    \u0275\u0275template(4, HeroDetailComponent_div_0_div_21_option_4_Template, 2, 2, "option", 26);
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
@@ -43288,9 +43330,9 @@ function HeroDetailComponent_div_0_div_18_Template(rf, ctx) {
     \u0275\u0275property("ngForOf", ctx_r1.years);
   }
 }
-function HeroDetailComponent_div_0_option_26_Template(rf, ctx) {
+function HeroDetailComponent_div_0_option_29_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "option", 30);
+    \u0275\u0275elementStart(0, "option", 34);
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
@@ -43304,82 +43346,93 @@ function HeroDetailComponent_div_0_option_26_Template(rf, ctx) {
 function HeroDetailComponent_div_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "div", 2)(1, "div", 3)(2, "div", 4)(3, "h3");
-    \u0275\u0275text(4, "Edit Hero");
-    \u0275\u0275elementEnd();
-    \u0275\u0275element(5, "app-notification", 5);
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(6, "form", 6);
-    \u0275\u0275listener("ngSubmit", function HeroDetailComponent_div_0_Template_form_ngSubmit_6_listener() {
-      \u0275\u0275restoreView(_r1);
-      const ctx_r1 = \u0275\u0275nextContext();
-      return \u0275\u0275resetView(ctx_r1.onSubmit());
-    });
-    \u0275\u0275elementStart(7, "div", 7)(8, "div", 8)(9, "label", 9);
-    \u0275\u0275text(10, "Hero name");
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(11, "div", 10);
-    \u0275\u0275namespaceSVG();
-    \u0275\u0275elementStart(12, "svg", 11);
-    \u0275\u0275element(13, "path", 12);
-    \u0275\u0275elementEnd();
-    \u0275\u0275namespaceHTML();
-    \u0275\u0275element(14, "input", 13);
-    \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(15, "div", 14)(16, "label", 15);
-    \u0275\u0275text(17, "year");
-    \u0275\u0275elementEnd();
-    \u0275\u0275template(18, HeroDetailComponent_div_0_div_18_Template, 5, 1, "div", 16);
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(19, "div", 17)(20, "label", 18);
-    \u0275\u0275text(21, "Publisher Name");
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(22, "div", 19);
-    \u0275\u0275namespaceSVG();
-    \u0275\u0275elementStart(23, "svg", 11);
-    \u0275\u0275element(24, "path", 20);
-    \u0275\u0275elementEnd();
-    \u0275\u0275namespaceHTML();
-    \u0275\u0275elementStart(25, "select", 21);
-    \u0275\u0275template(26, HeroDetailComponent_div_0_option_26_Template, 2, 2, "option", 22);
-    \u0275\u0275pipe(27, "async");
-    \u0275\u0275elementEnd()()()();
-    \u0275\u0275elementStart(28, "div", 23)(29, "button", 24);
-    \u0275\u0275listener("click", function HeroDetailComponent_div_0_Template_button_click_29_listener() {
-      \u0275\u0275restoreView(_r1);
-      const ctx_r1 = \u0275\u0275nextContext();
-      return \u0275\u0275resetView(ctx_r1.onSubmit());
-    });
-    \u0275\u0275text(30, " Update ");
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(31, "button", 25);
-    \u0275\u0275listener("click", function HeroDetailComponent_div_0_Template_button_click_31_listener() {
+    \u0275\u0275elementStart(0, "div", 2)(1, "div", 3);
+    \u0275\u0275listener("click", function HeroDetailComponent_div_0_Template_div_click_1_listener() {
       \u0275\u0275restoreView(_r1);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.goBack());
     });
-    \u0275\u0275text(32, " Cancel ");
+    \u0275\u0275namespaceSVG();
+    \u0275\u0275elementStart(2, "svg", 4);
+    \u0275\u0275element(3, "path", 5);
+    \u0275\u0275elementEnd()();
+    \u0275\u0275namespaceHTML();
+    \u0275\u0275elementStart(4, "div", 6)(5, "h3", 7);
+    \u0275\u0275text(6, "Edit Hero");
+    \u0275\u0275elementEnd();
+    \u0275\u0275element(7, "app-notification", 8);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(8, "div", 9)(9, "form", 10);
+    \u0275\u0275listener("ngSubmit", function HeroDetailComponent_div_0_Template_form_ngSubmit_9_listener() {
+      \u0275\u0275restoreView(_r1);
+      const ctx_r1 = \u0275\u0275nextContext();
+      return \u0275\u0275resetView(ctx_r1.onSubmit());
+    });
+    \u0275\u0275elementStart(10, "div", 11)(11, "div", 12)(12, "label", 13);
+    \u0275\u0275text(13, "Hero name");
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(14, "div", 14);
+    \u0275\u0275namespaceSVG();
+    \u0275\u0275elementStart(15, "svg", 15);
+    \u0275\u0275element(16, "path", 16);
+    \u0275\u0275elementEnd();
+    \u0275\u0275namespaceHTML();
+    \u0275\u0275element(17, "input", 17);
+    \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(18, "div", 18)(19, "label", 19);
+    \u0275\u0275text(20, "year");
+    \u0275\u0275elementEnd();
+    \u0275\u0275template(21, HeroDetailComponent_div_0_div_21_Template, 5, 1, "div", 20);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(22, "div", 21)(23, "label", 22);
+    \u0275\u0275text(24, "Publisher Name");
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(25, "div", 23);
+    \u0275\u0275namespaceSVG();
+    \u0275\u0275elementStart(26, "svg", 15);
+    \u0275\u0275element(27, "path", 24);
+    \u0275\u0275elementEnd();
+    \u0275\u0275namespaceHTML();
+    \u0275\u0275elementStart(28, "select", 25);
+    \u0275\u0275template(29, HeroDetailComponent_div_0_option_29_Template, 2, 2, "option", 26);
+    \u0275\u0275pipe(30, "async");
+    \u0275\u0275elementEnd()()()();
+    \u0275\u0275elementStart(31, "div", 27)(32, "button", 28);
+    \u0275\u0275listener("click", function HeroDetailComponent_div_0_Template_button_click_32_listener() {
+      \u0275\u0275restoreView(_r1);
+      const ctx_r1 = \u0275\u0275nextContext();
+      return \u0275\u0275resetView(ctx_r1.onSubmit());
+    });
+    \u0275\u0275text(33, " Update ");
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(34, "button", 29);
+    \u0275\u0275listener("click", function HeroDetailComponent_div_0_Template_button_click_34_listener() {
+      \u0275\u0275restoreView(_r1);
+      const ctx_r1 = \u0275\u0275nextContext();
+      return \u0275\u0275resetView(ctx_r1.goBack());
+    });
+    \u0275\u0275text(35, " Cancel ");
     \u0275\u0275elementEnd()()();
-    \u0275\u0275element(33, "app-spinner", 26);
+    \u0275\u0275element(36, "app-spinner", 30);
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
-    \u0275\u0275advance(5);
+    \u0275\u0275advance(7);
     \u0275\u0275property("message", ctx_r1.notificationMessage)("type", ctx_r1.notificationType);
-    \u0275\u0275advance();
+    \u0275\u0275advance(2);
     \u0275\u0275property("formGroup", ctx_r1.heroForm);
     \u0275\u0275advance(12);
     \u0275\u0275property("ngIf", ctx_r1.years && ctx_r1.years.length > 0);
     \u0275\u0275advance(8);
-    \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(27, 7, ctx_r1.publishers$));
+    \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(30, 7, ctx_r1.publishers$));
     \u0275\u0275advance(7);
     \u0275\u0275property("isLoading", ctx_r1.isLoadingSpinner)("message", ctx_r1.spinnerMessage);
   }
 }
 function HeroDetailComponent_ng_template_1_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 31)(1, "div", 32)(2, "h2");
+    \u0275\u0275elementStart(0, "div", 35)(1, "div", 36)(2, "h2");
     \u0275\u0275text(3, "Hero Not Found");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(4, "p");
@@ -43393,6 +43446,7 @@ var HeroDetailComponent = class _HeroDetailComponent {
   publisherService;
   route;
   spinnerService;
+  actionsService;
   hero;
   heroSubcription$;
   heroForm;
@@ -43431,14 +43485,16 @@ var HeroDetailComponent = class _HeroDetailComponent {
     2001,
     2e3
   ];
-  constructor(location2, heroService, publisherService, route, spinnerService) {
+  constructor(location2, heroService, publisherService, route, spinnerService, actionsService) {
     this.location = location2;
     this.heroService = heroService;
     this.publisherService = publisherService;
     this.route = route;
     this.spinnerService = spinnerService;
+    this.actionsService = actionsService;
   }
   ngOnInit() {
+    this.actionsService.setOptions("");
     this.publishers$ = this.publisherService.getPublishers();
     this.isLoadingSpinner = true;
     this.spinnerMessage = "Loading Hero Details...";
@@ -43515,11 +43571,11 @@ var HeroDetailComponent = class _HeroDetailComponent {
     return this.heroForm.get("publisher");
   }
   static \u0275fac = function HeroDetailComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _HeroDetailComponent)(\u0275\u0275directiveInject(Location), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(ActivatedRoute), \u0275\u0275directiveInject(SpinnerService));
+    return new (__ngFactoryType__ || _HeroDetailComponent)(\u0275\u0275directiveInject(Location), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(ActivatedRoute), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroDetailComponent, selectors: [["app-hero-detail"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 3, vars: 2, consts: [["notFoundTemplate", ""], ["class", "detail-heroe-container", 4, "ngIf", "ngIfElse"], [1, "detail-heroe-container"], [1, "hero-detail"], [1, "title"], [3, "message", "type"], [3, "ngSubmit", "formGroup"], [1, "container-form-control"], [1, "form-control"], ["for", "hero-name"], [1, "input-container", "name-field"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"], ["id", "hero-name", "placeholder", "Hero name", "formControlName", "name"], [1, "form-control", "year"], ["for", "year"], ["class", "input-container select", "style", "display: flex; align-items: center", 4, "ngIf"], [1, "form-control", "select-publisher"], ["for", "editorial", 2, "display", "block"], [1, "input-container", "select"], ["d", "M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"], ["formControlName", "publisher"], [3, "value", 4, "ngFor", "ngForOf"], [1, "container-form-button"], ["type", "button", 1, "submit-btn", 3, "click"], ["type", "button", 1, "back-btn", 3, "click"], [3, "isLoading", "message"], [1, "input-container", "select", 2, "display", "flex", "align-items", "center"], ["d", "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"], ["formControlName", "year", 2, "border", "none", "border-left", "1px solid #d4d4d4"], [3, "value"], [1, "detail-heroe-container", 2, "position", "relative"], [1, "hero-not-found"]], template: function HeroDetailComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroDetailComponent, selectors: [["app-hero-detail"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 3, vars: 2, consts: [["notFoundTemplate", ""], ["class", "detail-heroe-container", 4, "ngIf", "ngIfElse"], [1, "detail-heroe-container"], [1, "xmark-container", 3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 384 512", 1, "xmark"], ["d", "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"], [1, "title"], [2, "display", "block", "width", "100%"], [3, "message", "type"], [1, "hero-detail"], [3, "ngSubmit", "formGroup"], [1, "container-form-control"], [1, "form-control"], ["for", "hero-name"], [1, "input-container", "name-field"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"], ["id", "hero-name", "placeholder", "Hero name", "formControlName", "name"], [1, "form-control", "year"], ["for", "year"], ["class", "input-container select", "style", "display: flex; align-items: center", 4, "ngIf"], [1, "form-control", "select-publisher"], ["for", "editorial", 2, "display", "block"], [1, "input-container", "select"], ["d", "M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"], ["formControlName", "publisher"], [3, "value", 4, "ngFor", "ngForOf"], [1, "container-form-button"], ["type", "button", 1, "submit-btn", 3, "click"], ["type", "button", 1, "back-btn", 3, "click"], [3, "isLoading", "message"], [1, "input-container", "select", 2, "display", "flex", "align-items", "center"], ["d", "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"], ["formControlName", "year", 2, "border", "none", "border-left", "1px solid #d4d4d4"], [3, "value"], [1, "detail-heroe-container", 2, "position", "relative"], [1, "hero-not-found"]], template: function HeroDetailComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, HeroDetailComponent_div_0_Template, 34, 9, "div", 1)(1, HeroDetailComponent_ng_template_1_Template, 6, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
+      \u0275\u0275template(0, HeroDetailComponent_div_0_Template, 37, 9, "div", 1)(1, HeroDetailComponent_ng_template_1_Template, 6, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
     }
     if (rf & 2) {
       const notFoundTemplate_r5 = \u0275\u0275reference(2);
@@ -43543,24 +43599,99 @@ var HeroDetailComponent = class _HeroDetailComponent {
     NgForOf,
     AsyncPipe,
     NotificationComponent
-  ], styles: ["\n\n.detail-heroe-container[_ngcontent-%COMP%] {\n  height: auto;\n  min-height: 200px;\n  padding: 10px 30px;\n  position: relative;\n  border: 1px solid #d4d4d4;\n  border-radius: 5px;\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  display: flex;\n  flex-direction: column;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   .title[_ngcontent-%COMP%] {\n  display: inline-block;\n  margin-bottom: 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   .title[_ngcontent-%COMP%]   h3[_ngcontent-%COMP%] {\n  display: inline;\n  margin: 0;\n  font-weight: bold;\n  color: #104781;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   .title[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: inline;\n  margin: 0;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n  border-radius: 8px;\n  padding: 20px 20px;\n  box-sizing: border-box;\n  width: 100%;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  height: auto;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  width: 100%;\n  border-radius: 5px;\n  border: none;\n  height: 100px;\n  width: 100%;\n  padding: 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  display: block;\n  font-weight: bold;\n  margin-bottom: 10px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  border-radius: 10px;\n  padding: 12px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n  margin-right: 10px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n  outline: none;\n  color: #104781;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  font-size: 15px;\n  padding-left: 10px;\n  width: 82%;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]:hover {\n  outline: 2px solid #1696a4;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  color: #061112;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  padding: 0 10px;\n  border: none;\n  border: 1px solid #d4d4d4;\n  width: 100%;\n  display: flex;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 48px;\n  outline: none;\n  padding: 0 14px;\n  border: 1px solid #d4d4d4;\n  cursor: pointer;\n  color: #104781;\n  font-weight: 300;\n  font-size: 15px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  width: 100%;\n  display: flex;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 30px;\n  outline: none;\n  padding: 0;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  cursor: pointer;\n  color: #104781;\n  font-weight: 300;\n  font-size: 15px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  align-items: center;\n  padding: 10px 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 0;\n  margin: 0;\n  width: 100%;\n  height: 35px;\n  background-color: #104781;\n  color: #fff;\n  font-size: 16px;\n  margin: 10px 0;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  box-sizing: border-box;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%], \n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  margin: 5px;\n  color: #626262;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-size: 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  font-size: 14px;\n}\n@media (min-width: 800px) {\n  .detail-heroe-container[_ngcontent-%COMP%] {\n    padding: 30px 30px;\n    height: auto;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: auto;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    height: auto;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n    width: 100%;\n    border-radius: 5px;\n    border: none;\n    height: 100px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n    display: block;\n    font-weight: bold;\n    margin-bottom: 10px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: flex-start;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 20px;\n    height: 20px;\n    margin-right: 10px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n    outline: none;\n    color: #104781;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n    font-size: 15px;\n    padding-left: 10px;\n    width: 86%;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]:hover {\n    outline: 2px solid #104781;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 100%;\n    padding: 5px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    width: 90%;\n    height: 30px;\n    outline: none;\n    padding: 0;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n    cursor: pointer;\n    color: #104781;\n    font-weight: 300;\n    font-size: 15px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 100%;\n    padding: 5px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    width: 90%;\n    height: 30px;\n    outline: none;\n    padding: 0;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n    cursor: pointer;\n    color: #104781;\n    font-weight: 300;\n    font-size: 15px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%] {\n    display: flex;\n    flex-wrap: wrap;\n    flex-direction: row;\n    align-items: center;\n    justify-content: flex-end;\n    padding: 10px 20px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    padding: 0;\n    margin: 0;\n    width: 100%;\n    height: 35px;\n    background-color: #104781;\n    color: #fff;\n    font-size: 16px;\n    margin: 10px 0;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   .submit-btn[_ngcontent-%COMP%] {\n    color: #fff;\n    margin: 10px 0;\n    width: 25%;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   .back-btn[_ngcontent-%COMP%] {\n    background-color: #ccc;\n    width: 25%;\n    margin-left: 20px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%] {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    box-sizing: border-box;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%], \n   .detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    margin: 5px;\n  }\n}\n/*# sourceMappingURL=hero-detail.component.css.map */"] });
+  ], styles: ["\n\n.detail-heroe-container[_ngcontent-%COMP%] {\n  height: auto;\n  min-height: 200px;\n  padding: 10px 15px;\n  position: relative;\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .xmark-container[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 30px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .xmark-container[_ngcontent-%COMP%]   .xmark[_ngcontent-%COMP%] {\n  float: right;\n  width: 15px;\n  border-radius: 50%;\n  padding: 5px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .xmark-container[_ngcontent-%COMP%]   .xmark[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n  opacity: 0.5;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .title[_ngcontent-%COMP%] {\n  margin-bottom: 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .title[_ngcontent-%COMP%]   h3[_ngcontent-%COMP%] {\n  display: inline;\n  margin: 0;\n  padding: 0 20px;\n  font-weight: bold;\n  color: #104781;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .title[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: inline;\n  margin: 0;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  display: flex;\n  flex-direction: column;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n  border-radius: 8px;\n  box-sizing: border-box;\n  width: 100%;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  height: auto;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  width: 100%;\n  border-radius: 5px;\n  border: none;\n  height: 100px;\n  width: 100%;\n  padding: 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  display: block;\n  font-weight: bold;\n  margin-bottom: 10px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  border-radius: 10px;\n  padding: 12px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n  margin-right: 10px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n  outline: none;\n  color: #104781;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  font-size: 15px;\n  padding-left: 10px;\n  width: 82%;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]:hover {\n  outline: 2px solid #1696a4;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n  color: #061112;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  padding: 0 10px;\n  border: none;\n  border: 1px solid #d4d4d4;\n  width: 100%;\n  display: flex;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 48px;\n  outline: none;\n  padding: 0 14px;\n  border: 1px solid #d4d4d4;\n  cursor: pointer;\n  color: #104781;\n  font-weight: 300;\n  font-size: 15px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  width: 100%;\n  display: flex;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 30px;\n  outline: none;\n  padding: 0;\n  border: none;\n  border-left: 1px solid #d4d4d4;\n  cursor: pointer;\n  color: #104781;\n  font-weight: 300;\n  font-size: 15px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  align-items: center;\n  padding: 10px 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 0;\n  margin: 0;\n  width: 100%;\n  height: 35px;\n  background-color: #104781;\n  color: #fff;\n  font-size: 16px;\n  margin: 10px 0;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  box-sizing: border-box;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%], \n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  margin: 5px;\n  color: #626262;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-size: 20px;\n}\n.detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  font-size: 14px;\n}\n@media (min-width: 800px) {\n  .detail-heroe-container[_ngcontent-%COMP%] {\n    height: auto;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: auto;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    height: auto;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%] {\n    width: 100%;\n    border-radius: 5px;\n    border: none;\n    height: 100px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   label[_ngcontent-%COMP%] {\n    display: block;\n    font-weight: bold;\n    margin-bottom: 10px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: flex-start;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 20px;\n    height: 20px;\n    margin-right: 10px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]   input[_ngcontent-%COMP%] {\n    outline: none;\n    color: #104781;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n    font-size: 15px;\n    padding-left: 10px;\n    width: 86%;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control[_ngcontent-%COMP%]   .input-container[_ngcontent-%COMP%]:hover {\n    outline: 2px solid #104781;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 100%;\n    padding: 5px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.year[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    width: 90%;\n    height: 30px;\n    outline: none;\n    padding: 0;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n    cursor: pointer;\n    color: #104781;\n    font-weight: 300;\n    font-size: 15px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 100%;\n    padding: 5px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-control[_ngcontent-%COMP%]   .form-control.select-publisher[_ngcontent-%COMP%]   .select[_ngcontent-%COMP%]   select[_ngcontent-%COMP%] {\n    width: 90%;\n    height: 30px;\n    outline: none;\n    padding: 0;\n    border: none;\n    border-left: 1px solid #d4d4d4;\n    cursor: pointer;\n    color: #104781;\n    font-weight: 300;\n    font-size: 15px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%] {\n    display: flex;\n    flex-wrap: wrap;\n    flex-direction: row;\n    align-items: center;\n    justify-content: flex-end;\n    padding: 10px 20px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    padding: 0;\n    margin: 0;\n    width: 100%;\n    height: 35px;\n    background-color: #104781;\n    color: #fff;\n    font-size: 16px;\n    margin: 10px 0;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   .submit-btn[_ngcontent-%COMP%] {\n    color: #fff;\n    margin: 10px 0;\n    width: 25%;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-detail[_ngcontent-%COMP%]   form[_ngcontent-%COMP%]   .container-form-button[_ngcontent-%COMP%]   .back-btn[_ngcontent-%COMP%] {\n    background-color: #ccc;\n    width: 25%;\n    margin-left: 20px;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%] {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    box-sizing: border-box;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n  }\n  .detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%], \n   .detail-heroe-container[_ngcontent-%COMP%]   .hero-not-found[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    margin: 5px;\n  }\n}\n/*# sourceMappingURL=hero-detail.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HeroDetailComponent, { className: "HeroDetailComponent" });
 })();
 
-// src/app/hero/components/dashboard/dashboard.component.ts
-function DashboardComponent_a_4_Template(rf, ctx) {
+// src/app/hero/components/dashboard-hero-details/dashboard-hero-details.component.ts
+function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "a", 4);
+    \u0275\u0275elementStart(0, "div")(1, "span", 1);
+    \u0275\u0275text(2);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(3, "span");
+    \u0275\u0275text(4);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(5, "a", 2);
+    \u0275\u0275text(6, "Edit");
+    \u0275\u0275elementEnd()();
+  }
+  if (rf & 2) {
+    const ctx_r0 = \u0275\u0275nextContext();
+    \u0275\u0275advance(2);
+    \u0275\u0275textInterpolate(ctx_r0.hero.id);
+    \u0275\u0275advance(2);
+    \u0275\u0275textInterpolate(ctx_r0.hero.name);
+    \u0275\u0275advance();
+    \u0275\u0275propertyInterpolate1("routerLink", "/detail/", ctx_r0.hero.id, "");
+  }
+}
+var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
+  heroService;
+  renderHeroDetail;
+  hero = void 0;
+  hasHero;
+  subcription = void 0;
+  constructor(heroService) {
+    this.heroService = heroService;
+  }
+  ngOnInit() {
+  }
+  ngOnDestroy() {
+    if (this.subcription) {
+      this.subcription.unsubscribe();
+    }
+  }
+  ngOnChanges(changes) {
+    const renderHeroDetail = changes["renderHeroDetail"];
+    if (renderHeroDetail.currentValue === -1) {
+      this.hero = void 0;
+      return;
+    }
+    if (renderHeroDetail && renderHeroDetail.currentValue != void 0) {
+      const heroId = renderHeroDetail.currentValue;
+      this.subcription = this.heroService.getHero(heroId).subscribe((hero) => {
+        this.hero = hero;
+      });
+    }
+  }
+  static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(HeroService));
+  };
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [[4, "ngIf"], [2, "display", "block"], [3, "routerLink"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+    if (rf & 1) {
+      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 7, 4, "div", 0);
+    }
+    if (rf & 2) {
+      \u0275\u0275property("ngIf", ctx.hero);
+    }
+  }, dependencies: [NgIf, RouterLink] });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardHeroDetailsComponent, { className: "DashboardHeroDetailsComponent" });
+})();
+
+// src/app/hero/components/dashboard/dashboard.component.ts
+function DashboardComponent_button_4_Template(rf, ctx) {
+  if (rf & 1) {
+    const _r1 = \u0275\u0275getCurrentView();
+    \u0275\u0275elementStart(0, "button", 5);
+    \u0275\u0275listener("click", function DashboardComponent_button_4_Template_button_click_0_listener() {
+      const hero_r2 = \u0275\u0275restoreView(_r1).$implicit;
+      const ctx_r2 = \u0275\u0275nextContext();
+      return \u0275\u0275resetView(ctx_r2.currentSelected(hero_r2));
+    });
     \u0275\u0275text(1);
     \u0275\u0275elementEnd();
   }
   if (rf & 2) {
-    const hero_r1 = ctx.$implicit;
-    \u0275\u0275propertyInterpolate1("routerLink", "/detail/", hero_r1.id, "");
+    const hero_r2 = ctx.$implicit;
+    const ctx_r2 = \u0275\u0275nextContext();
+    \u0275\u0275classProp("selected", hero_r2 === ctx_r2.selectedHero);
     \u0275\u0275advance();
-    \u0275\u0275textInterpolate1(" ", hero_r1.name, " ");
+    \u0275\u0275textInterpolate1(" ", hero_r2.name, " ");
   }
 }
 var DashboardComponent = class _DashboardComponent {
@@ -43569,8 +43700,12 @@ var DashboardComponent = class _DashboardComponent {
   actionsService;
   heroes;
   heroSubscription;
+  renderHeroDetail;
   spinnerMessage = "Loading top heroes...";
   isLoadingSpinner = false;
+  isHeroSelected = false;
+  hero;
+  selectedHero;
   constructor(heroService, spinnerService, actionsService) {
     this.heroService = heroService;
     this.spinnerService = spinnerService;
@@ -43590,26 +43725,40 @@ var DashboardComponent = class _DashboardComponent {
       this.heroSubscription.unsubscribe();
     }
   }
+  currentSelected(hero) {
+    this.selectedHero = hero;
+    this.renderHeroDetails(this.selectedHero.id);
+  }
+  renderHeroDetails(id) {
+    this.renderHeroDetail = id;
+  }
+  cleanDetail() {
+    this.renderHeroDetail = -1;
+  }
   static \u0275fac = function DashboardComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 6, vars: 3, consts: [[1, "dashboard-topheroes"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], [3, "routerLink", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "routerLink"]], template: function DashboardComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 4, consts: [[1, "dashboard-topheroes"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], ["hero", "hero.id", 3, "selected", "click", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "renderHeroDetail"], ["hero", "hero.id", 3, "click"]], template: function DashboardComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0)(1, "h2");
       \u0275\u0275text(2, "Top Heroes");
       \u0275\u0275elementEnd();
       \u0275\u0275elementStart(3, "div", 1);
-      \u0275\u0275template(4, DashboardComponent_a_4_Template, 2, 3, "a", 2);
+      \u0275\u0275template(4, DashboardComponent_button_4_Template, 2, 3, "button", 2);
       \u0275\u0275element(5, "app-spinner", 3);
-      \u0275\u0275elementEnd()();
+      \u0275\u0275elementEnd();
+      \u0275\u0275element(6, "app-dashboard-hero-details", 4);
+      \u0275\u0275elementEnd();
     }
     if (rf & 2) {
       \u0275\u0275advance(4);
       \u0275\u0275property("ngForOf", ctx.heroes);
       \u0275\u0275advance();
       \u0275\u0275property("isLoading", ctx.isLoadingSpinner)("message", ctx.spinnerMessage);
+      \u0275\u0275advance();
+      \u0275\u0275property("renderHeroDetail", ctx.renderHeroDetail);
     }
-  }, dependencies: [NgForOf, RouterLink, SpinnerComponent], styles: ["\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  margin-top: 20px;\n  padding: 20px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-size: 18px;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  font-size: 16px;\n  padding: 1rem;\n  background-color: #3f525c;\n  border-radius: 2px;\n  padding: 1rem;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 100%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  box-sizing: border-box;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  background-color: #000;\n}\n/*# sourceMappingURL=dashboard.component.css.map */"] });
+  }, dependencies: [NgForOf, SpinnerComponent, DashboardHeroDetailsComponent], styles: ["\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n  padding: 20p5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-size: 18px;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  box-sizing: border-box;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #d4d4d4;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #9f9f9f;\n  border: none;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n  background-color: aliceblue;\n  color: #3f525c;\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n    background-color: #d4d4d4;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #9f9f9f;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n    background-color: aliceblue;\n    color: #3f525c;\n  }\n}\n/*# sourceMappingURL=dashboard.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardComponent, { className: "DashboardComponent" });
@@ -44979,25 +45128,66 @@ var InMemoryDataService = class _InMemoryDataService {
   }
   createDb() {
     const heroes = [
-      { id: 12, name: "Dr. Nice", year: 2010, publisher: { id: 3, name: "Image Comics" } },
-      { id: 13, name: "Bombasto", year: 2010, publisher: { id: 1, name: "Marvel Comics" } },
+      {
+        id: 12,
+        name: "Dr. Nice",
+        year: 2010,
+        publisher: { id: 3, name: "Image Comics" }
+      },
+      {
+        id: 13,
+        name: "Bombasto",
+        year: 2010,
+        publisher: { id: 1, name: "Marvel Comics" }
+      },
       {
         id: 14,
         name: "Celeritas",
         year: 2010,
         publisher: { id: 1, name: "Marvel Comics" }
       },
-      { id: 15, name: "Magneta", year: 2010, publisher: { id: 3, name: "Image Comics" } },
+      {
+        id: 15,
+        name: "Magneta",
+        year: 2010,
+        publisher: { id: 3, name: "Image Comics" }
+      },
       {
         id: 16,
         name: "RubberMan",
         year: 2e3,
         publisher: { id: 3, name: "Image Comics" }
       },
-      { id: 17, name: "Dynama", year: 2024, publisher: { id: 1, name: "Marvel Comics" } },
-      { id: 18, name: "Dr. IQ", year: 2024, publisher: { id: 1, name: "Marvel Comics" } },
-      { id: 19, name: "Magma", year: 2024, publisher: { id: 2, name: "DC Comics" } },
-      { id: 20, name: "Tornado", year: 2024, publisher: { id: 2, name: "DC Comics" } }
+      {
+        id: 17,
+        name: "Dynama",
+        year: 2024,
+        publisher: { id: 1, name: "Marvel Comics" }
+      },
+      {
+        id: 18,
+        name: "Dr. IQ",
+        year: 2024,
+        publisher: { id: 1, name: "Marvel Comics" }
+      },
+      {
+        id: 19,
+        name: "Magma",
+        year: 2024,
+        publisher: { id: 2, name: "DC Comics" }
+      },
+      {
+        id: 20,
+        name: "Tornado",
+        year: 2024,
+        publisher: { id: 2, name: "DC Comics" }
+      },
+      {
+        id: 21,
+        name: "Magneto",
+        year: 2024,
+        publisher: { id: 1, name: "Marvel Comics" }
+      }
     ];
     const publishers = [
       { id: 1, name: "Marvel Comics" },
@@ -45498,7 +45688,7 @@ var MessagesComponent = class _MessagesComponent {
       \u0275\u0275advance(7);
       \u0275\u0275property("isLoading", ctx.isLoading)("message", ctx.message);
     }
-  }, dependencies: [CommonModule, NgClass, NgForOf, AsyncPipe, SpinnerComponent], styles: ["\n\n.message-container[_ngcontent-%COMP%] {\n  border: 1px solid #ccc;\n  border-radius: 5px;\n}\n.message-container[_ngcontent-%COMP%]   h3[_ngcontent-%COMP%] {\n  margin: 0;\n  color: #747474;\n  display: block;\n  padding: 20px 35px;\n  font-weight: 300;\n}\n.message-container[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: block;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%] {\n  align-items: center;\n  padding-left: 30px;\n  padding-right: 30px;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%] {\n  padding: 15px 15px;\n  border-radius: 5px;\n  width: 100%;\n  box-sizing: border-box;\n  max-height: 200px;\n  height: 200px;\n  overflow-y: scroll;\n  border: 1px solid #d4d4d4;\n  padding: 10px;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  display: inline-block;\n  width: 100%;\n  font-size: 14px;\n  margin: 0;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .error[_ngcontent-%COMP%] {\n  color: red;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .info[_ngcontent-%COMP%] {\n  color: green;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .warning[_ngcontent-%COMP%] {\n  color: #e2db00;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: inline;\n  font-size: 12px;\n  color: #616161;\n  font-weight: 300;\n  margin: 0;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%] {\n  display: inline-block;\n  width: 100%;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 0;\n  margin: 0;\n  height: 35px;\n  margin: 10px 0;\n  border-radius: 5px;\n  color: #fff;\n  background-color: #104781;\n  width: 100%;\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%], \n   .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    display: inline-block;\n    font-size: 15px;\n    color: #616161;\n    font-weight: 300;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: 20px;\n    box-sizing: border-box;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 20%;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:nth-child(2) {\n    background-color: #c0c0c0;\n    margin-left: 20px;\n  }\n}\n/*# sourceMappingURL=messages.component.css.map */"] });
+  }, dependencies: [CommonModule, NgClass, NgForOf, AsyncPipe, SpinnerComponent], styles: ["\n\n.message-container[_ngcontent-%COMP%] {\n  margin-top: 25px;\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n}\n.message-container[_ngcontent-%COMP%]   h3[_ngcontent-%COMP%] {\n  margin: 0;\n  color: #747474;\n  display: block;\n  padding: 20px 35px;\n  font-weight: 300;\n}\n.message-container[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: block;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%] {\n  margin-bottom: 65px;\n  align-items: center;\n  padding: 0 20px;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%] {\n  padding: 15px 15px;\n  border-radius: 5px;\n  width: 100%;\n  box-sizing: border-box;\n  max-height: 200px;\n  height: 200px;\n  overflow-y: scroll;\n  border: 1px solid #d4d4d4;\n  padding: 10px;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n  display: inline-block;\n  width: 100%;\n  font-size: 14px;\n  margin: 0;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .error[_ngcontent-%COMP%] {\n  color: red;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .info[_ngcontent-%COMP%] {\n  color: green;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   .warning[_ngcontent-%COMP%] {\n  color: #e2db00;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  display: inline;\n  font-size: 12px;\n  color: #616161;\n  font-weight: 300;\n  margin: 0;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%] {\n  width: 100%;\n  height: 300px;\n  height: auto;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 0;\n  margin: 0;\n  height: 35px;\n  margin: 10px 0;\n  border-radius: 5px;\n  color: #fff;\n  background-color: #104781;\n  width: 100%;\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   p[_ngcontent-%COMP%], \n   .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .scrollable-div[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    display: inline-block;\n    font-size: 15px;\n    color: #616161;\n    font-weight: 300;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: center;\n    padding: 20px;\n    box-sizing: border-box;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    box-sizing: border-box;\n    width: 20%;\n  }\n  .message-container[_ngcontent-%COMP%]   .messages[_ngcontent-%COMP%]   .action-message[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:nth-child(2) {\n    background-color: #c0c0c0;\n    margin-left: 20px;\n  }\n    body.dark .message-container {\n    border: 2px solid #00ffff;\n    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);\n  }\n}\n/*# sourceMappingURL=messages.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(MessagesComponent, { className: "MessagesComponent" });
@@ -45517,33 +45707,20 @@ var AppComponent = class _AppComponent {
   static \u0275fac = function AppComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _AppComponent)(\u0275\u0275directiveInject(Router));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["app-root"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 12, vars: 1, consts: [[3, "click"], ["routerLink", "/dashboard"], [1, "router-outlet-container"], [1, "container-title"], [2, "margin-left", "30px", "font-weight", "bold"]], template: function AppComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["app-root"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 8, vars: 0, consts: [[1, "router-outlet-container"], [1, "container-title"], [2, "margin-left", "30px", "font-weight", "bold"]], template: function AppComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275elementStart(0, "nav")(1, "h1", 0);
-      \u0275\u0275listener("click", function AppComponent_Template_h1_click_1_listener() {
-        return ctx.goHome();
-      });
-      \u0275\u0275text(2);
+      \u0275\u0275element(0, "nav");
+      \u0275\u0275elementStart(1, "div", 0)(2, "div", 1)(3, "span", 2);
+      \u0275\u0275text(4, "Heroes Management");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(3, "a", 1);
-      \u0275\u0275text(4, "Dashboard");
-      \u0275\u0275elementEnd()();
-      \u0275\u0275elementStart(5, "div", 2)(6, "div", 3)(7, "span", 4);
-      \u0275\u0275text(8, "Heroes Management");
+      \u0275\u0275element(5, "app-actions");
       \u0275\u0275elementEnd();
-      \u0275\u0275element(9, "app-actions");
+      \u0275\u0275element(6, "router-outlet");
       \u0275\u0275elementEnd();
-      \u0275\u0275element(10, "router-outlet");
-      \u0275\u0275elementEnd();
-      \u0275\u0275element(11, "app-messages");
-    }
-    if (rf & 2) {
-      \u0275\u0275advance(2);
-      \u0275\u0275textInterpolate(ctx.title);
+      \u0275\u0275element(7, "app-messages");
     }
   }, dependencies: [
     RouterOutlet,
-    RouterLink,
     MessagesComponent,
     ActionsComponent
   ], styles: ["\n\n*[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n}\nnav[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around;\n}\nnav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n  margin-bottom: 0;\n  font-size: 25px;\n  text-align: center;\n  align-items: center;\n  padding: 12px 0;\n  display: block;\n}\nnav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 10px;\n  text-decoration: none;\n  margin-top: 10px;\n  display: inline-block;\n  background-color: none;\n  color: #000;\n  font-size: 18px;\n  border-radius: 10px;\n  border: none;\n}\nnav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #5e5e5e;\n  background-color: transparent;\n}\n.router-outlet-container[_ngcontent-%COMP%] {\n  height: auto;\n}\n@media screen and (min-width: 600px) {\n  nav[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap-reverse;\n    justify-content: space-around;\n    align-items: center;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%], \n   nav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    margin: 0;\n    padding: 20px;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n    margin-bottom: 0;\n    font-size: 26px;\n    text-align: center;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%]:hover {\n    cursor: pointer;\n  }\n  nav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    font-size: 23px;\n  }\n  .router-outlet-container[_ngcontent-%COMP%] {\n    height: auto;\n    margin-bottom: 20px;\n  }\n  .router-outlet-container[_ngcontent-%COMP%]   .container-title[_ngcontent-%COMP%] {\n    border: 1px solid #d4d4d4;\n    border-radius: 8px;\n    padding: 15px;\n  }\n}\n/*# sourceMappingURL=app.component.css.map */"] });
