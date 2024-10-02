@@ -4,12 +4,20 @@
     class="heroes-menu"
     style="height: auto; min-height: 100px; position: relative"
   >
-    <a *ngFor="let hero of heroes" routerLink="/detail/{{ hero.id }}">
+    <button
+      [class.selected]="hero === selectedHero"
+      *ngFor="let hero of heroes"
+      hero="hero.id"
+      (click)="currentSelected(hero)"
+    >
       {{ hero.name }}
-    </a>
+    </button>
     <app-spinner
       [isLoading]="isLoadingSpinner"
       [message]="spinnerMessage"
     ></app-spinner>
   </div>
+  <app-dashboard-hero-details
+    [renderHeroDetail]="renderHeroDetail"
+  ></app-dashboard-hero-details>
 </div>

@@ -1,0 +1,5 @@
+<div *ngIf="hero">
+  <span style="display: block">{{ hero.id }}</span>
+  <span>{{ hero.name }}</span>
+  <a routerLink="/detail/{{ hero.id }}">Edit</a>
+</div>

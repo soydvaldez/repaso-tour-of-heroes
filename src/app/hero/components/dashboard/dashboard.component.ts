@@ -8,11 +8,12 @@ import { SpinnerService } from '../../../spinner/service/spinner.service';
 import { Subscription } from 'rxjs';
 import { ActionsService } from '../../../actions/services/actions.service';
 import { HeroActions } from '../../../actions/enums/hero-actions.enum';
+import { DashboardHeroDetailsComponent } from '../dashboard-hero-details/dashboard-hero-details.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgFor, NgIf, RouterLink, SpinnerComponent],
+  imports: [NgFor, NgIf, SpinnerComponent, DashboardHeroDetailsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -20,8 +21,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   heroes?: Hero[];
   heroSubscription!: Subscription;
 
+  renderHeroDetail!: number;
+
   public spinnerMessage = 'Loading top heroes...';
   public isLoadingSpinner = false;
+
+  isHeroSelected: boolean = false;
+
+  hero?: Hero;
+  selectedHero?: Hero;
 
   constructor(
     private heroService: HeroService,
@@ -33,7 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // this.spinnerService.setMessage('Loading Top Heroes...');
     // this.spinnerService.show();
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
-    
+
     this.isLoadingSpinner = true;
     this.heroSubscription = this.heroService
       .getTopHeroes()
@@ -48,5 +56,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.heroSubscription) {
       this.heroSubscription.unsubscribe();
     }
+  }
+
+  currentSelected(hero: Hero) {
+    this.selectedHero = hero;
+    this.renderHeroDetails(this.selectedHero.id);
+  }
+
+  renderHeroDetails(id: number) {
+    this.renderHeroDetail = id;
+  }
+
+  cleanDetail() {
+    this.renderHeroDetail = -1;
   }
 }
