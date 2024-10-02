@@ -2,13 +2,18 @@
   <h3>{{ title }}</h3>
   <div class="messages">
     <div class="scrollable-div" #scrollContainer>
-      <p *ngFor="let log of messages$ | async">
-        <span [ngClass]="setSeverityStyle(log.severity)"
-          >[{{ log.severity }}] </span
-        ><strong>{{ log.source }}</strong
-        >: {{ log.message }}
-      </p>
+      <div *ngIf="messages$ | async as messages" style="height: 100%;">
+        <div *ngIf="messages.length > 0; else noMessage">
+          <p *ngFor="let log of messages">
+            <span [ngClass]="setSeverityStyle(log.severity)"
+              >[{{ log.severity }}] </span
+            ><strong>{{ log.source }}</strong
+            >: {{ log.message }}
+          </p>
+        </div>
+      </div>
     </div>
+
     <div class="action-message">
       <button type="button" (click)="publishMessage()">
         Publish a Message
@@ -18,3 +23,23 @@
   </div>
   <app-spinner [isLoading]="isLoading" [message]="message"></app-spinner>
 </div>
+
+<ng-template #noMessage>
+  <div class="noMessages">
+    <p>Not found Message!</p>
+    <style>
+      .noMessages {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 100px;
+      }
+      .noMessages p {
+        display: block;
+        text-align: center;
+      }
+    </style>
+  </div>
+</ng-template>

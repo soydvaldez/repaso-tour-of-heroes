@@ -5,9 +5,44 @@
   padding: 10px 15px;
   position: relative;
   border: 1px solid #d4d4d4;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
+
+  .xmark-container {
+    width: 100%;
+    height: 30px;
+  }
+
+  .xmark-container .xmark {
+    float: right;
+    width: 15px;
+    border-radius: 50%;
+    padding: 5px;
+  }
+
+  .xmark-container .xmark:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .title {
+    margin-bottom: 20px;
+    h3 {
+      display: inline;
+      margin: 0;
+      padding: 0 20px;
+      font-weight: bold;
+      color: #104781;
+    }
+
+    span {
+      display: inline;
+      margin: 0;
+      // color: #1696a4;
+    }
+  }
 
   .hero-detail {
     border-radius: 5px;
@@ -15,141 +50,76 @@
     flex-direction: column;
     // align-items: center;
 
-    .title {
-      display: inline-block;
-      // padding: 20px 20px;
-      margin-bottom: 20px;
-      h3 {
-        display: inline;
-        margin: 0;
-        font-weight: bold;
-        color: #104781;
-      }
-
-      span {
-        display: inline;
-        margin: 0;
-        // color: #1696a4;
-      }
-    }
-
     form {
       // border: 1px solid #ccc;
       border-radius: 8px;
       box-sizing: border-box;
       width: 100%;
 
-      .container-form-control {
-        display: flex;
-        flex-direction: column;
-        height: auto;
+      .form-control {
+        box-sizing: border-box;
+        width: 100%;
+        // border-radius: 5px;
+        border: none;
+        height: 100px;
 
-        .form-control {
-          box-sizing: border-box;
-          width: 100%;
+        width: 100%;
+        padding: 20px;
+
+        label {
+          display: block;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+
+        .input-container {
+          border: 1px solid #d4d4d4;
           border-radius: 5px;
-          border: none;
-          height: 100px;
+          height: 100%;
 
-          width: 100%;
-          padding: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-          label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
+          svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
           }
 
-          .input-container {
-            border: 1px solid #d4d4d4;
-            border-radius: 10px;
-            padding: 12px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            svg {
-              width: 20px;
-              height: 20px;
-              margin-right: 10px;
-            }
-
-            input {
-              outline: none;
-              color: #104781;
-              border: none;
-              border-left: 1px solid #d4d4d4;
-              font-size: 15px;
-              padding-left: 10px;
-              width: 82%;
-            }
-            &:hover {
-              outline: 2px solid #1696a4;
-            }
+          input {
+            box-sizing: border-box;
+            outline: none;
+            color: #104781;
+            border: none;
+            border-left: 1px solid #d4d4d4;
+            font-size: 15px;
+            padding-left: 10px;
+            width: 82%;
+            height: 100%;
           }
-
-          &.year {
-            label {
-              color: #061112;
-            }
-
-            .input-container {
-              box-sizing: border-box;
-              padding: 0 10px;
-              border: none;
-              border: 1px solid #d4d4d4;
-              width: 100%;
-              display: flex;
-
-              svg {
-              }
-
-              select {
-                width: 100%;
-                height: 48px;
-                outline: none;
-                padding: 0 14px;
-                border: 1px solid #d4d4d4;
-                cursor: pointer;
-                color: #104781;
-                font-weight: 300;
-                font-size: 15px;
-              }
-            }
-          }
-
-          &.select-publisher {
-            width: 100%;
-            label {
-            }
-
-            .input-container {
-              box-sizing: border-box;
-              width: 100%;
-              display: flex;
-
-              svg {
-              }
-
-              select {
-                width: 100%;
-                height: 30px;
-                outline: none;
-                padding: 0;
-                border: none;
-                border-left: 1px solid #d4d4d4;
-                cursor: pointer;
-                color: #104781;
-                font-weight: 300;
-                font-size: 15px;
-              }
-            }
+          &:hover {
+            outline: 2px solid #1696a4;
           }
         }
+
+        select {
+          width: 100%;
+          height: 48px;
+          outline: none;
+          padding: 0 14px;
+          border: 1px solid #d4d4d4;
+          cursor: pointer;
+          color: #104781;
+          font-weight: 300;
+          font-size: 15px;
+          background-color: transparent;
+        }        
       }
 
       .container-form-button {
+        box-sizing: border-box;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -159,11 +129,12 @@
         button {
           padding: 0;
           margin: 0;
+          border-radius: 5px;
           width: 100%;
           height: 35px;
           background-color: #104781;
           color: #fff;
-          font-size: 16px;
+          font-size: 14px;
           margin: 10px 0;
         }
       }
@@ -198,108 +169,54 @@
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 600px) {
   .detail-heroe-container {
     height: auto;
 
     .hero-detail {
       form {
         box-sizing: border-box;
-        width: auto;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 20px;
 
-        .container-form-control {
-          display: flex;
-          flex-direction: row;
-          height: auto;
+        .form-control {
+          width: 50%;
+          border-radius: 5px;
+          border: none;
+          height: 85px;
 
-          .form-control {
-            width: 100%;
-            border-radius: 5px;
-            border: none;
-            height: 100px;
+          label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
 
-            label {
-              display: block;
-              // border: 1px solid #d4d4d4;
-              font-weight: bold;
-              // padding: 0 15px;
-              margin-bottom: 10px;
+          .input-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+
+            svg {
+              width: 20px;
+              height: 20px;
+              margin-right: 10px;
             }
 
-            .input-container {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              justify-content: flex-start;
-
-              svg {
-                width: 20px;
-                height: 20px;
-                margin-right: 10px;
-              }
-
-              input {
-                outline: none;
-                color: #104781;
-                border: none;
-                border-left: 1px solid #d4d4d4;
-                font-size: 15px;
-                padding-left: 10px;
-                width: 86%;
-              }
-              &:hover {
-                outline: 2px solid #104781;
-              }
+            input {
+              outline: none;
+              color: #104781;
+              border: none;
+              border-left: 1px solid #d4d4d4;
+              font-size: 15px;
+              padding-left: 10px;
+              width: 86%;
             }
-
-            // publisher select component
-            &.year {
-              label {
-              }
-
-              .select {
-                box-sizing: border-box;
-                width: 100%;
-                padding: 5px;
-
-                select {
-                  width: 90%;
-                  height: 30px;
-                  outline: none;
-                  padding: 0;
-                  border: none;
-                  border-left: 1px solid #d4d4d4;
-                  cursor: pointer;
-                  color: #104781;
-                  font-weight: 300;
-                  font-size: 15px;
-                }
-              }
-            }
-
-            // publisher select component
-            &.select-publisher {
-              label {
-              }
-
-              .select {
-                box-sizing: border-box;
-                width: 100%;
-                padding: 5px;
-
-                select {
-                  width: 90%;
-                  height: 30px;
-                  outline: none;
-                  padding: 0;
-                  border: none;
-                  border-left: 1px solid #d4d4d4;
-                  cursor: pointer;
-                  color: #104781;
-                  font-weight: 300;
-                  font-size: 15px;
-                }
-              }
+            &:hover {
+              outline: 2px solid #104781;
             }
           }
         }

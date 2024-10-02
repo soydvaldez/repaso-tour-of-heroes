@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   heroes?: Hero[];
   heroSubscription!: Subscription;
 
-  renderHeroDetail!: number;
+  renderHeroDetail: number = 14;
 
   public spinnerMessage = 'Loading top heroes...';
   public isLoadingSpinner = false;

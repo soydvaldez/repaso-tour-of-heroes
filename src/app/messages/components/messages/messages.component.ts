@@ -1,7 +1,7 @@
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from '../../service/message.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Message } from '../../interface/message';
 import { SpinnerService } from '../../../spinner/service/spinner.service';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
@@ -29,6 +29,11 @@ export class MessagesComponent implements OnInit {
     public spinnerService: SpinnerService
   ) {
     this.messages$ = this.messageService.messages$;
+    this.messages$.pipe(
+      map((message) => {
+        return message && message.length > 0;
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -40,7 +45,7 @@ export class MessagesComponent implements OnInit {
         this.type = this.setSeverityStyle(m.severity);
       });
     });
-    
+
     setTimeout(() => {
       this.isLoading = false;
     }, 2000);
@@ -60,8 +65,9 @@ export class MessagesComponent implements OnInit {
 
   private scrollToBottom(): void {
     try {
-      this.scrollContainer.nativeElement.scrollTop =
-        this.scrollContainer.nativeElement.scrollHeight;
+      if (this.scrollContainer) {
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+      }
     } catch (err) {
       console.error('Error al desplazar el scroll:', err);
     }

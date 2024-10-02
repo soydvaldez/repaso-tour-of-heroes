@@ -21,7 +21,17 @@
       />
     </svg>
   </div>
-  <h2 style="text-align: center; margin: 0px; margin-bottom: 15px">New Hero</h2>
+  <span
+    style="
+      text-align: center;
+      margin: 0px;
+      margin-bottom: 15px;
+      font-size: 20px;
+      display: block;
+      text-align: center;
+    "
+    >New Hero</span
+  >
   <div class="my-heroes-container">
     <form [formGroup]="heroForm" (ngSubmit)="onSubmit()">
       <div class="form-control">
@@ -75,7 +85,7 @@
           <!-- <app-spinner></app-spinner> -->
         </div>
       </div>
-      <div>
+      <div class="action-form">
         <button type="submit">Save</button>
         <button
           type="button"
