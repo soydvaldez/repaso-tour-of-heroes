@@ -43719,7 +43719,7 @@ var DashboardComponent = class _DashboardComponent {
   actionsService;
   heroes;
   heroSubscription;
-  renderHeroDetail = 14;
+  renderHeroDetail;
   spinnerMessage = "Loading top heroes...";
   isLoadingSpinner = false;
   isHeroSelected = false;
@@ -43734,9 +43734,12 @@ var DashboardComponent = class _DashboardComponent {
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
     this.isLoadingSpinner = true;
     this.heroSubscription = this.heroService.getTopHeroes().subscribe((heroes) => {
-      this.spinnerService.hide();
-      this.heroes = heroes;
-      this.isLoadingSpinner = false;
+      if (heroes && heroes.length > 0) {
+        this.renderHeroDetail = heroes[0].id;
+        this.spinnerService.hide();
+        this.heroes = heroes;
+        this.isLoadingSpinner = false;
+      }
     });
   }
   ngOnDestroy() {
