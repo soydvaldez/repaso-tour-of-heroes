@@ -43608,23 +43608,42 @@ var HeroDetailComponent = class _HeroDetailComponent {
 // src/app/hero/components/dashboard-hero-details/dashboard-hero-details.component.ts
 function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div")(1, "span", 1);
-    \u0275\u0275text(2);
+    \u0275\u0275elementStart(0, "div", 1)(1, "div")(2, "p")(3, "span", 2);
+    \u0275\u0275text(4, "Name: ");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(3, "span");
-    \u0275\u0275text(4);
+    \u0275\u0275text(5);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(5, "a", 2);
-    \u0275\u0275text(6, "Edit");
+    \u0275\u0275elementStart(6, "p")(7, "span", 2);
+    \u0275\u0275text(8, "Year: ");
+    \u0275\u0275elementEnd();
+    \u0275\u0275text(9);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(10, "p")(11, "span", 2);
+    \u0275\u0275text(12, "Publisher: ");
+    \u0275\u0275elementEnd();
+    \u0275\u0275text(13);
     \u0275\u0275elementEnd()();
+    \u0275\u0275elementStart(14, "div", 3)(15, "a", 4);
+    \u0275\u0275namespaceSVG();
+    \u0275\u0275elementStart(16, "svg", 5);
+    \u0275\u0275element(17, "path", 6);
+    \u0275\u0275elementEnd()();
+    \u0275\u0275namespaceHTML();
+    \u0275\u0275elementStart(18, "button", 7);
+    \u0275\u0275namespaceSVG();
+    \u0275\u0275elementStart(19, "svg", 8);
+    \u0275\u0275element(20, "path", 9);
+    \u0275\u0275elementEnd()()()();
   }
   if (rf & 2) {
     const ctx_r0 = \u0275\u0275nextContext();
-    \u0275\u0275advance(2);
-    \u0275\u0275textInterpolate(ctx_r0.hero.id);
-    \u0275\u0275advance(2);
+    \u0275\u0275advance(5);
     \u0275\u0275textInterpolate(ctx_r0.hero.name);
-    \u0275\u0275advance();
+    \u0275\u0275advance(4);
+    \u0275\u0275textInterpolate(ctx_r0.hero.year);
+    \u0275\u0275advance(4);
+    \u0275\u0275textInterpolate(ctx_r0.hero.publisher == null ? null : ctx_r0.hero.publisher.name);
+    \u0275\u0275advance(2);
     \u0275\u0275propertyInterpolate1("routerLink", "/detail/", ctx_r0.hero.id, "");
   }
 }
@@ -43660,14 +43679,14 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(HeroService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [[4, "ngIf"], [2, "display", "block"], [3, "routerLink"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-around", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-around"], [2, "font-weight", "bolder"], [1, "action"], [3, "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [2, "background-color", "tomato", "color", "#fff"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 7, 4, "div", 0);
+      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 21, 5, "div", 0);
     }
     if (rf & 2) {
       \u0275\u0275property("ngIf", ctx.hero);
     }
-  }, dependencies: [NgIf, RouterLink] });
+  }, dependencies: [NgIf, RouterLink], styles: [".dashboard-hero-detail[_ngcontent-%COMP%] {\n    padding: 20px;\n  }\n\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]{\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n    gap: 10px;\n  }\n\n  a[_ngcontent-%COMP%] {\n    text-decoration-line: none;\n    background-color: #eee;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    color: black;\n    font-size: 1.2rem;\n    padding: 10px;\n    \n    svg {\n      width: 20px;\n    }\n  }\n\n  button[_ngcontent-%COMP%] {\n    padding: 10px;\n    font-size: 10px;\n    border: none;\n    outline: #d4d4d4;\n    \n    margin:0;\n    \n    svg {\n      width: 20px;\n    }\n  }\n\n  @media screen and (min-width: 600px) {\n    \n  }"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardHeroDetailsComponent, { className: "DashboardHeroDetailsComponent" });
@@ -43700,7 +43719,7 @@ var DashboardComponent = class _DashboardComponent {
   actionsService;
   heroes;
   heroSubscription;
-  renderHeroDetail;
+  renderHeroDetail = 14;
   spinnerMessage = "Loading top heroes...";
   isLoadingSpinner = false;
   isHeroSelected = false;
