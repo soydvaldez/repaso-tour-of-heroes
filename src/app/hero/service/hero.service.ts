@@ -212,6 +212,13 @@ export class HeroService {
       );
   }
 
+  delete(heroId: number) {
+    return this.http.delete<Hero>(
+      `${this.heroesUrl}/${heroId}`,
+      this.httpOptions
+    );
+  }
+
   log(message: Message) {
     this.messageService.add(message);
   }
@@ -235,8 +242,7 @@ export class HeroService {
       );
     }
 
-    this.getHeroes(true).subscribe((heroes) => {
-    });
+    this.getHeroes(true).subscribe((heroes) => {});
 
     // Obtener los héroes y verificar si el héroe a chequear existe
     return this.getHeroes(true).pipe(

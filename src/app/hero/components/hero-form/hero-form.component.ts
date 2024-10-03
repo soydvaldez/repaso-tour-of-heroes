@@ -1,5 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MessageService } from '../../../messages/service/message.service';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
 import { SpinnerService } from '../../../spinner/service/spinner.service';
@@ -9,15 +14,7 @@ import { RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
 import { ActionsComponent } from '../../../actions/actions.component';
 import { LoadingState } from '../../../spinner/interface/loading-state';
-import {
-  catchError,
-  finalize,
-  Observable,
-  of,
-  Subscription,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
 import { Hero, Publisher } from '../../interface/hero';
 import { NotificationComponent } from '../notification/notification.component';
@@ -70,6 +67,8 @@ export class HeroFormComponent implements OnInit, OnDestroy {
 
   btnText: string = 'Cancel';
   buttonColor: string = '#104781;';
+  isVisibleNotification: boolean = false;
+  notificationTimeout: any;
 
   constructor(
     private messageService: MessageService,
@@ -85,13 +84,15 @@ export class HeroFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // this.notificationMessage = 'Holamundo';
+
     this.actionsService.setOptions(HeroActions.Create);
 
     this.publishers$ = this.publisherService.getPublishers();
     this.isLoadingSpinner = true;
 
     this.heroForm = new FormGroup({
-      name: new FormControl<string>(''),
+      name: new FormControl<string>('', Validators.required),
       year: new FormControl<number>(2024),
       publisher: new FormControl<number>(1),
     });
@@ -105,6 +106,11 @@ export class HeroFormComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isLoadingSpinner = false;
     }, 1000);
+
+    let ref = document.getElementsByTagName(
+      'app-notification'
+    )[0] as HTMLElement;
+    console.log(document.getElementsByTagName('app-notification'));
   }
 
   ngOnDestroy(): void {
@@ -125,14 +131,16 @@ export class HeroFormComponent implements OnInit, OnDestroy {
     const publisherId = this.heroForm.get('publisher')?.value;
 
     if (!newHero.name) {
-      this.notificationType = 'error';
-      this.notificationMessage = 'Hero name is required';
-
+      this.setNotification('Hero name is required', 'error');
       this.isLoadingSpinner = false;
 
-      setTimeout(() => {
-        this.notificationMessage = '';
-      }, 5000);
+      let inputName = document.getElementById('name');
+      if (inputName) {
+        inputName.style.outline = '1px solid red';
+        setTimeout(() => {
+          inputName.style.outline = '';
+        }, 15000);
+      }
       return;
     }
 
@@ -176,14 +184,15 @@ export class HeroFormComponent implements OnInit, OnDestroy {
         this.isLoadingSpinner = false;
         this.btnText = 'Regresar';
         this.buttonColor = '#d4d4d4';
-        setTimeout(() => {
-          this.notificationMessage = '';
-        }, 5000);
       });
   }
 
   // Método para crear un nuevo héroe a partir del formulario
   private createHero(): Hero {
+    if (!this.heroForm.get('name')?.value) {
+      name: this.heroForm.get('name')?.invalid;
+    }
+
     return {
       id: Math.floor(Math.random() * 1000), // Genera un ID ficticio o usa uno real si es necesario
       name: this.heroForm.get('name')?.value,
@@ -202,8 +211,18 @@ export class HeroFormComponent implements OnInit, OnDestroy {
     message: string,
     type: 'success' | 'error' = 'success'
   ) {
+    console.log('');
+
     this.notificationMessage = message;
     this.notificationType = type;
+
+    if (this.notificationTimeout) {
+      clearInterval(this.notificationTimeout);
+    }
+
+    this.notificationTimeout = setTimeout(() => {
+      this.notificationMessage = '';
+    }, 5000);
   }
 
   goBack() {
@@ -216,5 +235,10 @@ export class HeroFormComponent implements OnInit, OnDestroy {
 
   log(message: Message) {
     this.messageService.add(message);
+  }
+
+  closeNotification(arg0: any) {
+    this.notificationMessage = '';
+    console.log('notify child');
   }
 }

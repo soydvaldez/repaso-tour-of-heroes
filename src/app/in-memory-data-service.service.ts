@@ -127,4 +127,26 @@ export class InMemoryDataService implements InMemoryDbService {
       status: 404,
     }));
   }
+
+  delete(reqInfo: RequestInfo) {
+    const collectionName = reqInfo.collectionName;
+    const heroes: Hero[] = reqInfo.collection;
+    const heroIdDelete = reqInfo.id || -1;
+
+    const index = heroes.findIndex((h) => h.id === heroIdDelete) || -1;
+
+    if (index && index !== -1) {
+      heroes.splice(index, 1);
+
+      return reqInfo.utils.createResponse$(() => ({
+        body: heroIdDelete,
+        status: 200,
+      }));
+    }
+
+    return reqInfo.utils.createResponse$(() => ({
+      body: heroIdDelete,
+      status: 404,
+    }));
+  }
 }

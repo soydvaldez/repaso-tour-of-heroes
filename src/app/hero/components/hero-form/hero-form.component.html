@@ -3,10 +3,6 @@
   <!-- <app-actions [action]="action"></app-actions> -->
 
   <!-- <div class="my-heroes-container" *ngIf="!(spinnerState$ | async)?.isLoading"> -->
-  <app-notification
-    [message]="notificationMessage"
-    [type]="notificationType"
-  ></app-notification>
   <div class="close-container">
     <svg
       (click)="goBack()"
@@ -21,6 +17,12 @@
       />
     </svg>
   </div>
+  <app-notification
+    (closeNotificationEvent)="closeNotification($event)"
+    [isVisible]="isVisibleNotification"
+    [message]="notificationMessage"
+    [type]="notificationType"
+  ></app-notification>
   <span
     style="
       text-align: center;
@@ -28,10 +30,17 @@
       margin-bottom: 15px;
       font-size: 20px;
       display: block;
-      text-align: center;
+      text-align: left;
+      padding-left: 30px;
     "
     >New Hero</span
   >
+  <div
+    *ngIf="heroForm.get('name')?.invalid && heroForm.get('name')?.touched"
+    class="error-message"
+  >
+    Hero name is required.
+  </div>
   <div class="my-heroes-container">
     <form [formGroup]="heroForm" (ngSubmit)="onSubmit()">
       <div class="form-control">
@@ -47,8 +56,14 @@
             id="name"
             type="text"
             formControlName="name"
-            autofocus
             placeholder="Hero name"
+            required="name"
+            [ngClass]="{
+              'is-invalid':
+                heroForm.get('name')?.invalid && heroForm.get('name')?.touched,
+              'is-valid':
+                heroForm.get('name')?.valid && heroForm.get('name')?.touched
+            }"
           />
         </div>
       </div>
@@ -102,3 +117,18 @@
     [message]="messageSpinner"
   ></app-spinner>
 </div>
+
+<style>
+  .is-invalid {
+    border: 2px solid red;
+  }
+
+  .is-valid {
+    border: 2px solid green;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+  }
+</style>

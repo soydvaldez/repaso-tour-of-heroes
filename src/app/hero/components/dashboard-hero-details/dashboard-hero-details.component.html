@@ -1,15 +1,18 @@
 <div
   class="dashboard-hero-detail"
   *ngIf="hero"
-  style="display: flex; justify-content: space-around"
+  style="display: flex; justify-content: space-evenly; position: relative"
 >
   <div>
-    <p><span style="font-weight: bolder;">Name: </span>{{ hero.name }}</p>
-    <p><span style="font-weight: bolder;">Year: </span>{{ hero.year }}</p>
-    <p><span style="font-weight: bolder;">Publisher: </span>{{ hero.publisher?.name }}</p>
+    <p><span style="font-weight: bolder">Name: </span>{{ hero.name }}</p>
+    <p><span style="font-weight: bolder">Year: </span>{{ hero.year }}</p>
+    <p>
+      <span style="font-weight: bolder">Publisher: </span
+      >{{ hero.publisher?.name }}
+    </p>
   </div>
   <div class="action">
-    <a routerLink="/detail/{{ hero.id }}">
+    <a appTooltip="Editar" routerLink="/detail/{{ hero.id }}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
         <path
@@ -17,7 +20,11 @@
         />
       </svg>
     </a>
-    <button style="background-color: tomato; color: #fff">
+    <button
+      appTooltip="Eliminar"
+      style="background-color: tomato; color: #fff; position: relative"
+      (click)="displayConfirmModal()"
+    >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
         <path
@@ -26,50 +33,12 @@
       </svg>
     </button>
   </div>
+  <app-spinner
+    [isLoading]="isLoadingSpinner"
+    [message]="messageSpinner"
+  ></app-spinner>
+  <app-confirm-modal
+    *ngIf="showModal"
+    (confirm)="handleConfirmation($event)"
+  ></app-confirm-modal>
 </div>
-
-<style>
-  .dashboard-hero-detail {
-    padding: 20px;
-  }
-
-  .dashboard-hero-detail .action{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-  }
-
-  a {
-    text-decoration-line: none;
-    background-color: #eee;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    color: black;
-    font-size: 1.2rem;
-    padding: 10px;
-    
-    svg {
-      width: 20px;
-    }
-  }
-
-  button {
-    padding: 10px;
-    font-size: 10px;
-    border: none;
-    outline: #d4d4d4;
-    
-    margin:0;
-    
-    svg {
-      width: 20px;
-    }
-  }
-
-  @media screen and (min-width: 600px) {
-    
-  }
-</style>

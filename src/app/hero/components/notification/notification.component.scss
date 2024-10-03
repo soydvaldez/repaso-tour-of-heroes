@@ -1,44 +1,63 @@
 .notification {
-  opacity: 0;
-  visibility: none;
-  transition: opacity 0.5s ease-in-out;
-
-  margin-top: 1rem;
-  padding: 1rem;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 94%;
+  // background-color: #d4edda;
+  // height: 40px;
   border-radius: 5px;
-  text-align: center;
-  //animation name keyframe
-  animation: notification 2s linear;
+  margin: 0 auto;
 
-  &.success {
-    // opacity: 1;
-    // visibility: visible;
-    // background-color: #d4edda;
-    // color: #155724;
-    background-color: #d4edda;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
 
-    @keyframes notification {
-      0% {
-        opacity: 1;
-        visibility: visible;
-        background-color: #d4edda;
-        color: #155724;
-      }
-      100% {
-        // transform: rotate(360deg);
-        height: 0;
-        opacity: 0;
-        display: none;
-        visibility: hidden;
-        background-color: #f8d7da;
-      }
+  p {
+    margin: 0;
+    border-radius: 5px;
+    font-size: 12px;
+    display: inline;
+    height: 100%;
+  }
+
+  .xmark-container {
+    // height: 20px;
+    float: right;
+    // position: relative;
+    // right: 0;
+    // top: 0;
+
+    svg {
+      height: 15px;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 
-  &.error {
-    opacity: 1;
-    visibility: visible;
-    background-color: #f8d7da;
-    color: #721c24;
+  &.success {
+    margin-top: 10px;
+    color: green;
+    background-color: #d4edda;
   }
+
+  &.error {
+    color: red;
+    background-color: #fde8e9;
+  }
+
+  // &.success {
+  // opacity: 1;
+  // visibility: visible;
+  // background-color: #d4edda;
+  // color: #155724;
+  // background-color: #d4edda;
+  // }
+
+  // &.error {
+  // opacity: 1;
+  // visibility: visible;
+  // background-color: #f8d7da;
+  // color: #721c24;
+  // }
 }

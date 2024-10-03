@@ -1,0 +1,54 @@
+.dashboard-hero-detail {
+  padding: 20px;
+
+  .action {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  a {
+    text-decoration-line: none;
+    background-color: #eee;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: black;
+    font-size: 1.2rem;
+    padding: 10px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  button {
+    padding: 10px;
+    font-size: 10px;
+    border: none;
+    border-radius: 8px;
+    outline: #d4d4d4;
+    padding: 10px;
+    margin: 0;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .dashboard-hero-detail {
+    .action {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+    }
+  }
+}

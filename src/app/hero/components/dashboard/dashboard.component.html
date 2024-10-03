@@ -18,6 +18,8 @@
     ></app-spinner>
   </div>
   <app-dashboard-hero-details
+    *ngIf="hasTopHeroes"
+    (heroDeleted)="updateTopHeroes()"
     [renderHeroDetail]="renderHeroDetail"
   ></app-dashboard-hero-details>
 </div>

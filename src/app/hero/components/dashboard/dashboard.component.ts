@@ -2,18 +2,24 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HeroService } from '../../service/hero.service';
 import { Hero } from '../../interface/hero';
 import { NgFor, NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
 import { SpinnerService } from '../../../spinner/service/spinner.service';
 import { Subscription } from 'rxjs';
 import { ActionsService } from '../../../actions/services/actions.service';
 import { HeroActions } from '../../../actions/enums/hero-actions.enum';
 import { DashboardHeroDetailsComponent } from '../dashboard-hero-details/dashboard-hero-details.component';
+import { TooltipDirective } from '../../../commons/tooltip.directive';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgFor, NgIf, SpinnerComponent, DashboardHeroDetailsComponent],
+  imports: [
+    NgFor,
+    NgIf,
+    SpinnerComponent,
+    DashboardHeroDetailsComponent,
+    TooltipDirective,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -21,7 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   heroes?: Hero[];
   heroSubscription!: Subscription;
 
-  renderHeroDetail: number = 14;
+  renderHeroDetail!: number;
 
   public spinnerMessage = 'Loading top heroes...';
   public isLoadingSpinner = false;
@@ -30,6 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   hero?: Hero;
   selectedHero?: Hero;
+  hasTopHeroes: boolean = true;
 
   constructor(
     private heroService: HeroService,
@@ -46,9 +53,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.heroSubscription = this.heroService
       .getTopHeroes()
       .subscribe((heroes) => {
-        this.spinnerService.hide();
-        this.heroes = heroes;
-        this.isLoadingSpinner = false;
+        if (heroes && heroes.length > 0) {
+          const defaultHeroSelected = heroes[0];
+          this.renderHeroDetail = defaultHeroSelected.id;
+          this.selectedHero = defaultHeroSelected;
+          this.spinnerService.hide();
+          this.heroes = heroes;
+          this.isLoadingSpinner = false;
+        }
       });
   }
 
@@ -69,5 +81,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   cleanDetail() {
     this.renderHeroDetail = -1;
+  }
+
+  updateTopHeroes() {
+    alert('actualizando vista');
+    this.isLoadingSpinner = true;
+
+    setTimeout(() => {
+      this.isLoadingSpinner = false;
+    }, 10000);
   }
 }
