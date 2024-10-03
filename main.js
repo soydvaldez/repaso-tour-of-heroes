@@ -43605,6 +43605,73 @@ var HeroDetailComponent = class _HeroDetailComponent {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HeroDetailComponent, { className: "HeroDetailComponent" });
 })();
 
+// src/app/commons/tooltip.directive.ts
+var TooltipDirective = class _TooltipDirective {
+  el;
+  renderer;
+  tooltipText = "";
+  // El texto que pasaremos a la directiva
+  tooltipElement = null;
+  constructor(el, renderer) {
+    this.el = el;
+    this.renderer = renderer;
+  }
+  // Método para crear el tooltip
+  createTooltip() {
+    this.tooltipElement = this.renderer.createElement("span");
+    this.renderer.appendChild(
+      this.tooltipElement,
+      this.renderer.createText(this.tooltipText)
+      // Añadimos el texto del tooltip
+    );
+    this.renderer.setStyle(this.tooltipElement, "position", "absolute");
+    this.renderer.setStyle(this.tooltipElement, "background-color", "#333");
+    this.renderer.setStyle(this.tooltipElement, "color", "#fff");
+    this.renderer.setStyle(this.tooltipElement, "padding", "5px 10px");
+    this.renderer.setStyle(this.tooltipElement, "border-radius", "4px");
+    this.renderer.setStyle(this.tooltipElement, "top", `${this.el.nativeElement.offsetTop - 30}px`);
+    this.renderer.setStyle(this.tooltipElement, "left", `${this.el.nativeElement.offsetLeft}px`);
+    this.renderer.setStyle(this.tooltipElement, "font-size", "12px");
+    this.renderer.setStyle(this.tooltipElement, "white-space", "nowrap");
+    this.renderer.setStyle(this.tooltipElement, "z-index", "1000");
+    this.renderer.appendChild(document.body, this.tooltipElement);
+  }
+  // Método para eliminar el tooltip
+  destroyTooltip() {
+    if (this.tooltipElement) {
+      this.renderer.removeChild(document.body, this.tooltipElement);
+      this.tooltipElement = null;
+    }
+  }
+  // Escucha cuando el mouse entra en el elemento
+  onMouseEnter() {
+    if (!this.tooltipElement) {
+      this.createTooltip();
+    }
+  }
+  // Escucha cuando el mouse sale del elemento
+  onMouseLeave() {
+    this.destroyTooltip();
+  }
+  onClick() {
+    this.destroyTooltip();
+  }
+  static \u0275fac = function TooltipDirective_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _TooltipDirective)(\u0275\u0275directiveInject(ElementRef), \u0275\u0275directiveInject(Renderer2));
+  };
+  static \u0275dir = /* @__PURE__ */ \u0275\u0275defineDirective({ type: _TooltipDirective, selectors: [["", "appTooltip", ""]], hostBindings: function TooltipDirective_HostBindings(rf, ctx) {
+    if (rf & 1) {
+      \u0275\u0275listener("mouseenter", function TooltipDirective_mouseenter_HostBindingHandler() {
+        return ctx.onMouseEnter();
+      })("mouseleave", function TooltipDirective_mouseleave_HostBindingHandler() {
+        return ctx.onMouseLeave();
+      })("click", function TooltipDirective_click_HostBindingHandler() {
+        return ctx.onClick();
+      });
+    }
+  }, inputs: { tooltipText: [0, "appTooltip", "tooltipText"] }, standalone: true });
+};
+
 // src/app/hero/components/dashboard-hero-details/dashboard-hero-details.component.ts
 function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
   if (rf & 1) {
@@ -43633,7 +43700,10 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
     \u0275\u0275namespaceSVG();
     \u0275\u0275elementStart(19, "svg", 8);
     \u0275\u0275element(20, "path", 9);
-    \u0275\u0275elementEnd()()()();
+    \u0275\u0275elementEnd()()();
+    \u0275\u0275namespaceHTML();
+    \u0275\u0275element(21, "app-spinner", 10);
+    \u0275\u0275elementEnd();
   }
   if (rf & 2) {
     const ctx_r0 = \u0275\u0275nextContext();
@@ -43642,9 +43712,11 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
     \u0275\u0275advance(4);
     \u0275\u0275textInterpolate(ctx_r0.hero.year);
     \u0275\u0275advance(4);
-    \u0275\u0275textInterpolate(ctx_r0.hero.publisher == null ? null : ctx_r0.hero.publisher.name);
+    \u0275\u0275textInterpolate1("", ctx_r0.hero.publisher == null ? null : ctx_r0.hero.publisher.name, " ");
     \u0275\u0275advance(2);
     \u0275\u0275propertyInterpolate1("routerLink", "/detail/", ctx_r0.hero.id, "");
+    \u0275\u0275advance(6);
+    \u0275\u0275property("isLoading", ctx_r0.isLoadingSpinner)("message", ctx_r0.messageSpinner);
   }
 }
 var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
@@ -43653,6 +43725,8 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   hero = void 0;
   hasHero;
   subcription = void 0;
+  isLoadingSpinner = false;
+  messageSpinner = "Loading hero details";
   constructor(heroService) {
     this.heroService = heroService;
   }
@@ -43665,13 +43739,16 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   }
   ngOnChanges(changes) {
     const renderHeroDetail = changes["renderHeroDetail"];
+    this.isLoadingSpinner = true;
     if (renderHeroDetail.currentValue === -1) {
       this.hero = void 0;
+      this.isLoadingSpinner = false;
       return;
     }
     if (renderHeroDetail && renderHeroDetail.currentValue != void 0) {
       const heroId = renderHeroDetail.currentValue;
       this.subcription = this.heroService.getHero(heroId).subscribe((hero) => {
+        this.isLoadingSpinner = false;
         this.hero = hero;
       });
     }
@@ -43679,14 +43756,14 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(HeroService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-around", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-around"], [2, "font-weight", "bolder"], [1, "action"], [3, "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [2, "background-color", "tomato", "color", "#fff"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly;position: relative;", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative"], [2, "font-weight", "bolder"], [1, "action"], ["appTooltip", "Editar", 3, "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], ["appTooltip", "'Eliminar'", 2, "background-color", "tomato", "color", "#fff"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 21, 5, "div", 0);
+      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 22, 7, "div", 0);
     }
     if (rf & 2) {
       \u0275\u0275property("ngIf", ctx.hero);
     }
-  }, dependencies: [NgIf, RouterLink], styles: [".dashboard-hero-detail[_ngcontent-%COMP%] {\n    padding: 20px;\n  }\n\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]{\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n    gap: 10px;\n  }\n\n  a[_ngcontent-%COMP%] {\n    text-decoration-line: none;\n    background-color: #eee;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    color: black;\n    font-size: 1.2rem;\n    padding: 10px;\n    \n    svg {\n      width: 20px;\n    }\n  }\n\n  button[_ngcontent-%COMP%] {\n    padding: 10px;\n    font-size: 10px;\n    border: none;\n    outline: #d4d4d4;\n    \n    margin:0;\n    \n    svg {\n      width: 20px;\n    }\n  }\n\n  @media screen and (min-width: 600px) {\n    \n  }"] });
+  }, dependencies: [NgIf, RouterLink, TooltipDirective, SpinnerComponent], styles: [".dashboard-hero-detail[_ngcontent-%COMP%] {\n    padding: 20px;\n  }\n\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n    gap: 10px;\n  }\n\n  a[_ngcontent-%COMP%] {\n    text-decoration-line: none;\n    background-color: #eee;\n    border: none;\n    border-radius: 8px;\n    cursor: pointer;\n    color: black;\n    font-size: 1.2rem;\n    padding: 10px;\n    \n\n    \n\n\n    svg {\n      width: 20px;\n      height: 20px;\n    }\n  }\n\n  button[_ngcontent-%COMP%] {\n    padding: 10px;\n    font-size: 10px;\n    border: none;\n    border-radius: 8px;\n    outline: #d4d4d4;\n    padding: 10px;\n    margin: 0;\n\n    svg {\n      width: 20px;\n      height: 20px;\n    }\n  }\n\n  @media screen and (min-width: 600px) {\n  }"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardHeroDetailsComponent, { className: "DashboardHeroDetailsComponent" });
@@ -43735,7 +43812,9 @@ var DashboardComponent = class _DashboardComponent {
     this.isLoadingSpinner = true;
     this.heroSubscription = this.heroService.getTopHeroes().subscribe((heroes) => {
       if (heroes && heroes.length > 0) {
-        this.renderHeroDetail = heroes[0].id;
+        const defaultHeroSelected = heroes[0];
+        this.renderHeroDetail = defaultHeroSelected.id;
+        this.selectedHero = defaultHeroSelected;
         this.spinnerService.hide();
         this.heroes = heroes;
         this.isLoadingSpinner = false;
@@ -43780,7 +43859,11 @@ var DashboardComponent = class _DashboardComponent {
       \u0275\u0275advance();
       \u0275\u0275property("renderHeroDetail", ctx.renderHeroDetail);
     }
-  }, dependencies: [NgForOf, SpinnerComponent, DashboardHeroDetailsComponent], styles: ["\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n  padding: 20p5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-size: 18px;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  box-sizing: border-box;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #d4d4d4;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #9f9f9f;\n  border: none;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n  background-color: aliceblue;\n  color: #3f525c;\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n    background-color: #d4d4d4;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #9f9f9f;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n    background-color: aliceblue;\n    color: #3f525c;\n  }\n}\n/*# sourceMappingURL=dashboard.component.css.map */"] });
+  }, dependencies: [
+    NgForOf,
+    SpinnerComponent,
+    DashboardHeroDetailsComponent
+  ], styles: ["\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n  padding: 20p5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-size: 18px;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  box-sizing: border-box;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #d4d4d4;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #9f9f9f;\n  border: none;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n  background-color: aliceblue;\n  color: #3f525c;\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n    background-color: #d4d4d4;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #9f9f9f;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n    background-color: aliceblue;\n    color: #3f525c;\n  }\n}\n/*# sourceMappingURL=dashboard.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardComponent, { className: "DashboardComponent" });
@@ -45784,7 +45867,7 @@ var AppComponent = class _AppComponent {
     RouterOutlet,
     MessagesComponent,
     ActionsComponent
-  ], styles: ["\n\n*[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n}\nnav[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around;\n}\nnav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n  margin-bottom: 0;\n  font-size: 25px;\n  text-align: center;\n  align-items: center;\n  padding: 12px 0;\n  display: block;\n}\nnav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 10px;\n  text-decoration: none;\n  margin-top: 10px;\n  display: inline-block;\n  background-color: none;\n  color: #000;\n  font-size: 18px;\n  border-radius: 10px;\n  border: none;\n}\nnav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #5e5e5e;\n  background-color: transparent;\n}\n.router-outlet-container[_ngcontent-%COMP%] {\n  height: auto;\n}\n@media screen and (min-width: 600px) {\n  nav[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap-reverse;\n    justify-content: space-around;\n    align-items: center;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%], \n   nav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    margin: 0;\n    padding: 20px;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n    margin-bottom: 0;\n    font-size: 26px;\n    text-align: center;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%]:hover {\n    cursor: pointer;\n  }\n  nav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    font-size: 23px;\n  }\n  .router-outlet-container[_ngcontent-%COMP%] {\n    height: auto;\n    margin-bottom: 20px;\n  }\n  .router-outlet-container[_ngcontent-%COMP%]   .container-title[_ngcontent-%COMP%] {\n    border: 1px solid #d4d4d4;\n    border-radius: 8px;\n    padding: 15px;\n  }\n}\n/*# sourceMappingURL=app.component.css.map */"] });
+  ], styles: ["\n\n*[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n}\nnav[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around;\n}\nnav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n  margin-bottom: 0;\n  font-size: 25px;\n  text-align: center;\n  align-items: center;\n  padding: 12px 0;\n  display: block;\n}\nnav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 10px;\n  text-decoration: none;\n  margin-top: 10px;\n  display: inline-block;\n  background-color: none;\n  color: #000;\n  font-size: 18px;\n  border-radius: 10px;\n  border: none;\n}\nnav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #5e5e5e;\n  background-color: transparent;\n}\n.router-outlet-container[_ngcontent-%COMP%] {\n  height: auto;\n}\n@media screen and (min-width: 600px) {\n  nav[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap-reverse;\n    justify-content: space-around;\n    align-items: center;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%], \n   nav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    margin: 0;\n    padding: 20px;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%] {\n    margin-bottom: 0;\n    font-size: 26px;\n    text-align: center;\n  }\n  nav[_ngcontent-%COMP%]   h1[_ngcontent-%COMP%]:hover {\n    cursor: pointer;\n  }\n  nav[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    font-size: 23px;\n  }\n  .router-outlet-container[_ngcontent-%COMP%] {\n    height: auto;\n    margin-bottom: 20px;\n  }\n  .router-outlet-container[_ngcontent-%COMP%]   .container-title[_ngcontent-%COMP%] {\n    border: 1px solid #d4d4d4;\n    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n    border-radius: 8px;\n    padding: 15px;\n  }\n}\n/*# sourceMappingURL=app.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AppComponent, { className: "AppComponent" });
