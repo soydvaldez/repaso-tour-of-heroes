@@ -42932,7 +42932,24 @@ var HeroService = class _HeroService {
         message: `fetched Top Heroes`,
         severity: "INFO"
       });
-    }), map((heroes) => heroes = heroes.splice(1, 4)));
+    }), switchMap((heroes) => {
+      return of(this.sortByPopularity(heroes));
+    }), switchMap((heroes) => {
+      return of(this.setRankingNumber(heroes.splice(0, 4)));
+    }));
+  }
+  setRankingNumber(topHeroes) {
+    return topHeroes.map((h, index) => {
+      h.statistics.ranking = ++index;
+      return h;
+    });
+  }
+  orderByRanking(topHeroes) {
+    return topHeroes.sort((a, b) => a.statistics.ranking - b.statistics.ranking);
+  }
+  sortByPopularity(heroes) {
+    let sortByPopularity = heroes.sort((h1, h2) => h2.statistics.popularity - h1.statistics.popularity);
+    return sortByPopularity;
   }
   getHeroes(refreshData) {
     if (this.isDatafetched && !refreshData) {
@@ -44066,11 +44083,11 @@ var ConfirmModalComponent = class _ConfirmModalComponent {
 })();
 
 // src/app/hero/components/dashboard-hero-details/dashboard-hero-details.component.ts
-function DashboardHeroDetailsComponent_div_0_app_confirm_modal_22_Template(rf, ctx) {
+function DashboardHeroDetailsComponent_div_0_app_confirm_modal_26_Template(rf, ctx) {
   if (rf & 1) {
     const _r3 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "app-confirm-modal", 12);
-    \u0275\u0275listener("confirm", function DashboardHeroDetailsComponent_div_0_app_confirm_modal_22_Template_app_confirm_modal_confirm_0_listener($event) {
+    \u0275\u0275listener("confirm", function DashboardHeroDetailsComponent_div_0_app_confirm_modal_26_Template_app_confirm_modal_confirm_0_listener($event) {
       \u0275\u0275restoreView(_r3);
       const ctx_r1 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r1.handleConfirmation($event));
@@ -44082,44 +44099,51 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "div", 1)(1, "div")(2, "p")(3, "span", 2);
-    \u0275\u0275text(4, "Name: ");
+    \u0275\u0275text(4, "Ranking: ");
     \u0275\u0275elementEnd();
     \u0275\u0275text(5);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(6, "p")(7, "span", 2);
-    \u0275\u0275text(8, "Year: ");
+    \u0275\u0275text(8, "Name: ");
     \u0275\u0275elementEnd();
     \u0275\u0275text(9);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(10, "p")(11, "span", 2);
-    \u0275\u0275text(12, "Publisher: ");
+    \u0275\u0275text(12, "Year: ");
     \u0275\u0275elementEnd();
     \u0275\u0275text(13);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(14, "p")(15, "span", 2);
+    \u0275\u0275text(16, "Publisher: ");
+    \u0275\u0275elementEnd();
+    \u0275\u0275text(17);
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(14, "div", 3)(15, "a", 4);
+    \u0275\u0275elementStart(18, "div", 3)(19, "a", 4);
     \u0275\u0275namespaceSVG();
-    \u0275\u0275elementStart(16, "svg", 5);
-    \u0275\u0275element(17, "path", 6);
+    \u0275\u0275elementStart(20, "svg", 5);
+    \u0275\u0275element(21, "path", 6);
     \u0275\u0275elementEnd()();
     \u0275\u0275namespaceHTML();
-    \u0275\u0275elementStart(18, "button", 7);
-    \u0275\u0275listener("click", function DashboardHeroDetailsComponent_div_0_Template_button_click_18_listener() {
+    \u0275\u0275elementStart(22, "button", 7);
+    \u0275\u0275listener("click", function DashboardHeroDetailsComponent_div_0_Template_button_click_22_listener() {
       \u0275\u0275restoreView(_r1);
       const ctx_r1 = \u0275\u0275nextContext();
       return \u0275\u0275resetView(ctx_r1.displayConfirmModal());
     });
     \u0275\u0275namespaceSVG();
-    \u0275\u0275elementStart(19, "svg", 8);
-    \u0275\u0275element(20, "path", 9);
+    \u0275\u0275elementStart(23, "svg", 8);
+    \u0275\u0275element(24, "path", 9);
     \u0275\u0275elementEnd()()();
     \u0275\u0275namespaceHTML();
-    \u0275\u0275element(21, "app-spinner", 10);
-    \u0275\u0275template(22, DashboardHeroDetailsComponent_div_0_app_confirm_modal_22_Template, 1, 0, "app-confirm-modal", 11);
+    \u0275\u0275element(25, "app-spinner", 10);
+    \u0275\u0275template(26, DashboardHeroDetailsComponent_div_0_app_confirm_modal_26_Template, 1, 0, "app-confirm-modal", 11);
     \u0275\u0275elementEnd();
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275advance(5);
+    \u0275\u0275textInterpolate(ctx_r1.hero.statistics == null ? null : ctx_r1.hero.statistics.ranking);
+    \u0275\u0275advance(4);
     \u0275\u0275textInterpolate(ctx_r1.hero.name);
     \u0275\u0275advance(4);
     \u0275\u0275textInterpolate(ctx_r1.hero.year);
@@ -44136,6 +44160,7 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
 var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   heroService;
   renderHeroDetail;
+  selectedHero;
   hero = void 0;
   hasHero;
   subcription = void 0;
@@ -44156,6 +44181,12 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   ngOnChanges(changes) {
     const renderHeroDetail = changes["renderHeroDetail"];
     this.isLoadingSpinner = true;
+    const selectedHero = changes["renderHeroDetail"].currentValue;
+    if (selectedHero) {
+      this.hero = this.selectedHero;
+      this.isLoadingSpinner = false;
+      return;
+    }
     if (renderHeroDetail.currentValue === -1) {
       this.hero = void 0;
       this.isLoadingSpinner = false;
@@ -44186,9 +44217,9 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(HeroService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail" }, outputs: { heroDeleted: "heroDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative"], [2, "font-weight", "bolder"], [1, "action"], ["appTooltip", "Editar", 3, "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], ["appTooltip", "Eliminar", 2, "background-color", "tomato", "color", "#fff", "position", "relative", 3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm", 4, "ngIf"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { heroDeleted: "heroDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative"], [2, "font-weight", "bolder"], [1, "action"], ["appTooltip", "Editar", 3, "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], ["appTooltip", "Eliminar", 2, "background-color", "tomato", "color", "#fff", "position", "relative", 3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm", 4, "ngIf"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 23, 8, "div", 0);
+      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 27, 9, "div", 0);
     }
     if (rf & 2) {
       \u0275\u0275property("ngIf", ctx.hero);
@@ -44239,7 +44270,7 @@ function DashboardComponent_app_dashboard_hero_details_6_Template(rf, ctx) {
   }
   if (rf & 2) {
     const ctx_r2 = \u0275\u0275nextContext();
-    \u0275\u0275property("renderHeroDetail", ctx_r2.renderHeroDetail);
+    \u0275\u0275property("selectedHero", ctx_r2.selectedHero)("renderHeroDetail", ctx_r2.renderHeroDetail);
   }
 }
 var DashboardComponent = class _DashboardComponent {
@@ -44299,7 +44330,7 @@ var DashboardComponent = class _DashboardComponent {
   static \u0275fac = function DashboardComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 4, consts: [[1, "dashboard-topheroes"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], ["hero", "hero.id", 3, "selected", "click", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "renderHeroDetail", "heroDeleted", 4, "ngIf"], ["hero", "hero.id", 3, "click"], [3, "heroDeleted", "renderHeroDetail"]], template: function DashboardComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 4, consts: [[1, "dashboard-topheroes"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], ["hero", "hero.id", 3, "selected", "click", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "selectedHero", "renderHeroDetail", "heroDeleted", 4, "ngIf"], ["hero", "hero.id", 3, "click"], [3, "heroDeleted", "selectedHero", "renderHeroDetail"]], template: function DashboardComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0)(1, "h2");
       \u0275\u0275text(2, "Top Heroes");
@@ -44308,7 +44339,7 @@ var DashboardComponent = class _DashboardComponent {
       \u0275\u0275template(4, DashboardComponent_button_4_Template, 2, 3, "button", 2);
       \u0275\u0275element(5, "app-spinner", 3);
       \u0275\u0275elementEnd();
-      \u0275\u0275template(6, DashboardComponent_app_dashboard_hero_details_6_Template, 1, 1, "app-dashboard-hero-details", 4);
+      \u0275\u0275template(6, DashboardComponent_app_dashboard_hero_details_6_Template, 1, 2, "app-dashboard-hero-details", 4);
       \u0275\u0275elementEnd();
     }
     if (rf & 2) {
@@ -45701,8 +45732,8 @@ var InMemoryDataService = class _InMemoryDataService {
         publisher: { id: 3, name: "Image Comics" },
         tophero: true,
         statistics: {
-          ranking: 1,
-          popularity: 1e3
+          popularity: 9999,
+          ranking: 0
         }
       },
       {
@@ -45712,8 +45743,8 @@ var InMemoryDataService = class _InMemoryDataService {
         publisher: { id: 1, name: "Marvel Comics" },
         tophero: true,
         statistics: {
-          popularity: 1e4,
-          ranking: 1
+          popularity: 9950,
+          ranking: 3
         }
       },
       {
@@ -45723,7 +45754,7 @@ var InMemoryDataService = class _InMemoryDataService {
         publisher: { id: 1, name: "Marvel Comics" },
         tophero: true,
         statistics: {
-          popularity: 9999,
+          popularity: 9998,
           ranking: 2
         }
       },
@@ -45734,8 +45765,8 @@ var InMemoryDataService = class _InMemoryDataService {
         publisher: { id: 3, name: "Image Comics" },
         tophero: true,
         statistics: {
-          popularity: 9e3,
-          ranking: 3
+          popularity: 8e3,
+          ranking: 4
         }
       },
       {
@@ -45743,7 +45774,7 @@ var InMemoryDataService = class _InMemoryDataService {
         name: "RubberMan",
         year: 2e3,
         publisher: { id: 3, name: "Image Comics" },
-        tophero: true,
+        tophero: false,
         statistics: {
           popularity: 8999,
           ranking: 4
@@ -45754,35 +45785,55 @@ var InMemoryDataService = class _InMemoryDataService {
         name: "Dynama",
         year: 2024,
         publisher: { id: 1, name: "Marvel Comics" },
-        tophero: false
+        tophero: false,
+        statistics: {
+          popularity: 7e3,
+          ranking: 0
+        }
       },
       {
         id: 18,
         name: "Dr. IQ",
         year: 2024,
         publisher: { id: 1, name: "Marvel Comics" },
-        tophero: false
+        tophero: false,
+        statistics: {
+          popularity: 6e3,
+          ranking: 0
+        }
       },
       {
         id: 19,
         name: "Magma",
         year: 2024,
         publisher: { id: 2, name: "DC Comics" },
-        tophero: false
+        tophero: false,
+        statistics: {
+          popularity: 5e3,
+          ranking: 0
+        }
       },
       {
         id: 20,
         name: "Tornado",
         year: 2024,
         publisher: { id: 2, name: "DC Comics" },
-        tophero: false
+        tophero: false,
+        statistics: {
+          popularity: 4e3,
+          ranking: 0
+        }
       },
       {
         id: 21,
         name: "Magneto",
         year: 2024,
         publisher: { id: 1, name: "Marvel Comics" },
-        tophero: false
+        tophero: false,
+        statistics: {
+          popularity: 3e3,
+          ranking: 0
+        }
       }
     ];
     const publishers = [
