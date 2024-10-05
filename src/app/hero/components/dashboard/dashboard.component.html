@@ -20,6 +20,7 @@
   <app-dashboard-hero-details
     *ngIf="hasTopHeroes"
     (heroDeleted)="updateTopHeroes()"
+    [selectedHero]="selectedHero"
     [renderHeroDetail]="renderHeroDetail"
   ></app-dashboard-hero-details>
 </div>

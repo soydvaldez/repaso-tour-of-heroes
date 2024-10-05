@@ -31,6 +31,8 @@ import { ConfirmModalComponent } from '../../../commons/confirm-modal/confirm-mo
 })
 export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
   @Input() renderHeroDetail!: number;
+  @Input() selectedHero?: Hero;
+
   hero?: Hero = undefined;
   hasHero: any;
   subcription?: Subscription = undefined;
@@ -54,6 +56,14 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     const renderHeroDetail = changes['renderHeroDetail'];
     this.isLoadingSpinner = true;
+
+    const selectedHero: Hero = changes['renderHeroDetail'].currentValue;
+
+    if (selectedHero) {
+      this.hero = this.selectedHero;
+      this.isLoadingSpinner = false;
+      return;
+    }
 
     if (renderHeroDetail.currentValue === -1) {
       this.hero = undefined;
