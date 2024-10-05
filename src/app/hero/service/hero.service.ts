@@ -3,14 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   BehaviorSubject,
   catchError,
-  delay,
-  filter,
   map,
   Observable,
   of,
   Subject,
   switchMap,
-  take,
   tap,
 } from 'rxjs';
 import { Hero } from '../interface/hero';
@@ -47,14 +44,7 @@ export class HeroService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService
-  ) {
-    // setTimeout(() => {
-    //   this.filterHeroes('value');
-    // }, 5000);
-    // setTimeout(() => {
-    //   this.restoreState();
-    // }, 20000);
-  }
+  ) {}
 
   notifyHeroCreated(success: boolean) {
     this.heroCreatedSubject.next(success);
@@ -70,8 +60,34 @@ export class HeroService {
           severity: 'INFO',
         });
       }),
-      map((heroes) => (heroes = heroes.splice(1, 4)))
+      switchMap((heroes: Hero[]): Observable<Hero[]> => {
+        return of(this.sortByPopularity(heroes));
+      }),
+      switchMap((heroes) => {        
+        return of(this.setRankingNumber(heroes.splice(0, 4)));
+      })
     );
+  }
+
+  setRankingNumber(topHeroes: Hero[]) {
+    return topHeroes.map((h, index) => {
+      h.statistics!.ranking = ++index;
+      return h;
+    });
+  }
+
+  orderByRanking(topHeroes: Hero[]) {
+    return topHeroes.sort(
+      (a, b) => a.statistics!.ranking - b.statistics!.ranking
+    );
+  }
+
+  sortByPopularity(heroes: Hero[]) {
+    let sortByPopularity = heroes.sort(
+      (h1, h2) => h2.statistics!.popularity - h1.statistics!.popularity
+    );
+
+    return sortByPopularity;
   }
 
   getHeroes(refreshData?: boolean): Observable<Hero[]> {

@@ -10,66 +10,116 @@ export class InMemoryDataService implements InMemoryDbService {
 
   createDb(): {} {
     // { id: 11, name: 'Iceman' },
-    const heroes = [
+    const heroes: Hero[] = [
       {
         id: 12,
         name: 'Dr. Nice',
         year: 2010,
         publisher: { id: 3, name: 'Image Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 9999,
+          ranking: 0,
+        },
       },
       {
         id: 13,
         name: 'Bombasto',
         year: 2010,
         publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 9950,
+          ranking: 3,
+        },
       },
       {
         id: 14,
         name: 'Celeritas',
         year: 2010,
         publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 9998,
+          ranking: 2,
+        },
       },
       {
         id: 15,
         name: 'Magneta',
         year: 2010,
         publisher: { id: 3, name: 'Image Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 8000,
+          ranking: 4,
+        },
       },
       {
         id: 16,
         name: 'RubberMan',
         year: 2000,
         publisher: { id: 3, name: 'Image Comics' },
+        tophero: false,
+        statistics: {
+          popularity: 8999,
+          ranking: 4,
+        },
       },
       {
         id: 17,
         name: 'Dynama',
         year: 2024,
         publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: false,
+        statistics: {
+          popularity: 7000,
+          ranking: 0,
+        },
       },
       {
         id: 18,
         name: 'Dr. IQ',
         year: 2024,
         publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: false,
+        statistics: {
+          popularity: 6000,
+          ranking: 0,
+        },
       },
       {
         id: 19,
         name: 'Magma',
         year: 2024,
         publisher: { id: 2, name: 'DC Comics' },
+        tophero: false,
+        statistics: {
+          popularity: 5000,
+          ranking: 0,
+        },
       },
       {
         id: 20,
         name: 'Tornado',
         year: 2024,
         publisher: { id: 2, name: 'DC Comics' },
+        tophero: false,
+        statistics: {
+          popularity: 4000,
+          ranking: 0,
+        },
       },
       {
         id: 21,
         name: 'Magneto',
         year: 2024,
         publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: false,
+        statistics: {
+          popularity: 3000,
+          ranking: 0,
+        },
       },
     ];
 

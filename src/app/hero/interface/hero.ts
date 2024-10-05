@@ -8,8 +8,15 @@ export interface Hero {
   name: string;
   year: number;
   publisher: Publisher | null;
+  tophero?: boolean;
+  statistics?: Statistics;
 }
 
 export interface NewHero {
   name: string;
+}
+
+export interface Statistics {
+  popularity: number;
+  ranking: number;
 }
