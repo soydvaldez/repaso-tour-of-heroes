@@ -3,12 +3,52 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   margin-top: 20px;
-  padding: 20p5;
 
   h2 {
     text-align: center;
-    font-size: 18px;
     font-weight: 300;
+  }
+
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 53px;
+    margin-bottom: 10px;
+
+    .action-sync-container {
+      border: 1px solid #d4d4d4;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        padding: 10px;
+        width: 15px;
+      }
+
+      .sincronized {
+        animation: sync 1s infinite ease-in-out;
+      }
+
+      @keyframes sync {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:active {
+        opacity: 0.5;
+      }
+    }
   }
 
   .heroes-menu {
@@ -25,64 +65,109 @@
     justify-content: space-around;
     align-content: center;
     align-items: flex-start;
+
+    button {
+      &.selected {
+        background-color: #9f9f9f;
+      }
+
+      &:hover {
+        background-color: #9f9f9f;
+        border: none;
+      }
+
+      &:active {
+        background-color: #9f9f9f;
+        color: #a5a5a5;
+      }
+
+      box-sizing: border-box;
+      border: none;
+      font-size: 16px;
+      padding: 0.5rem;
+      background-color: #3f525c;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      text-decoration: none;
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+      width: 70%;
+      min-width: 70px;
+      margin: 0.5rem auto;
+
+      /* flexbox */
+      order: 0;
+      flex: 0 1 auto;
+      align-self: auto;
+    }
+  }
+  .fade-in {
+    animation: fadeIn 1s forwards;
   }
 
-  button {
-    &.selected {
-      background-color: #d4d4d4;
+  @keyframes fadeIn {
+    from {
+      opacity: 1;
+      transform: translateX(0);
     }
-
-    &:hover {
-      background-color: #9f9f9f;
-      border: none;
+    to {
+      opacity: 0;
+      transform: translateX(-20px);
     }
+  }
 
-    &:active {
-      background-color: aliceblue;
-      color: #3f525c;
+  .fade-out {
+    animation: fadeOut 1s forwards;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
     }
-
-    font-size: 16px;
-    padding: 0.5rem;
-    background-color: #3f525c;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    text-decoration: none;
-    display: inline-block;
-    color: #fff;
-    text-align: center;
-    width: 70%;
-    min-width: 70px;
-    margin: 0.5rem auto;
-    box-sizing: border-box;
-
-    /* flexbox */
-    order: 0;
-    flex: 0 1 auto;
-    align-self: auto;
+    to {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   }
 }
 
 @media (min-width: 600px) {
   .dashboard-topheroes {
-    button {
-      width: 18%;
-      box-sizing: content-box;
-      padding: 0.8rem;
-      font-size: 1.2rem;
-      border-radius: 5px;
+    h2 {
+      margin: 0;
+      margin-top: 20px;
+      padding-left: 30px;
+    }
 
-      &.selected {
-        background-color: #d4d4d4;
-      }
+    .action {
+      padding-right: 23px;
+      margin-bottom: 0;
+    }
 
-      &:hover {
-        background-color: #9f9f9f;
-      }
+    .heroes-menu {
+      button {
+        width: 18%;
+        box-sizing: content-box;
+        padding: 0.8rem;
+        font-size: 1.2rem;
+        border-radius: 5px;
 
-      &:active {
-        background-color: aliceblue;
-        color: #3f525c;
+        &.selected {
+          background-color: #d4d4d4;
+        }
+
+        &:hover {
+          background-color: #9f9f9f;
+        }
+
+        &:disabled {
+          /* Tus estilos aquí */
+          background-color: #a5a5a5;
+          color: white;
+          cursor: not-allowed;
+        }
       }
     }
   }

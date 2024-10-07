@@ -1,10 +1,15 @@
 <div
   class="dashboard-hero-detail"
   *ngIf="hero"
+  [ngClass]="isDeleted ? ['fade-out', 'clo'] : []"
   style="display: flex; justify-content: space-evenly; position: relative"
 >
   <div>
-    <p><span style="font-weight: bolder">Ranking: </span>{{ hero.statistics?.ranking }}</p>
+    <p>
+      <span style="font-weight: bolder">Ranking </span>#{{
+        hero.statistics?.ranking
+      }}
+    </p>
     <p><span style="font-weight: bolder">Name: </span>{{ hero.name }}</p>
     <p><span style="font-weight: bolder">Year: </span>{{ hero.year }}</p>
     <p>
@@ -13,7 +18,7 @@
     </p>
   </div>
   <div class="action">
-    <a appTooltip="Editar" routerLink="/detail/{{ hero.id }}">
+    <a [appTooltip]="'Edit Hero'" routerLink="/detail/{{ hero.id }}">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
         <path
@@ -22,7 +27,7 @@
       </svg>
     </a>
     <button
-      appTooltip="Eliminar"
+      [appTooltip]="'Delete Hero'"
       style="background-color: tomato; color: #fff; position: relative"
       (click)="displayConfirmModal()"
     >

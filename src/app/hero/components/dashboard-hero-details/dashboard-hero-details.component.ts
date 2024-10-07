@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { HeroService } from '../../service/hero.service';
 import { Hero } from '../../interface/hero';
 import { Subscription } from 'rxjs';
@@ -15,6 +15,7 @@ import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '../../../commons/tooltip.directive';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
 import { ConfirmModalComponent } from '../../../commons/confirm-modal/confirm-modal.component';
+import { TopheroService } from '../../service/tophero.service';
 
 @Component({
   selector: 'app-dashboard-hero-details',
@@ -25,6 +26,7 @@ import { ConfirmModalComponent } from '../../../commons/confirm-modal/confirm-mo
     TooltipDirective,
     SpinnerComponent,
     ConfirmModalComponent,
+    CommonModule,
   ],
   templateUrl: './dashboard-hero-details.component.html',
   styleUrl: './dashboard-hero-details.component.scss',
@@ -41,9 +43,10 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
   messageSpinner: string = 'Loading hero details';
   showModal: boolean = false;
 
-  @Output() heroDeleted = new EventEmitter<boolean>();
+  isDeleted: boolean = false;
+  @Output() heroHasBeenDeleted = new EventEmitter<boolean>(false);
 
-  constructor(private heroService: HeroService) {}
+  constructor(private topheroService: TopheroService) {}
 
   ngOnInit(): void {}
 
@@ -54,30 +57,15 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const renderHeroDetail = changes['renderHeroDetail'];
+    const renderHeroDetail = changes['selectedHero'];
     this.isLoadingSpinner = true;
 
-    const selectedHero: Hero = changes['renderHeroDetail'].currentValue;
+    const selectedHero: Hero = changes['selectedHero'].currentValue;
 
     if (selectedHero) {
       this.hero = this.selectedHero;
       this.isLoadingSpinner = false;
       return;
-    }
-
-    if (renderHeroDetail.currentValue === -1) {
-      this.hero = undefined;
-      this.isLoadingSpinner = false;
-      return;
-    }
-
-    if (renderHeroDetail && renderHeroDetail.currentValue != undefined) {
-      const heroId = renderHeroDetail.currentValue;
-
-      this.subcription = this.heroService.getHero(heroId).subscribe((hero) => {
-        this.isLoadingSpinner = false;
-        this.hero = hero;
-      });
     }
   }
 
@@ -87,13 +75,22 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
 
   handleConfirmation(confirm: boolean) {
     this.showModal = false;
-    if (confirm) {
-      if (this.hero != undefined) {
-        this.heroService.delete(this.hero?.id).subscribe((isDeleted) => {
-          this.heroDeleted.emit(true);
-          console.log(isDeleted);
-        });
-      }
+
+    if (!confirm) {
+      return;
+    }
+
+    if (this.hero && this.hero != undefined) {
+      this.topheroService.delete(this.hero?.id).subscribe((isDeleted) => {
+        if (isDeleted) {
+          this.heroHasBeenDeleted.emit(true);
+          this.isDeleted = true;
+        }
+        setTimeout(() => {
+          this.isDeleted = false;
+          this.hero = undefined;
+        }, 2000);
+      });
     }
   }
 

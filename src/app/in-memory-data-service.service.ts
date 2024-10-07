@@ -9,7 +9,6 @@ export class InMemoryDataService implements InMemoryDbService {
   constructor() {}
 
   createDb(): {} {
-    // { id: 11, name: 'Iceman' },
     const heroes: Hero[] = [
       {
         id: 12,
@@ -129,8 +128,55 @@ export class InMemoryDataService implements InMemoryDbService {
       { id: 2, name: 'DC Comics' },
       { id: 3, name: 'Image Comics' },
     ];
+    
+    const topheroes = [
+      {
+        id: 12,
+        name: 'Dr. Nice',
+        year: 2010,
+        publisher: { id: 3, name: 'Image Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 9999,
+          ranking: 1,
+        },
+      },
+      {
+        id: 13,
+        name: 'Bombasto',
+        year: 2010,
+        publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 9950,
+          ranking: 3,
+        },
+      },
+      {
+        id: 14,
+        name: 'Celeritas',
+        year: 2010,
+        publisher: { id: 1, name: 'Marvel Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 9998,
+          ranking: 2,
+        },
+      },
+      {
+        id: 15,
+        name: 'Magneta',
+        year: 2010,
+        publisher: { id: 3, name: 'Image Comics' },
+        tophero: true,
+        statistics: {
+          popularity: 8000,
+          ranking: 4,
+        },
+      },
+    ];
 
-    return { heroes, publishers };
+    return { heroes, publishers, topheroes };
   }
   genId(heroes: Hero[]): number {
     return heroes.length > 0
@@ -183,20 +229,26 @@ export class InMemoryDataService implements InMemoryDbService {
     const heroes: Hero[] = reqInfo.collection;
     const heroIdDelete = reqInfo.id || -1;
 
-    const index = heroes.findIndex((h) => h.id === heroIdDelete) || -1;
-
-    if (index && index !== -1) {
-      heroes.splice(index, 1);
-
+    if (!heroes.some((h) => h.id === heroIdDelete)) {
       return reqInfo.utils.createResponse$(() => ({
-        body: heroIdDelete,
-        status: 200,
+        body: 'Hero not found',
+        status: 404,
       }));
     }
 
-    return reqInfo.utils.createResponse$(() => ({
-      body: heroIdDelete,
-      status: 404,
-    }));
+    const index = heroes.findIndex((h) => h.id === heroIdDelete);
+    if (index === -1) {
+      return reqInfo.utils.createResponse$(() => ({
+        body: 'Hero not found',
+        status: 404,
+      }));
+    } else {
+      heroes.splice(index, 1);
+
+      return reqInfo.utils.createResponse$(() => ({
+        body: 'Hero has been deleted!',
+        status: 200,
+      }));
+    }
   }
 }
