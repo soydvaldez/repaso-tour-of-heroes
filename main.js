@@ -42820,7 +42820,7 @@ var ActionsComponent = class _ActionsComponent {
       \u0275\u0275advance(5);
       \u0275\u0275classProp("selected", ctx.optionSelected === ctx.HeroActions.Create);
     }
-  }, dependencies: [RouterLink, CommonModule], styles: ["\n\n.actions[_ngcontent-%COMP%] {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  z-index: 999;\n  background-color: #fff;\n  border-top: 1px solid #d4d4d4;\n  list-style: none;\n  text-decoration: none;\n  width: 100%;\n  margin: 0;\n  text-align: left;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 20px;\n  background-color: none;\n  color: #000;\n  font-size: 15px;\n  text-decoration: none;\n  border-radius: 8px;\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 21px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .actions[_ngcontent-%COMP%] {\n    border-top: none;\n    padding: 10px 30px;\n    box-sizing: border-box;\n    position: static;\n    background-color: transparent;\n    flex-wrap: wrap;\n    gap: 10px;\n    justify-content: flex-start;\n  }\n  .actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n    opacity: 0.5;\n  }\n  .actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 29px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n    opacity: 0.5;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 30px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    font-size: 15px;\n  }\n}\n/*# sourceMappingURL=actions.component.css.map */"] });
+  }, dependencies: [RouterLink, CommonModule], styles: ["\n\n.actions[_ngcontent-%COMP%] {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  width: 100%;\n  z-index: 999;\n  background-color: #fff;\n  border-top: 1px solid #d4d4d4;\n  list-style: none;\n  text-decoration: none;\n  width: 100%;\n  margin: 0;\n  text-align: left;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  padding: 10px 20px;\n  background-color: none;\n  color: #000;\n  font-size: 15px;\n  text-decoration: none;\n  border-radius: 8px;\n  text-align: center;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 21px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  opacity: 0.5;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n}\n.actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  font-size: 14px;\n}\n@media (min-width: 600px) {\n  .actions[_ngcontent-%COMP%] {\n    border-top: none;\n    padding: 10px 30px;\n    box-sizing: border-box;\n    position: static;\n    background-color: transparent;\n    flex-wrap: wrap;\n    gap: 10px;\n    justify-content: flex-start;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 26px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n    font-size: 15px;\n  }\n  .actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%] {\n    opacity: 0.5;\n  }\n  .actions[_ngcontent-%COMP%]   a.selected[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n    width: 25px;\n  }\n  .actions[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n    opacity: 0.5;\n  }\n}\n/*# sourceMappingURL=actions.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ActionsComponent, { className: "ActionsComponent" });
@@ -43539,6 +43539,7 @@ var SearchBarComponent = class _SearchBarComponent {
 })();
 
 // src/app/hero/components/hero/hero.component.ts
+var _c02 = (a0) => ({ "deleted-effect": a0 });
 function HeroComponent_div_4_li_2_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "li")(1, "a", 8)(2, "span", 9);
@@ -43549,8 +43550,10 @@ function HeroComponent_div_4_li_2_Template(rf, ctx) {
   }
   if (rf & 2) {
     const hero_r1 = ctx.$implicit;
+    const ctx_r1 = \u0275\u0275nextContext(2);
     \u0275\u0275advance();
     \u0275\u0275propertyInterpolate1("routerLink", "/detail/", hero_r1.id, "");
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(5, _c02, ctx_r1.isDeleted));
     \u0275\u0275advance(2);
     \u0275\u0275textInterpolate(hero_r1.id);
     \u0275\u0275advance();
@@ -43560,7 +43563,7 @@ function HeroComponent_div_4_li_2_Template(rf, ctx) {
 function HeroComponent_div_4_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 3)(1, "ul", 4);
-    \u0275\u0275template(2, HeroComponent_div_4_li_2_Template, 5, 4, "li", 5);
+    \u0275\u0275template(2, HeroComponent_div_4_li_2_Template, 5, 7, "li", 5);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(3, "p", 6);
     \u0275\u0275text(4, " Total Registers: ");
@@ -43610,6 +43613,7 @@ var HeroComponent = class _HeroComponent {
   spinnerMessage = "";
   totalRegisters = 0;
   heroesSubcription;
+  isDeleted = false;
   constructor(heroService, spinnerService, actionsService) {
     this.heroService = heroService;
     this.spinnerService = spinnerService;
@@ -43641,7 +43645,7 @@ var HeroComponent = class _HeroComponent {
   static \u0275fac = function HeroComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [2, "padding", "10px", "font-size", "14px", "color", "black"], [3, "isLoading", "message"], [3, "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"], [2, "padding", "20px 0", "padding-left", "45px", "font-size", "14px", "color", "#353535", "font-weight", "bold"]], template: function HeroComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [2, "padding", "10px", "font-size", "14px", "color", "black"], [3, "isLoading", "message"], [3, "ngClass", "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"], [2, "padding", "20px 0", "padding-left", "45px", "font-size", "14px", "color", "#353535", "font-weight", "bold"]], template: function HeroComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 1)(1, "h2");
       \u0275\u0275text(2, "List of Heroes");
@@ -43663,8 +43667,9 @@ var HeroComponent = class _HeroComponent {
     RouterLink,
     SpinnerComponent,
     SearchBarComponent,
-    CommonModule
-  ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding-bottom: 20px;\n  margin-top: 20px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 20px 0;\n  text-align: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 100px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  background-color: azure;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .hero-component-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 25em;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   app-hero-form[_ngcontent-%COMP%] {\n    width: 100%;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
+    CommonModule,
+    NgClass
+  ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding-bottom: 20px;\n  margin-top: 20px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 20px 0;\n  text-align: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 100px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 100%;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:nth-child(10)   a[_ngcontent-%COMP%] {\n    background-color: #2c3a41;\n    color: #fff;\n  }\n  .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n  .deleted-effect[_ngcontent-%COMP%] {\n    animation: delete 2s infinite ease-in-out;\n  }\n  @keyframes delete {\n    from {\n      transform: translateX(0);\n      opacity: 1;\n    }\n    to {\n      transform: translateX(-20px);\n      opacity: 0;\n    }\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HeroComponent, { className: "HeroComponent" });
@@ -44082,7 +44087,44 @@ var ConfirmModalComponent = class _ConfirmModalComponent {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ConfirmModalComponent, { className: "ConfirmModalComponent" });
 })();
 
+// src/app/hero/service/tophero.service.ts
+var TopheroService = class _TopheroService {
+  http;
+  messageService;
+  url = "api/topheroes";
+  constructor(http, messageService) {
+    this.http = http;
+    this.messageService = messageService;
+  }
+  getTopHeroes() {
+    return this.http.get(this.url).pipe(tap(() => {
+      return this.messageService.add({
+        source: "TopheroService",
+        message: "All Top Heroes fetched",
+        severity: "info"
+      });
+    }), map((topheroes) => {
+      return topheroes.sort((a, b) => a.statistics.ranking - b.statistics.ranking);
+    }));
+  }
+  delete(id) {
+    return this.http.delete(`${this.url}/${id}`).pipe(tap(() => {
+      this.messageService.add({
+        source: "TopheroService",
+        message: `deleted TopHero: ${id}`,
+        severity: "INFO"
+      });
+    }));
+  }
+  static \u0275fac = function TopheroService_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _TopheroService)(\u0275\u0275inject(HttpClient), \u0275\u0275inject(MessageService));
+  };
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _TopheroService, factory: _TopheroService.\u0275fac, providedIn: "root" });
+};
+
 // src/app/hero/components/dashboard-hero-details/dashboard-hero-details.component.ts
+var _c03 = () => ["fade-out", "clo"];
+var _c12 = () => [];
 function DashboardHeroDetailsComponent_div_0_app_confirm_modal_26_Template(rf, ctx) {
   if (rf & 1) {
     const _r3 = \u0275\u0275getCurrentView();
@@ -44099,7 +44141,7 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "div", 1)(1, "div")(2, "p")(3, "span", 2);
-    \u0275\u0275text(4, "Ranking: ");
+    \u0275\u0275text(4, "Ranking ");
     \u0275\u0275elementEnd();
     \u0275\u0275text(5);
     \u0275\u0275elementEnd();
@@ -44141,8 +44183,9 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
   }
   if (rf & 2) {
     const ctx_r1 = \u0275\u0275nextContext();
+    \u0275\u0275property("ngClass", ctx_r1.isDeleted ? \u0275\u0275pureFunction0(12, _c03) : \u0275\u0275pureFunction0(13, _c12));
     \u0275\u0275advance(5);
-    \u0275\u0275textInterpolate(ctx_r1.hero.statistics == null ? null : ctx_r1.hero.statistics.ranking);
+    \u0275\u0275textInterpolate1("#", ctx_r1.hero.statistics == null ? null : ctx_r1.hero.statistics.ranking, " ");
     \u0275\u0275advance(4);
     \u0275\u0275textInterpolate(ctx_r1.hero.name);
     \u0275\u0275advance(4);
@@ -44151,14 +44194,17 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
     \u0275\u0275textInterpolate1("", ctx_r1.hero.publisher == null ? null : ctx_r1.hero.publisher.name, " ");
     \u0275\u0275advance(2);
     \u0275\u0275propertyInterpolate1("routerLink", "/detail/", ctx_r1.hero.id, "");
-    \u0275\u0275advance(6);
+    \u0275\u0275property("appTooltip", "Edit Hero");
+    \u0275\u0275advance(3);
+    \u0275\u0275property("appTooltip", "Delete Hero");
+    \u0275\u0275advance(3);
     \u0275\u0275property("isLoading", ctx_r1.isLoadingSpinner)("message", ctx_r1.messageSpinner);
     \u0275\u0275advance();
     \u0275\u0275property("ngIf", ctx_r1.showModal);
   }
 }
 var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
-  heroService;
+  topheroService;
   renderHeroDetail;
   selectedHero;
   hero = void 0;
@@ -44167,9 +44213,10 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   isLoadingSpinner = false;
   messageSpinner = "Loading hero details";
   showModal = false;
-  heroDeleted = new EventEmitter();
-  constructor(heroService) {
-    this.heroService = heroService;
+  isDeleted = false;
+  heroHasBeenDeleted = new EventEmitter(false);
+  constructor(topheroService) {
+    this.topheroService = topheroService;
   }
   ngOnInit() {
   }
@@ -44179,25 +44226,13 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
     }
   }
   ngOnChanges(changes) {
-    const renderHeroDetail = changes["renderHeroDetail"];
+    const renderHeroDetail = changes["selectedHero"];
     this.isLoadingSpinner = true;
-    const selectedHero = changes["renderHeroDetail"].currentValue;
+    const selectedHero = changes["selectedHero"].currentValue;
     if (selectedHero) {
       this.hero = this.selectedHero;
       this.isLoadingSpinner = false;
       return;
-    }
-    if (renderHeroDetail.currentValue === -1) {
-      this.hero = void 0;
-      this.isLoadingSpinner = false;
-      return;
-    }
-    if (renderHeroDetail && renderHeroDetail.currentValue != void 0) {
-      const heroId = renderHeroDetail.currentValue;
-      this.subcription = this.heroService.getHero(heroId).subscribe((hero) => {
-        this.isLoadingSpinner = false;
-        this.hero = hero;
-      });
     }
   }
   displayConfirmModal() {
@@ -44205,21 +44240,28 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   }
   handleConfirmation(confirm) {
     this.showModal = false;
-    if (confirm) {
-      if (this.hero != void 0) {
-        this.heroService.delete(this.hero?.id).subscribe((isDeleted) => {
-          this.heroDeleted.emit(true);
-          console.log(isDeleted);
-        });
-      }
+    if (!confirm) {
+      return;
+    }
+    if (this.hero && this.hero != void 0) {
+      this.topheroService.delete(this.hero?.id).subscribe((isDeleted) => {
+        if (isDeleted) {
+          this.heroHasBeenDeleted.emit(true);
+          this.isDeleted = true;
+        }
+        setTimeout(() => {
+          this.isDeleted = false;
+          this.hero = void 0;
+        }, 2e3);
+      });
     }
   }
   static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(HeroService));
+    return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(TopheroService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { heroDeleted: "heroDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative"], [2, "font-weight", "bolder"], [1, "action"], ["appTooltip", "Editar", 3, "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], ["appTooltip", "Eliminar", 2, "background-color", "tomato", "color", "#fff", "position", "relative", 3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm", 4, "ngIf"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { heroHasBeenDeleted: "heroHasBeenDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 1, vars: 1, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 3, "ngClass", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative", 3, "ngClass"], [2, "font-weight", "bolder"], [1, "action"], [3, "appTooltip", "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [2, "background-color", "tomato", "color", "#fff", "position", "relative", 3, "click", "appTooltip"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm", 4, "ngIf"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 27, 9, "div", 0);
+      \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 27, 14, "div", 0);
     }
     if (rf & 2) {
       \u0275\u0275property("ngIf", ctx.hero);
@@ -44229,21 +44271,25 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
     RouterLink,
     TooltipDirective,
     SpinnerComponent,
-    ConfirmModalComponent
-  ], styles: ["\n\n.dashboard-hero-detail[_ngcontent-%COMP%] {\n  padding: 20px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  text-decoration-line: none;\n  background-color: #eee;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n  color: black;\n  font-size: 1.2rem;\n  padding: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 10px;\n  font-size: 10px;\n  border: none;\n  border-radius: 8px;\n  outline: #d4d4d4;\n  padding: 10px;\n  margin: 0;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n}\n@media screen and (min-width: 600px) {\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    gap: 30px;\n  }\n}\n/*# sourceMappingURL=dashboard-hero-details.component.css.map */"] });
+    ConfirmModalComponent,
+    CommonModule,
+    NgClass
+  ], styles: ["\n\n.dashboard-hero-detail[_ngcontent-%COMP%] {\n  padding: 20px;\n  max-height: 156px;\n  transition: max-height 1s ease-out;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  text-decoration-line: none;\n  background-color: #eee;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n  color: black;\n  font-size: 1.2rem;\n  padding: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 10px;\n  font-size: 10px;\n  border: none;\n  border-radius: 8px;\n  outline: #d4d4d4;\n  padding: 10px;\n  margin: 0;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n}\n.fade-out[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeout 0.5s ease-in-out forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeout {\n  from {\n    opacity: 1;\n  }\n  to {\n    opacity: 0;\n    visibility: hidden;\n  }\n}\n@media screen and (min-width: 600px) {\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    gap: 30px;\n  }\n}\n.clo[_ngcontent-%COMP%] {\n  max-height: 10px;\n}\n/*# sourceMappingURL=dashboard-hero-details.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardHeroDetailsComponent, { className: "DashboardHeroDetailsComponent" });
 })();
 
 // src/app/hero/components/dashboard/dashboard.component.ts
-function DashboardComponent_button_4_Template(rf, ctx) {
+var _c04 = (a0) => ({ sincronized: a0 });
+var _c13 = (a0) => ({ "fade-in": a0 });
+function DashboardComponent_div_7_button_2_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 5);
-    \u0275\u0275listener("click", function DashboardComponent_button_4_Template_button_click_0_listener() {
+    \u0275\u0275elementStart(0, "button", 11);
+    \u0275\u0275listener("click", function DashboardComponent_div_7_button_2_Template_button_click_0_listener() {
       const hero_r2 = \u0275\u0275restoreView(_r1).$implicit;
-      const ctx_r2 = \u0275\u0275nextContext();
+      const ctx_r2 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r2.currentSelected(hero_r2));
     });
     \u0275\u0275text(1);
@@ -44251,33 +44297,60 @@ function DashboardComponent_button_4_Template(rf, ctx) {
   }
   if (rf & 2) {
     const hero_r2 = ctx.$implicit;
-    const ctx_r2 = \u0275\u0275nextContext();
+    const ctx_r2 = \u0275\u0275nextContext(2);
     \u0275\u0275classProp("selected", hero_r2 === ctx_r2.selectedHero);
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(5, _c13, hero_r2 === ctx_r2.selectedHero && ctx_r2.isDeleted))("appTooltip", "Top #" + (hero_r2.statistics == null ? null : hero_r2.statistics.ranking));
     \u0275\u0275advance();
     \u0275\u0275textInterpolate1(" ", hero_r2.name, " ");
   }
 }
-function DashboardComponent_app_dashboard_hero_details_6_Template(rf, ctx) {
+function DashboardComponent_div_7_app_dashboard_hero_details_4_Template(rf, ctx) {
   if (rf & 1) {
     const _r4 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "app-dashboard-hero-details", 6);
-    \u0275\u0275listener("heroDeleted", function DashboardComponent_app_dashboard_hero_details_6_Template_app_dashboard_hero_details_heroDeleted_0_listener() {
+    \u0275\u0275elementStart(0, "app-dashboard-hero-details", 12);
+    \u0275\u0275listener("heroHasBeenDeleted", function DashboardComponent_div_7_app_dashboard_hero_details_4_Template_app_dashboard_hero_details_heroHasBeenDeleted_0_listener($event) {
       \u0275\u0275restoreView(_r4);
-      const ctx_r2 = \u0275\u0275nextContext();
-      return \u0275\u0275resetView(ctx_r2.updateTopHeroes());
+      const ctx_r2 = \u0275\u0275nextContext(2);
+      return \u0275\u0275resetView(ctx_r2.updateViewTopHeroes($event));
     });
     \u0275\u0275elementEnd();
   }
   if (rf & 2) {
-    const ctx_r2 = \u0275\u0275nextContext();
+    const ctx_r2 = \u0275\u0275nextContext(2);
     \u0275\u0275property("selectedHero", ctx_r2.selectedHero)("renderHeroDetail", ctx_r2.renderHeroDetail);
   }
 }
+function DashboardComponent_div_7_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275elementStart(0, "div")(1, "div", 7);
+    \u0275\u0275template(2, DashboardComponent_div_7_button_2_Template, 2, 7, "button", 8);
+    \u0275\u0275element(3, "app-spinner", 9);
+    \u0275\u0275elementEnd();
+    \u0275\u0275template(4, DashboardComponent_div_7_app_dashboard_hero_details_4_Template, 1, 2, "app-dashboard-hero-details", 10);
+    \u0275\u0275elementEnd();
+  }
+  if (rf & 2) {
+    const ctx_r2 = \u0275\u0275nextContext();
+    \u0275\u0275advance(2);
+    \u0275\u0275property("ngForOf", ctx_r2.topheroes);
+    \u0275\u0275advance();
+    \u0275\u0275property("isLoading", ctx_r2.isLoadingSpinner)("message", ctx_r2.spinnerMessage);
+    \u0275\u0275advance();
+    \u0275\u0275property("ngIf", ctx_r2.hasTopHeroes);
+  }
+}
+function DashboardComponent_ng_template_8_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275elementStart(0, "div", 7)(1, "p", 13);
+    \u0275\u0275text(2, " No top heroes available ");
+    \u0275\u0275elementEnd()();
+  }
+}
 var DashboardComponent = class _DashboardComponent {
-  heroService;
+  TopheroService;
   spinnerService;
   actionsService;
-  heroes;
+  topheroes;
   heroSubscription;
   renderHeroDetail;
   spinnerMessage = "Loading top heroes...";
@@ -44286,24 +44359,47 @@ var DashboardComponent = class _DashboardComponent {
   hero;
   selectedHero;
   hasTopHeroes = true;
-  constructor(heroService, spinnerService, actionsService) {
-    this.heroService = heroService;
+  isVisible = true;
+  // Controla si el elemento está en el DOM
+  isFadingOut = false;
+  // Controla la animación de salida
+  isDeleted = false;
+  isSyncronized = true;
+  toggleVisibility() {
+    if (this.isVisible) {
+      this.isFadingOut = true;
+      setTimeout(() => {
+        this.isVisible = false;
+        this.isFadingOut = false;
+      }, 500);
+    } else {
+      this.isVisible = true;
+    }
+  }
+  toggle() {
+    this.isVisible = !this.isVisible;
+  }
+  constructor(TopheroService2, spinnerService, actionsService) {
+    this.TopheroService = TopheroService2;
     this.spinnerService = spinnerService;
     this.actionsService = actionsService;
   }
   ngOnInit() {
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
     this.isLoadingSpinner = true;
-    this.heroSubscription = this.heroService.getTopHeroes().subscribe((heroes) => {
+    this.heroSubscription = this.TopheroService.getTopHeroes().subscribe((heroes) => {
       if (heroes && heroes.length > 0) {
         const defaultHeroSelected = heroes[0];
         this.renderHeroDetail = defaultHeroSelected.id;
         this.selectedHero = defaultHeroSelected;
         this.spinnerService.hide();
-        this.heroes = heroes;
+        this.topheroes = heroes;
         this.isLoadingSpinner = false;
       }
     });
+    setTimeout(() => {
+      this.isSyncronized = false;
+    }, 1e4);
   }
   ngOnDestroy() {
     if (this.heroSubscription) {
@@ -44317,45 +44413,65 @@ var DashboardComponent = class _DashboardComponent {
   renderHeroDetails(id) {
     this.renderHeroDetail = id;
   }
-  cleanDetail() {
+  closeDetail() {
     this.renderHeroDetail = -1;
   }
-  updateTopHeroes() {
-    alert("actualizando vista");
+  displaySpinner() {
     this.isLoadingSpinner = true;
+  }
+  closeSpinner() {
+    this.isLoadingSpinner = false;
+  }
+  updateViewTopHeroes(heroHasBeenDeleted) {
+    this.isDeleted = true;
+    let index = this.topheroes?.findIndex((h) => h.id === this.selectedHero?.id);
     setTimeout(() => {
-      this.isLoadingSpinner = false;
-    }, 1e4);
+      this.displaySpinner();
+      if (index !== -1 && index != void 0) {
+        this.topheroes.splice(index, 1);
+      }
+      setTimeout(() => {
+        this.isDeleted = false;
+        this.closeSpinner();
+        if (this.topheroes && this.topheroes.length > 0) {
+          this.selectedHero = this.topheroes[0];
+        }
+      }, 1e3);
+    }, 2e3);
   }
   static \u0275fac = function DashboardComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
+    return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(TopheroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 4, consts: [[1, "dashboard-topheroes"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], ["hero", "hero.id", 3, "selected", "click", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "selectedHero", "renderHeroDetail", "heroDeleted", 4, "ngIf"], ["hero", "hero.id", 3, "click"], [3, "heroDeleted", "selectedHero", "renderHeroDetail"]], template: function DashboardComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 10, vars: 6, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action"], [1, "action-sync-container"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], [4, "ngIf", "ngIfElse"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "selectedHero", "renderHeroDetail", "heroHasBeenDeleted", 4, "ngIf"], [3, "click", "ngClass", "appTooltip"], [3, "heroHasBeenDeleted", "selectedHero", "renderHeroDetail"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275elementStart(0, "div", 0)(1, "h2");
-      \u0275\u0275text(2, "Top Heroes");
+      \u0275\u0275elementStart(0, "div", 1)(1, "h2");
+      \u0275\u0275text(2, "Top of Heroes");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(3, "div", 1);
-      \u0275\u0275template(4, DashboardComponent_button_4_Template, 2, 3, "button", 2);
-      \u0275\u0275element(5, "app-spinner", 3);
+      \u0275\u0275elementStart(3, "div", 2)(4, "div", 3);
+      \u0275\u0275namespaceSVG();
+      \u0275\u0275elementStart(5, "svg", 4);
+      \u0275\u0275element(6, "path", 5);
+      \u0275\u0275elementEnd()()();
+      \u0275\u0275template(7, DashboardComponent_div_7_Template, 5, 4, "div", 6);
       \u0275\u0275elementEnd();
-      \u0275\u0275template(6, DashboardComponent_app_dashboard_hero_details_6_Template, 1, 2, "app-dashboard-hero-details", 4);
-      \u0275\u0275elementEnd();
+      \u0275\u0275template(8, DashboardComponent_ng_template_8_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
     }
     if (rf & 2) {
-      \u0275\u0275advance(4);
-      \u0275\u0275property("ngForOf", ctx.heroes);
-      \u0275\u0275advance();
-      \u0275\u0275property("isLoading", ctx.isLoadingSpinner)("message", ctx.spinnerMessage);
-      \u0275\u0275advance();
-      \u0275\u0275property("ngIf", ctx.hasTopHeroes);
+      const heroesNotAvailable_r5 = \u0275\u0275reference(9);
+      \u0275\u0275advance(5);
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(4, _c04, ctx.isSyncronized))("appTooltip", "sync");
+      \u0275\u0275advance(2);
+      \u0275\u0275property("ngIf", ctx.topheroes && ctx.topheroes.length > 0)("ngIfElse", heroesNotAvailable_r5);
     }
   }, dependencies: [
     NgForOf,
     NgIf,
     SpinnerComponent,
-    DashboardHeroDetailsComponent
-  ], styles: ["\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n  padding: 20p5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-size: 18px;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  box-sizing: border-box;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #d4d4d4;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #9f9f9f;\n  border: none;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n  background-color: aliceblue;\n  color: #3f525c;\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n    background-color: #d4d4d4;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #9f9f9f;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n    background-color: aliceblue;\n    color: #3f525c;\n  }\n}\n/*# sourceMappingURL=dashboard.component.css.map */"] });
+    DashboardHeroDetailsComponent,
+    TooltipDirective,
+    CommonModule,
+    NgClass
+  ], styles: ['@charset "UTF-8";\n\n\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n  padding-right: 53px;\n  margin-bottom: 10px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  border-radius: 5px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  padding: 10px;\n  width: 15px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   .sincronized[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_sync 1s infinite ease-in-out;\n}\n@keyframes _ngcontent-%COMP%_sync {\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]:active {\n  opacity: 0.5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  margin-bottom: 20px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  border: none;\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #9f9f9f;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #9f9f9f;\n  border: none;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n  background-color: #9f9f9f;\n  color: #a5a5a5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .fade-in[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeIn 1s forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeIn {\n  from {\n    opacity: 1;\n    transform: translateX(0);\n  }\n  to {\n    opacity: 0;\n    transform: translateX(-20px);\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .fade-out[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeOut 1s forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeOut {\n  from {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  to {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n    margin: 0;\n    margin-top: 20px;\n    padding-left: 30px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    padding-right: 23px;\n    margin-bottom: 0;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n    background-color: #d4d4d4;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #9f9f9f;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:disabled {\n    background-color: #a5a5a5;\n    color: white;\n    cursor: not-allowed;\n  }\n}\n/*# sourceMappingURL=dashboard.component.css.map */'] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardComponent, { className: "DashboardComponent" });
@@ -45841,7 +45957,53 @@ var InMemoryDataService = class _InMemoryDataService {
       { id: 2, name: "DC Comics" },
       { id: 3, name: "Image Comics" }
     ];
-    return { heroes, publishers };
+    const topheroes = [
+      {
+        id: 12,
+        name: "Dr. Nice",
+        year: 2010,
+        publisher: { id: 3, name: "Image Comics" },
+        tophero: true,
+        statistics: {
+          popularity: 9999,
+          ranking: 1
+        }
+      },
+      {
+        id: 13,
+        name: "Bombasto",
+        year: 2010,
+        publisher: { id: 1, name: "Marvel Comics" },
+        tophero: true,
+        statistics: {
+          popularity: 9950,
+          ranking: 3
+        }
+      },
+      {
+        id: 14,
+        name: "Celeritas",
+        year: 2010,
+        publisher: { id: 1, name: "Marvel Comics" },
+        tophero: true,
+        statistics: {
+          popularity: 9998,
+          ranking: 2
+        }
+      },
+      {
+        id: 15,
+        name: "Magneta",
+        year: 2010,
+        publisher: { id: 3, name: "Image Comics" },
+        tophero: true,
+        statistics: {
+          popularity: 8e3,
+          ranking: 4
+        }
+      }
+    ];
+    return { heroes, publishers, topheroes };
   }
   genId(heroes) {
     return heroes.length > 0 ? Math.max(...heroes.map((hero) => hero.id)) + 1 : 11;
@@ -45882,18 +46044,25 @@ var InMemoryDataService = class _InMemoryDataService {
     const collectionName = reqInfo.collectionName;
     const heroes = reqInfo.collection;
     const heroIdDelete = reqInfo.id || -1;
-    const index = heroes.findIndex((h) => h.id === heroIdDelete) || -1;
-    if (index && index !== -1) {
+    if (!heroes.some((h) => h.id === heroIdDelete)) {
+      return reqInfo.utils.createResponse$(() => ({
+        body: "Hero not found",
+        status: 404
+      }));
+    }
+    const index = heroes.findIndex((h) => h.id === heroIdDelete);
+    if (index === -1) {
+      return reqInfo.utils.createResponse$(() => ({
+        body: "Hero not found",
+        status: 404
+      }));
+    } else {
       heroes.splice(index, 1);
       return reqInfo.utils.createResponse$(() => ({
-        body: heroIdDelete,
+        body: "Hero has been deleted!",
         status: 200
       }));
     }
-    return reqInfo.utils.createResponse$(() => ({
-      body: heroIdDelete,
-      status: 404
-    }));
   }
   static \u0275fac = function InMemoryDataService_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _InMemoryDataService)();
@@ -46223,7 +46392,7 @@ var appConfig = {
 };
 
 // src/app/messages/components/messages/messages.component.ts
-var _c02 = ["scrollContainer"];
+var _c05 = ["scrollContainer"];
 function MessagesComponent_div_6_div_1_p_1_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "p")(1, "span", 12);
@@ -46349,7 +46518,7 @@ var MessagesComponent = class _MessagesComponent {
   };
   static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _MessagesComponent, selectors: [["app-messages"]], viewQuery: function MessagesComponent_Query(rf, ctx) {
     if (rf & 1) {
-      \u0275\u0275viewQuery(_c02, 5);
+      \u0275\u0275viewQuery(_c05, 5);
     }
     if (rf & 2) {
       let _t;
