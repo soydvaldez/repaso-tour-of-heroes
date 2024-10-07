@@ -44408,7 +44408,6 @@ var DashboardComponent = class _DashboardComponent {
   }
   currentSelected(hero) {
     this.selectedHero = hero;
-    this.renderHeroDetails(this.selectedHero.id);
   }
   renderHeroDetails(id) {
     this.renderHeroDetail = id;
