@@ -53,8 +53,6 @@
 
   .heroes-menu {
     border-radius: 5px;
-    /* margin: auto; */
-    margin-bottom: 20px;
     max-width: 1000px;
     height: auto;
 
@@ -135,6 +133,8 @@
 
 @media (min-width: 600px) {
   .dashboard-topheroes {
+    min-height: 220px;
+    height: auto;
     h2 {
       margin: 0;
       margin-top: 20px;

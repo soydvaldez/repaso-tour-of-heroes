@@ -43,8 +43,8 @@
     [isLoading]="isLoadingSpinner"
     [message]="messageSpinner"
   ></app-spinner>
-  <app-confirm-modal
-    *ngIf="showModal"
-    (confirm)="handleConfirmation($event)"
-  ></app-confirm-modal>
 </div>
+<app-confirm-modal
+  *ngIf="showModal"
+  (confirm)="handleConfirmation($event)"
+></app-confirm-modal>

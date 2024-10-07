@@ -35,8 +35,8 @@
       ></app-spinner>
     </div>
     <app-dashboard-hero-details
-      *ngIf="hasTopHeroes"
-      (heroHasBeenDeleted)="updateViewTopHeroes($event)"
+      *ngIf="selectedHero"
+      (onHeroDeleted)="updateViewTopHeroes($event)"
       [selectedHero]="selectedHero"
       [renderHeroDetail]="renderHeroDetail"
     ></app-dashboard-hero-details>

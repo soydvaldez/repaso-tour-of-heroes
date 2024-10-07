@@ -1,8 +1,7 @@
 // src/app/hero.service.spec.ts
 import { TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { HeroService } from './hero.service';
-import { Hero, NewHero } from '../interface/hero';
+import { Hero } from '../interface/hero';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -102,6 +101,8 @@ describe('HeroService', () => {
     let saveHero: Hero = {
       id: 21,
       name: 'Hero Name Testing',
+      year: 0,
+      publisher: null
     };
 
     heroService.add(saveHero).subscribe((hero) => {
@@ -115,24 +116,54 @@ describe('HeroService', () => {
 // Expected list of heroes to compare with api response
 function getExpectedHeroes(): Hero[] {
   return [
-    { id: 12, name: 'Dr. Nice', },
-    { id: 13, name: 'Bombasto' },
-    { id: 14, name: 'Celeritas' },
-    { id: 15, name: 'Magneta' },
-    { id: 16, name: 'RubberMan' },
-    { id: 17, name: 'Dynama' },
-    { id: 18, name: 'Dr. IQ' },
-    { id: 19, name: 'Magma' },
-    { id: 20, name: 'Tornado' },
+    {
+      id: 12,
+      name: 'Dr. Nice',
+      year: 0,
+      publisher: null,
+    },
+    { id: 13, name: 'Bombasto', year: 0, publisher: null },
+    { id: 14, name: 'Celeritas', year: 0, publisher: null },
+    { id: 15, name: 'Magneta', year: 0, publisher: null },
+    { id: 16, name: 'RubberMan', year: 0, publisher: null },
+    { id: 17, name: 'Dynama', year: 0, publisher: null },
+    { id: 18, name: 'Dr. IQ', year: 0, publisher: null },
+    { id: 19, name: 'Magma', year: 0, publisher: null },
+    {
+      id: 20,
+      name: 'Tornado',
+      year: 0,
+      publisher: null,
+    },
   ];
 }
 
 // Unexpected list of heroes to compare with api response
 function getUnexpectedHeroes(): Hero[] {
   return [
-    { id: 21, name: 'Dr. Ice' },
-    { id: 22, name: 'Mr. Fantastic' },
-    { id: 23, name: 'Dr Doom' },
-    { id: 24, name: 'Venom' },
+    {
+      id: 21,
+      name: 'Dr. Ice',
+      year: 0,
+      publisher: null,
+    },
+    {
+      id: 22,
+      name: 'Mr. Fantastic',
+      year: 0,
+      publisher: null,
+    },
+    {
+      id: 23,
+      name: 'Dr Doom',
+      year: 0,
+      publisher: null,
+    },
+    {
+      id: 24,
+      name: 'Venom',
+      year: 0,
+      publisher: null,
+    },
   ];
 }

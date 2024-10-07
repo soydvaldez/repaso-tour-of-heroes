@@ -44,7 +44,7 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
   showModal: boolean = false;
 
   isDeleted: boolean = false;
-  @Output() heroHasBeenDeleted = new EventEmitter<boolean>(false);
+  @Output() onHeroDeleted = new EventEmitter<boolean>(false);
 
   constructor(private topheroService: TopheroService) {}
 
@@ -83,7 +83,7 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
     if (this.hero && this.hero != undefined) {
       this.topheroService.delete(this.hero?.id).subscribe((isDeleted) => {
         if (isDeleted) {
-          this.heroHasBeenDeleted.emit(true);
+          this.onHeroDeleted.emit(true);
           this.isDeleted = true;
         }
         setTimeout(() => {

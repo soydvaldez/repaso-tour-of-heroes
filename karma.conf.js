@@ -3,6 +3,7 @@
 
 module.exports = function (config) {
   config.set({
+    random: false,
     singleRun: false,
     basePath: "",
     frameworks: ["jasmine", "@angular-devkit/build-angular"],
@@ -15,7 +16,11 @@ module.exports = function (config) {
     ],
     client: {
       jasmine: {
-        defaultTimeoutInterval: 10000,
+        random: true,
+        seed: 4321,
+        stopOnFailure: true,
+        failFast: true,
+        timeOutInterval: 1000,
         // you can add configuration options for Jasmine here
         // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
         // for example, you can disable the random execution with `random: false`
@@ -26,14 +31,14 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true, // removes the duplicated traces
     },
-    port:9222,
+    // port: 9876,
     coverageReporter: {
       dir: require("path").join(__dirname, "./coverage/repaso-tour-of-heroes"),
       subdir: ".",
       reporters: [{ type: "html" }, { type: "text-summary" }],
     },
     reporters: ["progress", "kjhtml"],
-    browsers: ["Chrome"],
+    browsers: ["ChromeHeadless"],
     restartOnFileChange: true,
     // customLaunchers: {
     //   ChromeDebugging: {

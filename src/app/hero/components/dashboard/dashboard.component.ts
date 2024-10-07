@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   currentSelected(hero: Hero) {
     this.selectedHero = hero;
-    this.renderHeroDetails(this.selectedHero.id);
+    // this.renderHeroDetails(this.selectedHero.id);
   }
 
   renderHeroDetails(id: number) {
@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isLoadingSpinner = false;
   }
 
-  updateViewTopHeroes(heroHasBeenDeleted: boolean) {
+  updateViewTopHeroes(onHeroDeleted: boolean) {
     this.isDeleted = true;
 
     // this.selectedHero === true && isDeleted
@@ -143,6 +143,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.selectedHero = this.topheroes[0];
         }
       }, 1000);
-    }, 2000);
+    }, 1000);
   }
 }

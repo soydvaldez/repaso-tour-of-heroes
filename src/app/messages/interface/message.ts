@@ -1,5 +1,5 @@
 export interface Message {
   source: string;
   message: string;
-  severity?: string;
+  severity?: string | 'info' | 'error';
 }

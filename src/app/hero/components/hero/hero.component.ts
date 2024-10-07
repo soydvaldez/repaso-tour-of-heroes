@@ -50,6 +50,7 @@ export class HeroComponent implements OnInit, OnDestroy {
   totalRegisters: number = 0;
 
   heroesSubcription?: Subscription;
+  isDeleted: boolean = false;
 
   constructor(
     private heroService: HeroService,
@@ -85,9 +86,7 @@ export class HeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  searchHero(){
-    
-  }
+  searchHero() {}
 
   getHeroes() {}
 }

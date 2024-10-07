@@ -7,7 +7,10 @@
   >
     <ul class="heroes">
       <li *ngFor="let hero of this.heroes">
-        <a routerLink="/detail/{{ hero.id }}">
+        <a
+          [ngClass]="{ 'deleted-effect': isDeleted }"
+          routerLink="/detail/{{ hero.id }}"
+        >
           <span class="badge">{{ hero.id }}</span> {{ hero.name }}
         </a>
       </li>
@@ -26,7 +29,15 @@
   <div class="my-heroes-container notFoundHero">
     <p>Not found Heroes</p>
   </div>
-  <p style="padding: 20px 0; padding-left: 45px; font-size: 14px; color: #353535;font-weight: bold;">
+  <p
+    style="
+      padding: 20px 0;
+      padding-left: 45px;
+      font-size: 14px;
+      color: #353535;
+      font-weight: bold;
+    "
+  >
     Total registers: <span>{{ totalRegisters }}</span> finded
   </p>
 </ng-template>

@@ -1,5 +1,5 @@
 .dashboard-hero-detail {
-  padding: 20px;
+  padding: 10px 30px;
   max-height: 156px;
   transition: max-height 1s ease-out;
 
@@ -44,7 +44,7 @@
 }
 
 .fade-out {
-  animation: fadeout .5s ease-in-out forwards;
+  animation: fadeout .3s ease-in-out forwards;
 }
 
 @keyframes fadeout {
@@ -60,6 +60,7 @@
 
 @media screen and (min-width: 600px) {
   .dashboard-hero-detail {
+    padding: 10px 0;
     .action {
       display: flex;
       flex-direction: row;
@@ -71,5 +72,5 @@
 }
 
 .clo {
-  max-height: 10px;
+  max-height: 0;
 }
