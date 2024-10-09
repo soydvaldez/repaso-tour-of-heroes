@@ -39,7 +39,7 @@ export class TooltipDirective {
     // Calcular la posición del tooltip
     if (this.tooltipElement) {
       const tooltipPosTop = hostPos.top - this.tooltipElement.offsetHeight - 27; // Arriba del botón
-      const tooltipPosLeft = hostPos.left - 8;
+      const tooltipPosLeft = hostPos.left - 33;
 
       // Establecer la posición usando las coordenadas globales
       this.renderer.setStyle(this.tooltipElement, 'top', `${tooltipPosTop}px`);

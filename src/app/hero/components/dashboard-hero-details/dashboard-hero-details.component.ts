@@ -81,7 +81,7 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
     }
 
     if (this.hero && this.hero != undefined) {
-      this.topheroService.delete(this.hero?.id).subscribe((isDeleted) => {
+      this.topheroService.deleteHeroById(this.hero?.id).subscribe((isDeleted) => {
         if (isDeleted) {
           this.onHeroDeleted.emit(true);
           this.isDeleted = true;

@@ -9,6 +9,7 @@ import { map, tap } from 'rxjs';
 })
 export class TopheroService {
   private url: string = 'api/topheroes';
+
   constructor(
     private http: HttpClient,
     private messageService: MessageService
@@ -20,23 +21,57 @@ export class TopheroService {
         return this.messageService.add({
           source: 'TopheroService',
           message: 'All Top Heroes fetched',
-          severity: 'info',
+          severity: 'INFO',
         });
       }),
       map((topheroes) => {
-        return topheroes.sort(
-          (a, b) => a.statistics!.ranking - b.statistics!.ranking
-        );
+        const sortTopHeroes = (a: Hero, b: Hero) => {
+          return a.statistics!.ranking - b.statistics!.ranking;
+        };
+
+        const initializedHeroes = topheroes.map((hero) => ({
+          ...hero,
+          isSelected: false, // Añadir la propiedad `isSelected`
+        }));
+
+        return initializedHeroes.sort(sortTopHeroes);
+      }),
+      map((top) => {
+        return top;
       })
     );
   }
 
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`).pipe(
+  save(topheroes: Hero[]) {
+    return this.http.post('api/topheroes', topheroes).pipe(
       tap(() => {
         this.messageService.add({
           source: 'TopheroService',
-          message: `deleted TopHero: ${id}`,
+          message: `register top of heroes`,
+          severity: 'INFO',
+        });
+      })
+    );
+  }
+
+  deleteHeroById(id: number) {
+    return this.http.delete(`api/topheroes/${id}`).pipe(
+      tap(() => {
+        this.messageService.add({
+          source: 'TopheroService',
+          message: `Hero with id ${id} was deleted!`,
+          severity: 'INFO',
+        });
+      })
+    );
+  }
+
+  deleteHeroesByIds(ids: number[]) {
+    return this.http.post('api/topheroes', { ids }).pipe(
+      tap(() => {
+        this.messageService.add({
+          source: 'TopheroService',
+          message: `Heroes with ids: {${ids}} was deleted!`,
           severity: 'INFO',
         });
       })

@@ -33,7 +33,7 @@ describe('PublisherService', () => {
     expect(publisherService).toBeTruthy();
   });
 
-  fit('should be return a list of publisher', (done) => {
+  it('should be return a list of publisher', (done) => {
     publisherService.getPublishers().subscribe((publishers) => {
       expect(publishers.length).toBe(3);
 

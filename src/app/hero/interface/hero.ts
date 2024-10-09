@@ -10,6 +10,7 @@ export interface Hero {
   publisher: Publisher | null;
   tophero?: boolean;
   statistics?: Statistics;
+  isSelected?: boolean;
 }
 
 export interface NewHero {

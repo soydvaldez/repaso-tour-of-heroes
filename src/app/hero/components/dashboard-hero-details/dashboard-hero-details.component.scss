@@ -23,7 +23,6 @@
 
     svg {
       width: 20px;
-      height: 20px;
     }
   }
 
@@ -35,16 +34,19 @@
     outline: #d4d4d4;
     padding: 10px;
     margin: 0;
-
+    background-color: red;
+    color: #fff;
+    position: relative;
+    
     svg {
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      fill: white;
     }
   }
 }
 
 .fade-out {
-  animation: fadeout .3s ease-in-out forwards;
+  animation: fadeout 0.3s ease-in-out forwards;
 }
 
 @keyframes fadeout {
