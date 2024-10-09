@@ -44008,7 +44008,7 @@ var TooltipDirective = class _TooltipDirective {
     const hostPos = this.el.nativeElement.getBoundingClientRect();
     if (this.tooltipElement) {
       const tooltipPosTop = hostPos.top - this.tooltipElement.offsetHeight - 27;
-      const tooltipPosLeft = hostPos.left - 8;
+      const tooltipPosLeft = hostPos.left - 33;
       this.renderer.setStyle(this.tooltipElement, "top", `${tooltipPosTop}px`);
       this.renderer.setStyle(this.tooltipElement, "left", `${tooltipPosLeft}px`);
       this.renderer.appendChild(document.body, this.tooltipElement);
@@ -44053,6 +44053,7 @@ var TooltipDirective = class _TooltipDirective {
 // src/app/commons/confirm-modal/confirm-modal.component.ts
 var ConfirmModalComponent = class _ConfirmModalComponent {
   confirm = new EventEmitter();
+  message = "";
   onConfirm() {
     this.confirm.emit(true);
   }
@@ -44062,10 +44063,10 @@ var ConfirmModalComponent = class _ConfirmModalComponent {
   static \u0275fac = function ConfirmModalComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ConfirmModalComponent)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _ConfirmModalComponent, selectors: [["app-confirm-modal"]], outputs: { confirm: "confirm" }, standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 10, vars: 0, consts: [[1, "modal"], [1, "modal-content"], [1, "modal-actions"], [1, "btn", "btn-cancel", 3, "click"], [1, "btn", "btn-confirm", 3, "click"], [1, "modal-backdrop"]], template: function ConfirmModalComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _ConfirmModalComponent, selectors: [["app-confirm-modal"]], inputs: { message: "message" }, outputs: { confirm: "confirm" }, standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 10, vars: 1, consts: [[1, "modal"], [1, "modal-content"], [1, "modal-actions"], [1, "btn", "btn-cancel", 3, "click"], [1, "btn", "btn-confirm", 3, "click"], [1, "modal-backdrop"]], template: function ConfirmModalComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0)(1, "div", 1)(2, "h5");
-      \u0275\u0275text(3, "\xBFEst\xE1s seguro que deseas eliminar este elemento?");
+      \u0275\u0275text(3);
       \u0275\u0275elementEnd();
       \u0275\u0275elementStart(4, "div", 2)(5, "button", 3);
       \u0275\u0275listener("click", function ConfirmModalComponent_Template_button_click_5_listener() {
@@ -44080,6 +44081,10 @@ var ConfirmModalComponent = class _ConfirmModalComponent {
       \u0275\u0275text(8, "Eliminar");
       \u0275\u0275elementEnd()()()();
       \u0275\u0275element(9, "div", 5);
+    }
+    if (rf & 2) {
+      \u0275\u0275advance(3);
+      \u0275\u0275textInterpolate1(" ", ctx.message ? ctx.message : "\xBFEst\xE1s seguro que deseas eliminar este elemento?", " ");
     }
   }, styles: ["\n\n.modal[_ngcontent-%COMP%] {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 300px;\n  background-color: #fff;\n  border-radius: 8px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n  z-index: 1000;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%] {\n  padding: 20px;\n  text-align: center;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   h3[_ngcontent-%COMP%] {\n  margin: 0 0 20px;\n  font-size: 18px;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   .modal-actions[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: space-between;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   .modal-actions[_ngcontent-%COMP%]   .btn[_ngcontent-%COMP%] {\n  margin: 0;\n  padding: 8px 16px;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  font-size: 14px;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   .modal-actions[_ngcontent-%COMP%]   .btn-cancel[_ngcontent-%COMP%] {\n  background-color: #ccc;\n  color: #333;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   .modal-actions[_ngcontent-%COMP%]   .btn-cancel[_ngcontent-%COMP%]:hover {\n  background-color: #bbb;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   .modal-actions[_ngcontent-%COMP%]   .btn-confirm[_ngcontent-%COMP%] {\n  background-color: #e74c3c;\n  color: #fff;\n}\n.modal[_ngcontent-%COMP%]   .modal-content[_ngcontent-%COMP%]   .modal-actions[_ngcontent-%COMP%]   .btn-confirm[_ngcontent-%COMP%]:hover {\n  background-color: #c0392b;\n}\n.modal-backdrop[_ngcontent-%COMP%] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 999;\n}\n/*# sourceMappingURL=confirm-modal.component.css.map */"] });
 };
@@ -44101,17 +44106,44 @@ var TopheroService = class _TopheroService {
       return this.messageService.add({
         source: "TopheroService",
         message: "All Top Heroes fetched",
-        severity: "info"
+        severity: "INFO"
       });
     }), map((topheroes) => {
-      return topheroes.sort((a, b) => a.statistics.ranking - b.statistics.ranking);
+      const sortTopHeroes = (a, b) => {
+        return a.statistics.ranking - b.statistics.ranking;
+      };
+      const initializedHeroes = topheroes.map((hero) => __spreadProps(__spreadValues({}, hero), {
+        isSelected: false
+        // Añadir la propiedad `isSelected`
+      }));
+      return initializedHeroes.sort(sortTopHeroes);
+    }), map((top) => {
+      return top;
     }));
   }
-  delete(id) {
-    return this.http.delete(`${this.url}/${id}`).pipe(tap(() => {
+  save(topheroes) {
+    return this.http.post("api/topheroes", topheroes).pipe(tap(() => {
       this.messageService.add({
         source: "TopheroService",
-        message: `deleted TopHero: ${id}`,
+        message: `register top of heroes`,
+        severity: "INFO"
+      });
+    }));
+  }
+  deleteHeroById(id) {
+    return this.http.delete(`api/topheroes/${id}`).pipe(tap(() => {
+      this.messageService.add({
+        source: "TopheroService",
+        message: `Hero with id ${id} was deleted!`,
+        severity: "INFO"
+      });
+    }));
+  }
+  deleteHeroesByIds(ids) {
+    return this.http.post("api/topheroes", { ids }).pipe(tap(() => {
+      this.messageService.add({
+        source: "TopheroService",
+        message: `Heroes with ids: {${ids}} was deleted!`,
         severity: "INFO"
       });
     }));
@@ -44241,7 +44273,7 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
       return;
     }
     if (this.hero && this.hero != void 0) {
-      this.topheroService.delete(this.hero?.id).subscribe((isDeleted) => {
+      this.topheroService.deleteHeroById(this.hero?.id).subscribe((isDeleted) => {
         if (isDeleted) {
           this.onHeroDeleted.emit(true);
           this.isDeleted = true;
@@ -44256,7 +44288,7 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(TopheroService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { onHeroDeleted: "onHeroDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 2, vars: 2, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 3, "ngClass", 4, "ngIf"], [3, "confirm", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative", 3, "ngClass"], [2, "font-weight", "bolder"], [1, "action"], [3, "appTooltip", "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [2, "background-color", "tomato", "color", "#fff", "position", "relative", 3, "click", "appTooltip"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { onHeroDeleted: "onHeroDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 2, vars: 2, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 3, "ngClass", 4, "ngIf"], [3, "confirm", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative", 3, "ngClass"], [2, "font-weight", "bolder"], [1, "action"], [3, "appTooltip", "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [3, "click", "appTooltip"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 26, 13, "div", 0)(1, DashboardHeroDetailsComponent_app_confirm_modal_1_Template, 1, 0, "app-confirm-modal", 1);
     }
@@ -44273,123 +44305,144 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
     ConfirmModalComponent,
     CommonModule,
     NgClass
-  ], styles: ["\n\n.dashboard-hero-detail[_ngcontent-%COMP%] {\n  padding: 10px 30px;\n  max-height: 156px;\n  transition: max-height 1s ease-out;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  text-decoration-line: none;\n  background-color: #eee;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n  color: black;\n  font-size: 1.2rem;\n  padding: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 10px;\n  font-size: 10px;\n  border: none;\n  border-radius: 8px;\n  outline: #d4d4d4;\n  padding: 10px;\n  margin: 0;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n  height: 20px;\n}\n.fade-out[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeout 0.3s ease-in-out forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeout {\n  from {\n    opacity: 1;\n  }\n  to {\n    opacity: 0;\n    visibility: hidden;\n  }\n}\n@media screen and (min-width: 600px) {\n  .dashboard-hero-detail[_ngcontent-%COMP%] {\n    padding: 10px 0;\n  }\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    gap: 30px;\n  }\n}\n.clo[_ngcontent-%COMP%] {\n  max-height: 0;\n}\n/*# sourceMappingURL=dashboard-hero-details.component.css.map */"] });
+  ], styles: ["\n\n.dashboard-hero-detail[_ngcontent-%COMP%] {\n  padding: 10px 30px;\n  max-height: 156px;\n  transition: max-height 1s ease-out;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  text-decoration-line: none;\n  background-color: #eee;\n  border: none;\n  border-radius: 8px;\n  cursor: pointer;\n  color: black;\n  font-size: 1.2rem;\n  padding: 10px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 20px;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  padding: 10px;\n  font-size: 10px;\n  border: none;\n  border-radius: 8px;\n  outline: #d4d4d4;\n  padding: 10px;\n  margin: 0;\n  background-color: red;\n  color: #fff;\n  position: relative;\n}\n.dashboard-hero-detail[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  width: 15px;\n  fill: white;\n}\n.fade-out[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeout 0.3s ease-in-out forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeout {\n  from {\n    opacity: 1;\n  }\n  to {\n    opacity: 0;\n    visibility: hidden;\n  }\n}\n@media screen and (min-width: 600px) {\n  .dashboard-hero-detail[_ngcontent-%COMP%] {\n    padding: 10px 0;\n  }\n  .dashboard-hero-detail[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    gap: 30px;\n  }\n}\n.clo[_ngcontent-%COMP%] {\n  max-height: 0;\n}\n/*# sourceMappingURL=dashboard-hero-details.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardHeroDetailsComponent, { className: "DashboardHeroDetailsComponent" });
 })();
 
 // src/app/hero/components/dashboard/dashboard.component.ts
-var _c04 = (a0) => ({ sincronized: a0 });
-var _c13 = (a0) => ({ "fade-in": a0 });
-function DashboardComponent_div_7_button_2_Template(rf, ctx) {
+var _c04 = () => ["trash-action"];
+var _c13 = () => [];
+var _c2 = (a0) => ({ sincronized: a0 });
+var _c3 = (a0) => ({ "fade-in": a0 });
+function DashboardComponent_div_17_button_2_Template(rf, ctx) {
   if (rf & 1) {
-    const _r1 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 11);
-    \u0275\u0275listener("click", function DashboardComponent_div_7_button_2_Template_button_click_0_listener() {
-      const hero_r2 = \u0275\u0275restoreView(_r1).$implicit;
-      const ctx_r2 = \u0275\u0275nextContext(2);
-      return \u0275\u0275resetView(ctx_r2.currentSelected(hero_r2));
+    const _r2 = \u0275\u0275getCurrentView();
+    \u0275\u0275elementStart(0, "button", 21);
+    \u0275\u0275listener("click", function DashboardComponent_div_17_button_2_Template_button_click_0_listener() {
+      const hero_r3 = \u0275\u0275restoreView(_r2).$implicit;
+      const ctx_r3 = \u0275\u0275nextContext(2);
+      return \u0275\u0275resetView(ctx_r3.currentSelected(hero_r3));
     });
-    \u0275\u0275text(1);
+    \u0275\u0275elementStart(1, "input", 22);
+    \u0275\u0275listener("click", function DashboardComponent_div_17_button_2_Template_input_click_1_listener() {
+      const hero_r3 = \u0275\u0275restoreView(_r2).$implicit;
+      const ctx_r3 = \u0275\u0275nextContext(2);
+      return \u0275\u0275resetView(ctx_r3.selectTophero(hero_r3));
+    });
+    \u0275\u0275twoWayListener("ngModelChange", function DashboardComponent_div_17_button_2_Template_input_ngModelChange_1_listener($event) {
+      const hero_r3 = \u0275\u0275restoreView(_r2).$implicit;
+      \u0275\u0275twoWayBindingSet(hero_r3.isSelected, $event) || (hero_r3.isSelected = $event);
+      return \u0275\u0275resetView($event);
+    });
     \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(2, "span");
+    \u0275\u0275text(3);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(4, "span");
+    \u0275\u0275text(5);
+    \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
-    const hero_r2 = ctx.$implicit;
-    const ctx_r2 = \u0275\u0275nextContext(2);
-    \u0275\u0275classProp("selected", hero_r2 === ctx_r2.selectedHero);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(5, _c13, hero_r2 === ctx_r2.selectedHero && ctx_r2.isDeleted))("appTooltip", "Top #" + (hero_r2.statistics == null ? null : hero_r2.statistics.ranking));
+    const hero_r3 = ctx.$implicit;
+    const ctx_r3 = \u0275\u0275nextContext(2);
+    \u0275\u0275classProp("selected", hero_r3 === ctx_r3.selectedHero);
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(9, _c3, hero_r3 === ctx_r3.selectedHero && ctx_r3.isDeleted))("appTooltip", "Top #" + (hero_r3.statistics == null ? null : hero_r3.statistics.ranking));
     \u0275\u0275advance();
-    \u0275\u0275textInterpolate1(" ", hero_r2.name, " ");
-  }
-}
-function DashboardComponent_div_7_app_dashboard_hero_details_4_Template(rf, ctx) {
-  if (rf & 1) {
-    const _r4 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "app-dashboard-hero-details", 12);
-    \u0275\u0275listener("onHeroDeleted", function DashboardComponent_div_7_app_dashboard_hero_details_4_Template_app_dashboard_hero_details_onHeroDeleted_0_listener($event) {
-      \u0275\u0275restoreView(_r4);
-      const ctx_r2 = \u0275\u0275nextContext(2);
-      return \u0275\u0275resetView(ctx_r2.updateViewTopHeroes($event));
-    });
-    \u0275\u0275elementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r2 = \u0275\u0275nextContext(2);
-    \u0275\u0275property("selectedHero", ctx_r2.selectedHero)("renderHeroDetail", ctx_r2.renderHeroDetail);
-  }
-}
-function DashboardComponent_div_7_Template(rf, ctx) {
-  if (rf & 1) {
-    \u0275\u0275elementStart(0, "div")(1, "div", 7);
-    \u0275\u0275template(2, DashboardComponent_div_7_button_2_Template, 2, 7, "button", 8);
-    \u0275\u0275element(3, "app-spinner", 9);
-    \u0275\u0275elementEnd();
-    \u0275\u0275template(4, DashboardComponent_div_7_app_dashboard_hero_details_4_Template, 1, 2, "app-dashboard-hero-details", 10);
-    \u0275\u0275elementEnd();
-  }
-  if (rf & 2) {
-    const ctx_r2 = \u0275\u0275nextContext();
+    \u0275\u0275propertyInterpolate1("name", "selectedHero", hero_r3.id, "");
+    \u0275\u0275twoWayProperty("ngModel", hero_r3.isSelected);
     \u0275\u0275advance(2);
-    \u0275\u0275property("ngForOf", ctx_r2.topheroes);
-    \u0275\u0275advance();
-    \u0275\u0275property("isLoading", ctx_r2.isLoadingSpinner)("message", ctx_r2.spinnerMessage);
-    \u0275\u0275advance();
-    \u0275\u0275property("ngIf", ctx_r2.selectedHero);
+    \u0275\u0275textInterpolate(hero_r3.statistics == null ? null : hero_r3.statistics.ranking);
+    \u0275\u0275advance(2);
+    \u0275\u0275textInterpolate(hero_r3.name);
   }
 }
-function DashboardComponent_ng_template_8_Template(rf, ctx) {
+function DashboardComponent_div_17_app_dashboard_hero_details_3_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 7)(1, "p", 13);
+    const _r5 = \u0275\u0275getCurrentView();
+    \u0275\u0275elementStart(0, "app-dashboard-hero-details", 23);
+    \u0275\u0275listener("onHeroDeleted", function DashboardComponent_div_17_app_dashboard_hero_details_3_Template_app_dashboard_hero_details_onHeroDeleted_0_listener($event) {
+      \u0275\u0275restoreView(_r5);
+      const ctx_r3 = \u0275\u0275nextContext(2);
+      return \u0275\u0275resetView(ctx_r3.updateViewTopHeroes($event));
+    });
+    \u0275\u0275elementEnd();
+  }
+  if (rf & 2) {
+    const ctx_r3 = \u0275\u0275nextContext(2);
+    \u0275\u0275property("selectedHero", ctx_r3.selectedHero);
+  }
+}
+function DashboardComponent_div_17_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275elementStart(0, "div", 16)(1, "div", 17);
+    \u0275\u0275template(2, DashboardComponent_div_17_button_2_Template, 6, 11, "button", 18);
+    \u0275\u0275elementEnd();
+    \u0275\u0275template(3, DashboardComponent_div_17_app_dashboard_hero_details_3_Template, 1, 1, "app-dashboard-hero-details", 19);
+    \u0275\u0275element(4, "app-spinner", 20);
+    \u0275\u0275elementEnd();
+  }
+  if (rf & 2) {
+    const ctx_r3 = \u0275\u0275nextContext();
+    \u0275\u0275advance(2);
+    \u0275\u0275property("ngForOf", ctx_r3.topheroes);
+    \u0275\u0275advance();
+    \u0275\u0275property("ngIf", ctx_r3.selectedHero);
+    \u0275\u0275advance();
+    \u0275\u0275property("isLoading", ctx_r3.isLoadingSpinner)("message", ctx_r3.spinnerMessage);
+  }
+}
+function DashboardComponent_app_confirm_modal_18_Template(rf, ctx) {
+  if (rf & 1) {
+    const _r6 = \u0275\u0275getCurrentView();
+    \u0275\u0275elementStart(0, "app-confirm-modal", 24);
+    \u0275\u0275listener("confirm", function DashboardComponent_app_confirm_modal_18_Template_app_confirm_modal_confirm_0_listener($event) {
+      \u0275\u0275restoreView(_r6);
+      const ctx_r3 = \u0275\u0275nextContext();
+      return \u0275\u0275resetView(ctx_r3.handleConfirmation($event));
+    });
+    \u0275\u0275elementEnd();
+  }
+  if (rf & 2) {
+    \u0275\u0275property("message", "\xBFEst\xE1s seguro que deseas eliminar?");
+  }
+}
+function DashboardComponent_ng_template_19_Template(rf, ctx) {
+  if (rf & 1) {
+    \u0275\u0275elementStart(0, "div", 25)(1, "p", 26);
     \u0275\u0275text(2, " No top heroes available ");
     \u0275\u0275elementEnd()();
   }
 }
 var DashboardComponent = class _DashboardComponent {
-  TopheroService;
+  topheroService;
   spinnerService;
   actionsService;
-  topheroes;
+  topheroes = [];
+  topheroesBackup;
   heroSubscription;
-  renderHeroDetail;
   spinnerMessage = "Loading top heroes...";
   isLoadingSpinner = false;
-  isHeroSelected = false;
-  hero;
   selectedHero;
-  hasTopHeroes = true;
-  isVisible = true;
-  // Controla si el elemento está en el DOM
-  isFadingOut = false;
-  // Controla la animación de salida
   isDeleted = false;
   isSyncronized = true;
-  toggleVisibility() {
-    if (this.isVisible) {
-      this.isFadingOut = true;
-      setTimeout(() => {
-        this.isVisible = false;
-        this.isFadingOut = false;
-      }, 500);
-    } else {
-      this.isVisible = true;
-    }
-  }
-  toggle() {
-    this.isVisible = !this.isVisible;
-  }
-  constructor(TopheroService2, spinnerService, actionsService) {
-    this.TopheroService = TopheroService2;
+  isSelectedAllTopHeroes;
+  isSelectedTopHero = false;
+  showModal = false;
+  topHeroes$;
+  constructor(topheroService, spinnerService, actionsService) {
+    this.topheroService = topheroService;
     this.spinnerService = spinnerService;
     this.actionsService = actionsService;
   }
   ngOnInit() {
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
     this.isLoadingSpinner = true;
-    this.heroSubscription = this.TopheroService.getTopHeroes().subscribe((heroes) => {
+    this.topHeroes$ = this.topheroService.getTopHeroes();
+    this.heroSubscription = this.topHeroes$.subscribe((heroes) => {
       if (heroes && heroes.length > 0) {
         const defaultHeroSelected = heroes[0];
-        this.renderHeroDetail = defaultHeroSelected.id;
         this.selectedHero = defaultHeroSelected;
         this.spinnerService.hide();
         this.topheroes = heroes;
@@ -44407,12 +44460,6 @@ var DashboardComponent = class _DashboardComponent {
   }
   currentSelected(hero) {
     this.selectedHero = hero;
-  }
-  renderHeroDetails(id) {
-    this.renderHeroDetail = id;
-  }
-  closeDetail() {
-    this.renderHeroDetail = -1;
   }
   displaySpinner() {
     this.isLoadingSpinner = true;
@@ -44437,29 +44484,200 @@ var DashboardComponent = class _DashboardComponent {
       }, 1e3);
     }, 1e3);
   }
+  selectAllTopheroes() {
+    if (!this.isSelectedAllTopHeroes) {
+      const selectedAllCheckbox = (h) => {
+        h.isSelected = true;
+      };
+      this.topheroes?.forEach(selectedAllCheckbox);
+      this.isSelectedAllTopHeroes = true;
+      return;
+    }
+    if (this.isSelectedAllTopHeroes) {
+      const selectedAllCheckbox = (h) => {
+        h.isSelected = false;
+      };
+      this.topheroes?.forEach(selectedAllCheckbox);
+      this.isSelectedAllTopHeroes = false;
+      return;
+    }
+  }
+  selectTophero(hero) {
+    hero.isSelected = !hero.isSelected;
+    if (this.topheroes?.every((h) => h.isSelected)) {
+      this.isSelectedAllTopHeroes = true;
+    } else {
+      this.isSelectedAllTopHeroes = false;
+      this.isSelectedTopHero = false;
+    }
+    if (this.topheroes?.some((h) => h.isSelected)) {
+      this.isSelectedTopHero = true;
+    } else {
+      this.isSelectedTopHero = false;
+    }
+  }
+  delete() {
+    this.handleModal();
+  }
+  handleModal() {
+    this.showModal = !this.showModal;
+  }
+  isSelectedElement() {
+    return !this.topheroes?.some((h) => h.isSelected);
+  }
+  handleConfirmation(isConfirmDelete) {
+    this.handleModal();
+    if (isConfirmDelete) {
+      const heroesSelectedToDeleted = (hero) => {
+        return hero.isSelected;
+      };
+      const topHeroesToDelete = this.topheroes?.filter(heroesSelectedToDeleted) || [];
+      if (topHeroesToDelete.length <= 0) {
+        console.log("El usuario no selecciono ningun hero, notificar al usuario que debe de seleccionar al menos un hero");
+        return;
+      }
+      if (topHeroesToDelete.length === 1) {
+        this.topheroService.deleteHeroById(topHeroesToDelete[0].id).subscribe((isHeroDeleted) => {
+          console.log(isHeroDeleted);
+          if (!isHeroDeleted) {
+            console.log("something wrong");
+            return;
+          }
+          const index = this.getHeroIndex(topHeroesToDelete[0].id);
+          if (index != void 0 && index >= 0) {
+            this.topheroes?.splice(index, 1);
+          }
+        });
+        return;
+      }
+      if (topHeroesToDelete.length > 1) {
+        const idsToDelete = topHeroesToDelete.map((hero) => hero.id);
+        this.topheroService.deleteHeroesByIds(idsToDelete).subscribe((areHeroesDeleted) => {
+          console.log(areHeroesDeleted);
+          idsToDelete.forEach((id) => {
+            if (this.topheroes?.some((h) => h.id === id)) {
+              this.topheroes.splice(Number(this.getHeroIndex(id)), 1);
+            }
+          });
+        });
+        return;
+      }
+    }
+  }
+  getHeroIndex(heroId) {
+    return this.topheroes?.findIndex((h) => h.id === heroId);
+  }
+  restoreHeroes() {
+    if (this.topheroes?.length <= 0) {
+      const restoreHeroes = [
+        {
+          id: 12,
+          name: "Dr. Nice",
+          year: 2010,
+          publisher: { id: 3, name: "Image Comics" },
+          tophero: true,
+          statistics: {
+            popularity: 9999,
+            ranking: 1
+          }
+        },
+        {
+          id: 13,
+          name: "Bombasto",
+          year: 2010,
+          publisher: { id: 1, name: "Marvel Comics" },
+          tophero: true,
+          statistics: {
+            popularity: 9950,
+            ranking: 3
+          }
+        },
+        {
+          id: 14,
+          name: "Celeritas",
+          year: 2010,
+          publisher: { id: 1, name: "Marvel Comics" },
+          tophero: true,
+          statistics: {
+            popularity: 9998,
+            ranking: 2
+          }
+        },
+        {
+          id: 15,
+          name: "Magneta",
+          year: 2010,
+          publisher: { id: 3, name: "Image Comics" },
+          tophero: true,
+          statistics: {
+            popularity: 8e3,
+            ranking: 4
+          }
+        }
+      ];
+      this.topheroService.save(restoreHeroes).subscribe((heroes) => {
+        this.topheroes = heroes;
+      });
+    }
+  }
   static \u0275fac = function DashboardComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(TopheroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 10, vars: 6, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action"], [1, "action-sync-container"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], [4, "ngIf", "ngIfElse"], [1, "heroes-menu", 2, "height", "auto", "min-height", "100px", "position", "relative"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "isLoading", "message"], [3, "selectedHero", "renderHeroDetail", "onHeroDeleted", 4, "ngIf"], [3, "click", "ngClass", "appTooltip"], [3, "onHeroDeleted", "selectedHero", "renderHeroDetail"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 21, vars: 12, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action", 2, "display", "flex", "justify-content", "space-between"], [2, "float", "left", "margin-left", "55px"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel"], ["for", "", 2, "font-weight", "bold", "font-size", "14px", "padding-left", "5px"], [2, "display", "flex", "flex-direction", "row"], [1, "action-sync-container"], [3, "click", "disabled", "ngClass"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], ["class", "container_heroes-menu_details", "style", "position: relative", 4, "ngIf", "ngIfElse"], [3, "message", "confirm", 4, "ngIf"], [1, "container_heroes-menu_details", 2, "position", "relative"], [1, "heroes-menu"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "selectedHero", "onHeroDeleted", 4, "ngIf"], [3, "isLoading", "message"], [3, "click", "ngClass", "appTooltip"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel", "name"], [3, "onHeroDeleted", "selectedHero"], [3, "confirm", "message"], [1, "", 2, "height", "auto", "min-height", "100px", "position", "relative", "text-align", "center"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
     if (rf & 1) {
+      const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275elementStart(0, "div", 1)(1, "h2");
       \u0275\u0275text(2, "Top of Heroes");
       \u0275\u0275elementEnd();
-      \u0275\u0275elementStart(3, "div", 2)(4, "div", 3);
-      \u0275\u0275namespaceSVG();
-      \u0275\u0275elementStart(5, "svg", 4);
-      \u0275\u0275element(6, "path", 5);
-      \u0275\u0275elementEnd()()();
-      \u0275\u0275template(7, DashboardComponent_div_7_Template, 5, 4, "div", 6);
+      \u0275\u0275elementStart(3, "div", 2)(4, "div", 3)(5, "input", 4);
+      \u0275\u0275listener("click", function DashboardComponent_Template_input_click_5_listener() {
+        \u0275\u0275restoreView(_r1);
+        return \u0275\u0275resetView(ctx.selectAllTopheroes());
+      });
+      \u0275\u0275twoWayListener("ngModelChange", function DashboardComponent_Template_input_ngModelChange_5_listener($event) {
+        \u0275\u0275restoreView(_r1);
+        \u0275\u0275twoWayBindingSet(ctx.isSelectedAllTopHeroes, $event) || (ctx.isSelectedAllTopHeroes = $event);
+        return \u0275\u0275resetView($event);
+      });
       \u0275\u0275elementEnd();
-      \u0275\u0275template(8, DashboardComponent_ng_template_8_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
+      \u0275\u0275elementStart(6, "label", 5);
+      \u0275\u0275text(7, "Select all");
+      \u0275\u0275elementEnd()();
+      \u0275\u0275elementStart(8, "div", 6)(9, "div", 7)(10, "button", 8);
+      \u0275\u0275listener("click", function DashboardComponent_Template_button_click_10_listener() {
+        \u0275\u0275restoreView(_r1);
+        return \u0275\u0275resetView(ctx.delete());
+      });
+      \u0275\u0275namespaceSVG();
+      \u0275\u0275elementStart(11, "svg", 9);
+      \u0275\u0275element(12, "path", 10);
+      \u0275\u0275elementEnd()()();
+      \u0275\u0275namespaceHTML();
+      \u0275\u0275elementStart(13, "div", 7)(14, "button", 11);
+      \u0275\u0275listener("click", function DashboardComponent_Template_button_click_14_listener() {
+        \u0275\u0275restoreView(_r1);
+        return \u0275\u0275resetView(ctx.restoreHeroes());
+      });
+      \u0275\u0275namespaceSVG();
+      \u0275\u0275elementStart(15, "svg", 12);
+      \u0275\u0275element(16, "path", 13);
+      \u0275\u0275elementEnd()()()()();
+      \u0275\u0275template(17, DashboardComponent_div_17_Template, 5, 4, "div", 14);
+      \u0275\u0275elementEnd();
+      \u0275\u0275template(18, DashboardComponent_app_confirm_modal_18_Template, 1, 1, "app-confirm-modal", 15)(19, DashboardComponent_ng_template_19_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
     }
     if (rf & 2) {
-      const heroesNotAvailable_r5 = \u0275\u0275reference(9);
+      const heroesNotAvailable_r7 = \u0275\u0275reference(20);
       \u0275\u0275advance(5);
-      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(4, _c04, ctx.isSyncronized))("appTooltip", "sync");
+      \u0275\u0275twoWayProperty("ngModel", ctx.isSelectedAllTopHeroes);
+      \u0275\u0275advance(5);
+      \u0275\u0275property("disabled", ctx.isSelectedElement())("ngClass", !ctx.isSelectedElement() ? \u0275\u0275pureFunction0(8, _c04) : \u0275\u0275pureFunction0(9, _c13));
+      \u0275\u0275advance(5);
+      \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(10, _c2, ctx.isSyncronized))("appTooltip", "restore heroes");
       \u0275\u0275advance(2);
-      \u0275\u0275property("ngIf", ctx.topheroes && ctx.topheroes.length > 0)("ngIfElse", heroesNotAvailable_r5);
+      \u0275\u0275property("ngIf", ctx.topheroes && ctx.topheroes.length > 0)("ngIfElse", heroesNotAvailable_r7);
+      \u0275\u0275advance();
+      \u0275\u0275property("ngIf", ctx.showModal);
     }
   }, dependencies: [
     NgForOf,
@@ -44468,8 +44686,13 @@ var DashboardComponent = class _DashboardComponent {
     DashboardHeroDetailsComponent,
     TooltipDirective,
     CommonModule,
-    NgClass
-  ], styles: ['@charset "UTF-8";\n\n\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  text-align: center;\n  font-weight: 300;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n  padding-right: 53px;\n  margin-bottom: 10px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  border-radius: 5px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  padding: 10px;\n  width: 15px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   .sincronized[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_sync 1s infinite ease-in-out;\n}\n@keyframes _ngcontent-%COMP%_sync {\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]:active {\n  opacity: 0.5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  max-width: 1000px;\n  height: auto;\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  border: none;\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  display: inline-block;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  order: 0;\n  flex: 0 1 auto;\n  align-self: auto;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #9f9f9f;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  background-color: #9f9f9f;\n  border: none;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:active {\n  background-color: #9f9f9f;\n  color: #a5a5a5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .fade-in[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeIn 1s forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeIn {\n  from {\n    opacity: 1;\n    transform: translateX(0);\n  }\n  to {\n    opacity: 0;\n    transform: translateX(-20px);\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .fade-out[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeOut 1s forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeOut {\n  from {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  to {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%] {\n    min-height: 220px;\n    height: auto;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n    margin: 0;\n    margin-top: 20px;\n    padding-left: 30px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    padding-right: 23px;\n    margin-bottom: 0;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 18%;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n    background-color: #d4d4d4;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n    background-color: #9f9f9f;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:disabled {\n    background-color: #a5a5a5;\n    color: white;\n    cursor: not-allowed;\n  }\n}\n/*# sourceMappingURL=dashboard.component.css.map */'] });
+    NgClass,
+    FormsModule,
+    CheckboxControlValueAccessor,
+    NgControlStatus,
+    NgModel,
+    ConfirmModalComponent
+  ], styles: ["\n\n.dashboard-topheroes[_ngcontent-%COMP%] {\n  border: 1px solid #d4d4d4;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n  border-radius: 5px;\n  margin-top: 20px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 0;\n  text-align: center;\n  font-weight: 300;\n  padding: 20px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n  padding-right: 53px;\n  margin-bottom: 10px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  opacity: 1;\n  margin-right: 20px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  box-sizing: border-box;\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n  border: 1px solid #d4d4d4;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  padding: 10px;\n  width: 15px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button.trash-action[_ngcontent-%COMP%] {\n  background-color: red;\n  opacity: 1;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button.trash-action[_ngcontent-%COMP%]   svg[_ngcontent-%COMP%] {\n  fill: #fff;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:hover {\n  cursor: pointer;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:disabled {\n  background-color: #fff;\n  color: white;\n  cursor: not-allowed;\n  opacity: 0.5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:disabled   svg[_ngcontent-%COMP%] {\n  fill: #000;\n  opacity: 0.5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%]   .action-sync-container[_ngcontent-%COMP%]   .sincronized[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_sync 1s infinite ease-in-out;\n}\n@keyframes _ngcontent-%COMP%_sync {\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%] {\n  border-radius: 5px;\n  max-width: 1000px;\n  height: auto;\n  height: auto;\n  min-height: 100px;\n  position: relative;\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  flex-wrap: wrap;\n  justify-content: space-around;\n  align-content: center;\n  align-items: flex-start;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  box-sizing: border-box;\n  border: none;\n  font-size: 16px;\n  padding: 0.5rem;\n  background-color: #3f525c;\n  border-radius: 5px;\n  font-size: 1.2rem;\n  text-decoration: none;\n  color: #fff;\n  text-align: center;\n  width: 70%;\n  min-width: 70px;\n  margin: 0.5rem auto;\n  display: flex;\n  align-items: center;\n  gap: 15px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button.selected[_ngcontent-%COMP%] {\n  background-color: #9f9f9f;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  font-size: 17px;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:disabled {\n  color: white;\n  cursor: not-allowed;\n  opacity: 0.5;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   app-dashboard-hero-details[_ngcontent-%COMP%] {\n  width: 100%;\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .fade-in[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeIn 1s forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeIn {\n  from {\n    opacity: 1;\n    transform: translateX(0);\n  }\n  to {\n    opacity: 0;\n    transform: translateX(-20px);\n  }\n}\n.dashboard-topheroes[_ngcontent-%COMP%]   .fade-out[_ngcontent-%COMP%] {\n  animation: _ngcontent-%COMP%_fadeOut 1s forwards;\n}\n@keyframes _ngcontent-%COMP%_fadeOut {\n  from {\n    opacity: 1;\n    transform: translateY(0);\n  }\n  to {\n    opacity: 0;\n    transform: translateY(20px);\n  }\n}\n@media (min-width: 600px) {\n  .dashboard-topheroes[_ngcontent-%COMP%] {\n    padding-bottom: 20px;\n    min-height: 220px;\n    height: auto;\n    padding: 20px 20px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n    margin: 0;\n    padding: 10px 10px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .action[_ngcontent-%COMP%] {\n    padding: 0;\n    margin-bottom: 0;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%] {\n    margin-top: 10px;\n    padding: 20px;\n    border: 1px solid #d4d4d4;\n    border-radius: 5px;\n    min-height: 176px;\n    display: flex;\n    flex-direction: row;\n    justify-content: flex-start;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n    width: 62%;\n    max-width: 568px;\n    box-sizing: content-box;\n    padding: 0.8rem;\n    font-size: 1.2rem;\n    border-radius: 5px;\n  }\n  .dashboard-topheroes[_ngcontent-%COMP%]   .container_heroes-menu_details[_ngcontent-%COMP%]   .heroes-menu[_ngcontent-%COMP%]   button[_ngcontent-%COMP%]:disabled {\n    background-color: grey;\n    color: white;\n    cursor: not-allowed;\n    opacity: 0.5;\n  }\n}\n.test[_ngcontent-%COMP%] {\n  visibility: hidden;\n}\n/*# sourceMappingURL=dashboard.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardComponent, { className: "DashboardComponent" });
