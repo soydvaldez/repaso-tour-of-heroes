@@ -14,9 +14,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 12,
         name: 'Dr. Nice',
         year: 2010,
-        publisher: { id: 3, name: 'Image Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 3, name: 'Image Comics' },
+        isTophero: true,
+        heroStatistics: {
+          id: 1,
           popularity: 9999,
           ranking: 0,
         },
@@ -25,9 +26,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 13,
         name: 'Bombasto',
         year: 2010,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: true,
+        heroStatistics: {
+          id: 2,
           popularity: 9950,
           ranking: 3,
         },
@@ -36,9 +38,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 14,
         name: 'Celeritas',
         year: 2010,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: true,
+        heroStatistics: {
+          id: 3,
           popularity: 9998,
           ranking: 2,
         },
@@ -47,9 +50,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 15,
         name: 'Magneta',
         year: 2010,
-        publisher: { id: 3, name: 'Image Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 3, name: 'Image Comics' },
+        isTophero: true,
+        heroStatistics: {
+          id: 4,
           popularity: 8000,
           ranking: 4,
         },
@@ -58,9 +62,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 16,
         name: 'RubberMan',
         year: 2000,
-        publisher: { id: 3, name: 'Image Comics' },
-        tophero: false,
-        statistics: {
+        comicPublishers: { id: 3, name: 'Image Comics' },
+        isTophero: false,
+        heroStatistics: {
+          id: 5,
           popularity: 8999,
           ranking: 4,
         },
@@ -69,9 +74,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 17,
         name: 'Dynama',
         year: 2024,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: false,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: false,
+        heroStatistics: {
+          id: 6,
           popularity: 7000,
           ranking: 0,
         },
@@ -80,9 +86,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 18,
         name: 'Dr. IQ',
         year: 2024,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: false,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: false,
+        heroStatistics: {
+          id: 7,
           popularity: 6000,
           ranking: 0,
         },
@@ -91,9 +98,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 19,
         name: 'Magma',
         year: 2024,
-        publisher: { id: 2, name: 'DC Comics' },
-        tophero: false,
-        statistics: {
+        comicPublishers: { id: 2, name: 'DC Comics' },
+        isTophero: false,
+        heroStatistics: {
+          id: 8,
           popularity: 5000,
           ranking: 0,
         },
@@ -102,9 +110,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 20,
         name: 'Tornado',
         year: 2024,
-        publisher: { id: 2, name: 'DC Comics' },
-        tophero: false,
-        statistics: {
+        comicPublishers: { id: 2, name: 'DC Comics' },
+        isTophero: false,
+        heroStatistics: {
+          id: 9,
           popularity: 4000,
           ranking: 0,
         },
@@ -113,9 +122,10 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 21,
         name: 'Magneto',
         year: 2024,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: false,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: false,
+        heroStatistics: {
+          id: 10,
           popularity: 3000,
           ranking: 0,
         },
@@ -123,7 +133,7 @@ export class InMemoryDataService implements InMemoryDbService {
     ];
 
     // Nueva colección de editoriales de cómics
-    const publishers = [
+    const comicPublisherss = [
       { id: 1, name: 'Marvel Comics' },
       { id: 2, name: 'DC Comics' },
       { id: 3, name: 'Image Comics' },
@@ -134,9 +144,9 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 12,
         name: 'Dr. Nice',
         year: 2010,
-        publisher: { id: 3, name: 'Image Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 3, name: 'Image Comics' },
+        isTophero: true,
+        heroStatistics: {
           popularity: 9999,
           ranking: 1,
         },
@@ -145,9 +155,9 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 13,
         name: 'Bombasto',
         year: 2010,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: true,
+        heroStatistics: {
           popularity: 9950,
           ranking: 3,
         },
@@ -156,9 +166,9 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 14,
         name: 'Celeritas',
         year: 2010,
-        publisher: { id: 1, name: 'Marvel Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 1, name: 'Marvel Comics' },
+        isTophero: true,
+        heroStatistics: {
           popularity: 9998,
           ranking: 2,
         },
@@ -167,16 +177,16 @@ export class InMemoryDataService implements InMemoryDbService {
         id: 15,
         name: 'Magneta',
         year: 2010,
-        publisher: { id: 3, name: 'Image Comics' },
-        tophero: true,
-        statistics: {
+        comicPublishers: { id: 3, name: 'Image Comics' },
+        isTophero: true,
+        heroStatistics: {
           popularity: 8000,
           ranking: 4,
         },
       },
     ];
 
-    return { heroes, publishers, topheroes };
+    return { heroes, comicPublisherss, topheroes };
   }
   genId(heroes: Hero[]): number {
     return heroes.length > 0
@@ -209,7 +219,7 @@ export class InMemoryDataService implements InMemoryDbService {
       if (heroTmp) {
         heroTmp.name = heroUpdate.name;
         heroTmp.year = heroUpdate.year;
-        heroTmp.publisher = heroUpdate.publisher;
+        heroTmp.comicPublishers = heroUpdate.comicPublishers;
 
         return reqInfo.utils.createResponse$(() => ({
           body: heroUpdate,

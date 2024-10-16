@@ -25,6 +25,7 @@ import { PublisherService } from '../hero-form/service/publisher.service';
 import { NotificationComponent } from '../notification/notification.component';
 import { HeroActions } from '../../../actions/enums/hero-actions.enum';
 import { ActionsService } from '../../../actions/services/actions.service';
+import { HeroesService } from '@data/rest/supabase/heroes/heroes-data.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -67,7 +68,7 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private location: Location,
-    private heroService: HeroService,
+    private supabase: HeroesService,
     private publisherService: PublisherService,
     private route: ActivatedRoute,
     private spinnerService: SpinnerService,
@@ -76,7 +77,11 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.actionsService.setOptions('');
-    this.publishers$ = this.publisherService.getPublishers();
+    this.publishers$ = this.publisherService.getPublishers().pipe(
+      tap((publishers) => {
+        console.log(publishers);
+      })
+    );
 
     // this.spinnerService.setMessage('Loading Details...');
     // this.spinnerService.show();
@@ -95,7 +100,7 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((params) => {
           const id = Number(params.get('id'));
-          return this.heroService.getHero(id).pipe(
+          return this.supabase.getHeroById(id).pipe(
             catchError((error) => {
               console.error('Error:', error);
               this.notFound = true;
@@ -121,7 +126,7 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
             id: hero.id,
             name: hero.name,
             year: hero.year,
-            publisher: hero.publisher?.id,
+            publisher: hero.comicPublishers?.id,
           });
         }
       });
@@ -142,9 +147,9 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
 
     this.getPublisher(publisherId)
       .pipe(
-        switchMap((publisher) => {
-          hero.publisher = publisher;
-          return this.heroService.update(hero);
+        switchMap((comicPublishers) => {
+          hero.comicPublishers = comicPublishers;
+          return this.supabase.updateHero(hero);
         }),
         tap((hero) => {
           this.notificationMessage = 'Hero updated!';
@@ -165,12 +170,19 @@ export class HeroDetailComponent implements OnInit, OnDestroy {
   }
 
   private createHero(): Hero {
-    return {
+    let hero: Hero = {
       id: this.heroForm.get('id')?.value,
       name: this.heroForm.get('name')?.value,
       year: this.heroForm.get('year')?.value,
-      publisher: null,
+      comicPublishers: null,
+      isTophero: false,
+      heroStatistics: {
+        id: 5,
+        popularity: 0,
+        ranking: 0,
+      },
     };
+    return hero;
   }
 
   goBack() {

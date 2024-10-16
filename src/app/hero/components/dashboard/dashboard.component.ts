@@ -1,17 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { HeroService } from '../../service/hero.service';
 import { Hero } from '../../interface/hero';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
 import { SpinnerService } from '../../../spinner/service/spinner.service';
-import { Observable, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { ActionsService } from '../../../actions/services/actions.service';
 import { HeroActions } from '../../../actions/enums/hero-actions.enum';
 import { DashboardHeroDetailsComponent } from '../dashboard-hero-details/dashboard-hero-details.component';
 import { TooltipDirective } from '../../../commons/tooltip.directive';
-import { TopheroService } from '../../service/tophero.service';
 import { FormsModule } from '@angular/forms';
 import { ConfirmModalComponent } from '../../../commons/confirm-modal/confirm-modal.component';
+import { TopHeroService } from '../../service/tophero.service';
+import { HeroesService } from '@data/rest/supabase/heroes/heroes-data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +32,7 @@ import { ConfirmModalComponent } from '../../../commons/confirm-modal/confirm-mo
 export class DashboardComponent implements OnInit, OnDestroy {
   topheroes: Hero[] = [];
   topheroesBackup?: Hero[];
-  heroSubscription!: Subscription;
+  topHeroSubscription!: Subscription;
 
   public spinnerMessage = 'Loading top heroes...';
   public isLoadingSpinner = false;
@@ -47,12 +47,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   showModal: boolean = false;
   topHeroes$!: Observable<Hero[]>;
+  // service: IHeroService;
 
   constructor(
-    private topheroService: TopheroService,
+    // private heroFactoryService: HeroFactoryService,
+    private apiHeroesService: HeroesService,
+    private topheroService: TopHeroService,
     private spinnerService: SpinnerService,
     private actionsService: ActionsService
-  ) {}
+  ) {
+    // this.service = heroFactoryService.getHeroService();
+  }
 
   ngOnInit(): void {
     // this.spinnerService.setMessage('Loading Top Heroes...');
@@ -60,16 +65,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
     this.isLoadingSpinner = true;
 
-    this.topHeroes$ = this.topheroService.getTopHeroes();
-    this.heroSubscription = this.topHeroes$.subscribe((heroes) => {
-      if (heroes && heroes.length > 0) {
-        const defaultHeroSelected = heroes[0];
-        this.selectedHero = defaultHeroSelected;
-        this.spinnerService.hide();
-        this.topheroes = heroes;
-        this.isLoadingSpinner = false;
-      }
-    });
+    this.topHeroSubscription = this.apiHeroesService
+      .getHeroes()
+      .pipe(
+        map((heroes: Hero[]) => {
+          return heroes.filter((h) => h.isTophero);
+        }),
+        map((topheroes) => {
+          return topheroes.sort((a: Hero, b: Hero) => {
+            return a.heroStatistics!.ranking - b.heroStatistics!.ranking;
+          });
+        })
+      )
+      .subscribe((heroes: Hero[]) => {
+        if (heroes && heroes.length > 0) {
+          const defaultHeroSelected = heroes[0];
+          this.selectedHero = defaultHeroSelected;
+          this.spinnerService.hide();
+          this.topheroes = heroes;
+          this.isLoadingSpinner = false;
+        }
+      });
 
     setTimeout(() => {
       this.isSyncronized = false;
@@ -77,8 +93,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.heroSubscription) {
-      this.heroSubscription.unsubscribe();
+    if (this.topHeroSubscription) {
+      this.topHeroSubscription.unsubscribe();
     }
   }
 
@@ -94,7 +110,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isLoadingSpinner = false;
   }
 
-  updateViewTopHeroes(onHeroDeleted: boolean) {
+  updateViewTopHeroes(onDeleteHero: boolean) {
     this.isDeleted = true;
 
     // this.selectedHero === true && isDeleted
@@ -238,9 +254,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           id: 12,
           name: 'Dr. Nice',
           year: 2010,
-          publisher: { id: 3, name: 'Image Comics' },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 3, name: 'Image Comics' },
+          isTophero: true,
+          heroStatistics: {
+            id: 1,
             popularity: 9999,
             ranking: 1,
           },
@@ -249,9 +266,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           id: 13,
           name: 'Bombasto',
           year: 2010,
-          publisher: { id: 1, name: 'Marvel Comics' },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 1, name: 'Marvel Comics' },
+          isTophero: true,
+          heroStatistics: {
+            id: 2,
             popularity: 9950,
             ranking: 3,
           },
@@ -260,9 +278,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           id: 14,
           name: 'Celeritas',
           year: 2010,
-          publisher: { id: 1, name: 'Marvel Comics' },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 1, name: 'Marvel Comics' },
+          isTophero: true,
+          heroStatistics: {
+            id: 3,
             popularity: 9998,
             ranking: 2,
           },
@@ -271,9 +290,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           id: 15,
           name: 'Magneta',
           year: 2010,
-          publisher: { id: 3, name: 'Image Comics' },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 3, name: 'Image Comics' },
+          isTophero: true,
+          heroStatistics: {
+            id: 4,
             popularity: 8000,
             ranking: 4,
           },

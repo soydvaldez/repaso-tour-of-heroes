@@ -19,10 +19,14 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "lib": ["ES2022", "dom"],
+    "baseUrl": "src", // Asegúrate de tener esto configurado
+    "paths": {
+      "@app/*": ["app/*"],
+      "@data/*": ["app/data/*", "app/data/rest/supabase/*"], // Aquí puedes agregar más alias según lo necesites
+      "@data/rest/*": ["app/data/rest/*"], // Aquí puedes agregar más alias según lo necesites
+      "@message/*": ["app/messages/*"] // Aquí puedes agregar más alias según lo necesites
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

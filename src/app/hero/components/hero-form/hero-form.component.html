@@ -93,7 +93,7 @@
             />
           </svg>
           <select formControlName="publisher">
-            <option *ngFor="let p of this.publishers$ | async" [value]="p.id">
+            <option *ngFor="let p of this.comicPublishers$ | async" [value]="p.id">
               {{ p.name }}
             </option>
           </select>

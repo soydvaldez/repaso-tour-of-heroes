@@ -16,10 +16,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideHttpClientTesting(),
-    importProvidersFrom(
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-        dataEncapsulation: false,
-      })
-    ),
+    // importProvidersFrom(
+    //   HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
+    //     dataEncapsulation: false,
+    //   })
+    // ),
   ],
 };

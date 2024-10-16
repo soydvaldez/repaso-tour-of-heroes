@@ -71,20 +71,20 @@ export class HeroService {
 
   setRankingNumber(topHeroes: Hero[]) {
     return topHeroes.map((h, index) => {
-      h.statistics!.ranking = ++index;
+      h.heroStatistics!.ranking = ++index;
       return h;
     });
   }
 
   orderByRanking(topHeroes: Hero[]) {
     return topHeroes.sort(
-      (a, b) => a.statistics!.ranking - b.statistics!.ranking
+      (a, b) => a.heroStatistics!.ranking - b.heroStatistics!.ranking
     );
   }
 
   sortByPopularity(heroes: Hero[]) {
     let sortByPopularity = heroes.sort(
-      (h1, h2) => h2.statistics!.popularity - h1.statistics!.popularity
+      (h1, h2) => h2.heroStatistics!.popularity - h1.heroStatistics!.popularity
     );
 
     return sortByPopularity;

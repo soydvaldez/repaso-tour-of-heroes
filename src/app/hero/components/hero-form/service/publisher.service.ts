@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, tap } from 'rxjs';
 import { Publisher } from '../../../interface/publisher';
 import { MessageService } from '../../../../messages/service/message.service';
 
@@ -10,7 +10,9 @@ import { MessageService } from '../../../../messages/service/message.service';
 export class PublisherService {
   private publisherUrl = 'api/publishers';
 
-  private publisherSubject$: BehaviorSubject<Publisher[]> = new BehaviorSubject<Publisher[]>([]);
+  private publisherSubject$: BehaviorSubject<Publisher[]> = new BehaviorSubject<
+    Publisher[]
+  >([]);
   public publisher$ = this.publisherSubject$.asObservable();
   private publishersLoaded = false;
 
@@ -48,7 +50,11 @@ export class PublisherService {
         });
     }
 
-    return this.publisher$;
+    return of([
+      { id: 1, name: 'Marvel Comics' },
+      { id: 2, name: 'DC Comics' },
+      { id: 3, name: 'Image Comics' },
+    ]);
   }
 
   getPublisherById(id: number): Observable<Publisher> {

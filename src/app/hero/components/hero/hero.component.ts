@@ -19,6 +19,7 @@ import { ActionsComponent } from '../../../actions/actions.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { ActionsService } from '../../../actions/services/actions.service';
 import { HeroActions } from '../../../actions/enums/hero-actions.enum';
+import { HeroesService } from '@data/rest/supabase/heroes/heroes-data.service';
 
 @Component({
   selector: 'app-hero',
@@ -53,7 +54,7 @@ export class HeroComponent implements OnInit, OnDestroy {
   isDeleted: boolean = false;
 
   constructor(
-    private heroService: HeroService,
+    private supabase: HeroesService,
     public spinnerService: SpinnerService,
     private actionsService: ActionsService
   ) {}
@@ -65,15 +66,13 @@ export class HeroComponent implements OnInit, OnDestroy {
     this.isLoadingSpinner = true;
     this.spinnerMessage = 'Loading Héroes...';
 
-    this.heroesSubcription = this.heroService
-      .getHeroes(true)
-      .subscribe((heroes) => {
-        this.totalRegisters = heroes.length;
-        this.heroes = heroes;
-        setTimeout(() => {
-          this.isLoadingSpinner = false;
-        }, 1000);
-      });
+    this.heroesSubcription = this.supabase.getHeroes().subscribe((heroes) => {
+      this.totalRegisters = heroes.length;
+      this.heroes = heroes;
+      setTimeout(() => {
+        this.isLoadingSpinner = false;
+      }, 1000);
+    });
     // this.getHeroes();
   }
 

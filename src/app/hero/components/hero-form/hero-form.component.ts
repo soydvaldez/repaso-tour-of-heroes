@@ -63,7 +63,7 @@ export class HeroFormComponent implements OnInit, OnDestroy {
   ];
 
   defaultYear: number = 2024;
-  publishers$!: Observable<Publisher[]>;
+  comicPublishers$!: Observable<Publisher[]>;
 
   btnText: string = 'Cancel';
   buttonColor: string = '#104781;';
@@ -74,7 +74,7 @@ export class HeroFormComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private spinnerService: SpinnerService,
     private heroService: HeroService,
-    private publisherService: PublisherService,
+    private comicPublishersService: PublisherService,
     private location: Location,
     private actionsService: ActionsService
   ) {
@@ -88,13 +88,13 @@ export class HeroFormComponent implements OnInit, OnDestroy {
 
     this.actionsService.setOptions(HeroActions.Create);
 
-    this.publishers$ = this.publisherService.getPublishers();
+    this.comicPublishers$ = this.comicPublishersService.getPublishers();
     this.isLoadingSpinner = true;
 
     this.heroForm = new FormGroup({
       name: new FormControl<string>('', Validators.required),
       year: new FormControl<number>(2024),
-      publisher: new FormControl<number>(1),
+      comicPublishers: new FormControl<number>(1),
     });
 
     this.messageService.add({
@@ -128,7 +128,7 @@ export class HeroFormComponent implements OnInit, OnDestroy {
     this.messageSpinner = 'Saving a Hero...';
 
     const newHero = this.createHero();
-    const publisherId = this.heroForm.get('publisher')?.value;
+    const comicPublishersId = this.heroForm.get('comicPublishers')?.value;
 
     if (!newHero.name) {
       this.setNotification('Hero name is required', 'error');
@@ -155,16 +155,16 @@ export class HeroFormComponent implements OnInit, OnDestroy {
             throw new Error('Héroe ya registrado');
           }
         }),
-        switchMap(() => this.publisherService.getPublisherById(publisherId)),
-        tap((publisher) => {
-          if (!publisher) {
+        switchMap(() => this.comicPublishersService.getPublisherById(comicPublishersId)),
+        tap((comicPublishers) => {
+          if (!comicPublishers) {
             this.setNotification('Publisher no encontrado', 'error');
             throw new Error('Publisher no encontrado');
           }
-          return publisher;
+          return comicPublishers;
         }),
-        switchMap((publisher) =>
-          this.heroService.add({ ...newHero, publisher })
+        switchMap((comicPublishers) =>
+          this.heroService.add({ ...newHero, comicPublishers })
         ),
         tap(() => this.setNotification('¡Héroe creado con éxito!', 'success')),
         catchError((error) => {
@@ -193,12 +193,19 @@ export class HeroFormComponent implements OnInit, OnDestroy {
       name: this.heroForm.get('name')?.invalid;
     }
 
-    return {
+    let hero: Hero = {
       id: Math.floor(Math.random() * 1000), // Genera un ID ficticio o usa uno real si es necesario
       name: this.heroForm.get('name')?.value,
       year: this.heroForm.get('year')?.value,
-      publisher: null, // Se asignará más tarde
+      comicPublishers: null,
+      isTophero: false,
+      heroStatistics: {
+        id: 0,
+        popularity: 0,
+        ranking: 0,
+      },
     };
+    return hero;
   }
 
   // Método para verificar si el héroe ya existe
@@ -230,7 +237,7 @@ export class HeroFormComponent implements OnInit, OnDestroy {
   }
   // En el componente padre
   getPublisherControl(): FormControl<number> {
-    return this.heroForm.get('publisher') as FormControl<number>;
+    return this.heroForm.get('comicPublishers') as FormControl<number>;
   }
 
   log(message: Message) {

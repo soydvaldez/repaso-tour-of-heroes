@@ -1,45 +1,25 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from '../../messages/service/message.service';
 import { Hero } from '../interface/hero';
-import { map, tap } from 'rxjs';
+import { tap } from 'rxjs';
+import { HeroesService } from '@data/rest/supabase/heroes/heroes-data.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TopheroService {
-  private url: string = 'api/topheroes';
+export class TopHeroService {
+  // private url: string = 'api/topheroes';
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private supabase: HeroesService
   ) {}
 
   getTopHeroes() {
-    return this.http.get<Hero[]>(this.url).pipe(
-      tap(() => {
-        return this.messageService.add({
-          source: 'TopheroService',
-          message: 'All Top Heroes fetched',
-          severity: 'INFO',
-        });
-      }),
-      map((topheroes) => {
-        const sortTopHeroes = (a: Hero, b: Hero) => {
-          return a.statistics!.ranking - b.statistics!.ranking;
-        };
-
-        const initializedHeroes = topheroes.map((hero) => ({
-          ...hero,
-          isSelected: false, // Añadir la propiedad `isSelected`
-        }));
-
-        return initializedHeroes.sort(sortTopHeroes);
-      }),
-      map((top) => {
-        return top;
-      })
-    );
+    return this.supabase.getHeroes();
   }
 
   save(topheroes: Hero[]) {

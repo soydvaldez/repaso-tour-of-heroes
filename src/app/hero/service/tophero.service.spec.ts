@@ -1,41 +1,39 @@
 import { TestBed } from '@angular/core/testing';
-import { TopheroService } from './tophero.service';
+
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { Hero } from '../interface/hero';
+import { TopHeroService } from './tophero.service';
 
-fdescribe('TopheroService', () => {
-  let service: TopheroService;
+describe('TopheroService', () => {
+  let service: TopHeroService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
+        HttpClientModule,
+        // HttpClientTestingModule,
         // InMemoryWebApiModule.forRoot(InMemoryDataService),
       ],
-      providers: [TopheroService],
+      providers: [TopHeroService],
     });
 
-    service = TestBed.inject(TopheroService);
-    httpTestingController = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(TopHeroService);
+    // httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
     // Verifica que no haya solicitudes pendientes
-    httpTestingController.verify();
+    // httpTestingController.verify();
   });
-  
-  it('should be return all top heroes', (done) => {
-    /*service.getTopHeroes().subscribe((topheroes) => {
-      expect(4).toEqual(topheroes.length);
-      done();
-    });*/
 
-    service.getTopHeroes().subscribe((heroes) => {
-      console.log(heroes);
-      expect(1).toEqual(1);
+  it('should be return all top heroes', (done) => {
+    service.getTopHeroes().subscribe((heroes: Hero[]) => {
+      expect(4).toEqual(heroes.length);
       done();
     });
 
@@ -53,8 +51,8 @@ function getMockTopHeroes() {
       name: 'Dr. Nice',
       year: 2010,
       publisher: { id: 3, name: 'Image Comics' },
-      tophero: true,
-      statistics: {
+      isTophero: true,
+      heroStatistics: {
         popularity: 9999,
         ranking: 0,
       },
@@ -64,8 +62,8 @@ function getMockTopHeroes() {
       name: 'Bombasto',
       year: 2010,
       publisher: { id: 1, name: 'Marvel Comics' },
-      tophero: true,
-      statistics: {
+      isTophero: true,
+      heroStatistics: {
         popularity: 9950,
         ranking: 3,
       },
@@ -75,8 +73,8 @@ function getMockTopHeroes() {
       name: 'Celeritas',
       year: 2010,
       publisher: { id: 1, name: 'Marvel Comics' },
-      tophero: true,
-      statistics: {
+      isTophero: true,
+      heroStatistics: {
         popularity: 9998,
         ranking: 2,
       },
@@ -86,8 +84,8 @@ function getMockTopHeroes() {
       name: 'Magneta',
       year: 2010,
       publisher: { id: 3, name: 'Image Comics' },
-      tophero: true,
-      statistics: {
+      isTophero: true,
+      heroStatistics: {
         popularity: 8000,
         ranking: 4,
       },

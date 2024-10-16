@@ -8,14 +8,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
-import { HeroService } from '../../service/hero.service';
 import { Hero } from '../../interface/hero';
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { TooltipDirective } from '../../../commons/tooltip.directive';
 import { SpinnerComponent } from '../../../spinner/spinner.component';
 import { ConfirmModalComponent } from '../../../commons/confirm-modal/confirm-modal.component';
-import { TopheroService } from '../../service/tophero.service';
+import { TopHeroService } from '../../service/tophero.service';
+import { HeroesService } from '@data/rest/supabase/heroes/heroes-data.service';
 
 @Component({
   selector: 'app-dashboard-hero-details',
@@ -44,9 +44,10 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
   showModal: boolean = false;
 
   isDeleted: boolean = false;
-  @Output() onHeroDeleted = new EventEmitter<boolean>(false);
+  @Output() onDeleteHero = new EventEmitter<boolean>(false);
+  @Output() onEditHero = new EventEmitter<boolean>(false);
 
-  constructor(private topheroService: TopheroService) {}
+  constructor(private supabaseService: HeroesService) {}
 
   ngOnInit(): void {}
 
@@ -81,16 +82,18 @@ export class DashboardHeroDetailsComponent implements OnInit, OnDestroy {
     }
 
     if (this.hero && this.hero != undefined) {
-      this.topheroService.deleteHeroById(this.hero?.id).subscribe((isDeleted) => {
-        if (isDeleted) {
-          this.onHeroDeleted.emit(true);
-          this.isDeleted = true;
-        }
-        setTimeout(() => {
-          this.isDeleted = false;
-          this.hero = undefined;
-        }, 2000);
-      });
+      this.supabaseService
+        .deleteHero(this.hero?.id)
+        .subscribe((isHeroDeleted) => {
+          if (isHeroDeleted) {
+            this.onDeleteHero.emit(true);
+            this.isDeleted = true;
+          }
+          setTimeout(() => {
+            this.isDeleted = false;
+            this.hero = undefined;
+          }, 2000);
+        });
     }
   }
 
