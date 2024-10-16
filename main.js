@@ -1,42 +1,1288 @@
-var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b ||= {})
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
+import {
+  Headers as Headers2,
+  browser_default,
+  browser_exports,
+  init_browser
+} from "./chunk-V72RMYHE.js";
+import {
+  __async,
+  __commonJS,
+  __objRest,
+  __spreadProps,
+  __spreadValues,
+  __toCommonJS,
+  __toESM
+} from "./chunk-S35DAJRX.js";
+
+// node_modules/@supabase/postgrest-js/dist/cjs/PostgrestError.js
+var require_PostgrestError = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/PostgrestError.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var PostgrestError = class extends Error {
+      constructor(context2) {
+        super(context2.message);
+        this.name = "PostgrestError";
+        this.details = context2.details;
+        this.hint = context2.hint;
+        this.code = context2.code;
       }
     };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
+    exports.default = PostgrestError;
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/PostgrestBuilder.js
+var require_PostgrestBuilder = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/PostgrestBuilder.js"(exports) {
+    "use strict";
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : {
+        "default": mod
+      };
+    };
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var node_fetch_1 = __importDefault((init_browser(), __toCommonJS(browser_exports)));
+    var PostgrestError_1 = __importDefault(require_PostgrestError());
+    var PostgrestBuilder2 = class {
+      constructor(builder) {
+        this.shouldThrowOnError = false;
+        this.method = builder.method;
+        this.url = builder.url;
+        this.headers = builder.headers;
+        this.schema = builder.schema;
+        this.body = builder.body;
+        this.shouldThrowOnError = builder.shouldThrowOnError;
+        this.signal = builder.signal;
+        this.isMaybeSingle = builder.isMaybeSingle;
+        if (builder.fetch) {
+          this.fetch = builder.fetch;
+        } else if (typeof fetch === "undefined") {
+          this.fetch = node_fetch_1.default;
+        } else {
+          this.fetch = fetch;
+        }
+      }
+      /**
+       * If there's an error with the query, throwOnError will reject the promise by
+       * throwing the error instead of returning it as part of a successful response.
+       *
+       * {@link https://github.com/supabase/supabase-js/issues/92}
+       */
+      throwOnError() {
+        this.shouldThrowOnError = true;
+        return this;
+      }
+      /**
+       * Set an HTTP header for the request.
+       */
+      setHeader(name, value) {
+        this.headers = Object.assign({}, this.headers);
+        this.headers[name] = value;
+        return this;
+      }
+      then(onfulfilled, onrejected) {
+        if (this.schema === void 0) {
+        } else if (["GET", "HEAD"].includes(this.method)) {
+          this.headers["Accept-Profile"] = this.schema;
+        } else {
+          this.headers["Content-Profile"] = this.schema;
+        }
+        if (this.method !== "GET" && this.method !== "HEAD") {
+          this.headers["Content-Type"] = "application/json";
+        }
+        const _fetch = this.fetch;
+        let res = _fetch(this.url.toString(), {
+          method: this.method,
+          headers: this.headers,
+          body: JSON.stringify(this.body),
+          signal: this.signal
+        }).then((res2) => __async(this, null, function* () {
+          var _a, _b, _c;
+          let error = null;
+          let data = null;
+          let count = null;
+          let status = res2.status;
+          let statusText = res2.statusText;
+          if (res2.ok) {
+            if (this.method !== "HEAD") {
+              const body = yield res2.text();
+              if (body === "") {
+              } else if (this.headers["Accept"] === "text/csv") {
+                data = body;
+              } else if (this.headers["Accept"] && this.headers["Accept"].includes("application/vnd.pgrst.plan+text")) {
+                data = body;
+              } else {
+                data = JSON.parse(body);
+              }
+            }
+            const countHeader = (_a = this.headers["Prefer"]) === null || _a === void 0 ? void 0 : _a.match(/count=(exact|planned|estimated)/);
+            const contentRange = (_b = res2.headers.get("content-range")) === null || _b === void 0 ? void 0 : _b.split("/");
+            if (countHeader && contentRange && contentRange.length > 1) {
+              count = parseInt(contentRange[1]);
+            }
+            if (this.isMaybeSingle && this.method === "GET" && Array.isArray(data)) {
+              if (data.length > 1) {
+                error = {
+                  // https://github.com/PostgREST/postgrest/blob/a867d79c42419af16c18c3fb019eba8df992626f/src/PostgREST/Error.hs#L553
+                  code: "PGRST116",
+                  details: `Results contain ${data.length} rows, application/vnd.pgrst.object+json requires 1 row`,
+                  hint: null,
+                  message: "JSON object requested, multiple (or no) rows returned"
+                };
+                data = null;
+                count = null;
+                status = 406;
+                statusText = "Not Acceptable";
+              } else if (data.length === 1) {
+                data = data[0];
+              } else {
+                data = null;
+              }
+            }
+          } else {
+            const body = yield res2.text();
+            try {
+              error = JSON.parse(body);
+              if (Array.isArray(error) && res2.status === 404) {
+                data = [];
+                error = null;
+                status = 200;
+                statusText = "OK";
+              }
+            } catch (_d) {
+              if (res2.status === 404 && body === "") {
+                status = 204;
+                statusText = "No Content";
+              } else {
+                error = {
+                  message: body
+                };
+              }
+            }
+            if (error && this.isMaybeSingle && ((_c = error === null || error === void 0 ? void 0 : error.details) === null || _c === void 0 ? void 0 : _c.includes("0 rows"))) {
+              error = null;
+              status = 200;
+              statusText = "OK";
+            }
+            if (error && this.shouldThrowOnError) {
+              throw new PostgrestError_1.default(error);
+            }
+          }
+          const postgrestResponse = {
+            error,
+            data,
+            count,
+            status,
+            statusText
+          };
+          return postgrestResponse;
+        }));
+        if (!this.shouldThrowOnError) {
+          res = res.catch((fetchError) => {
+            var _a, _b, _c;
+            return {
+              error: {
+                message: `${(_a = fetchError === null || fetchError === void 0 ? void 0 : fetchError.name) !== null && _a !== void 0 ? _a : "FetchError"}: ${fetchError === null || fetchError === void 0 ? void 0 : fetchError.message}`,
+                details: `${(_b = fetchError === null || fetchError === void 0 ? void 0 : fetchError.stack) !== null && _b !== void 0 ? _b : ""}`,
+                hint: "",
+                code: `${(_c = fetchError === null || fetchError === void 0 ? void 0 : fetchError.code) !== null && _c !== void 0 ? _c : ""}`
+              },
+              data: null,
+              count: null,
+              status: 0,
+              statusText: ""
+            };
+          });
+        }
+        return res.then(onfulfilled, onrejected);
       }
     };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
+    exports.default = PostgrestBuilder2;
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/PostgrestTransformBuilder.js
+var require_PostgrestTransformBuilder = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/PostgrestTransformBuilder.js"(exports) {
+    "use strict";
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : {
+        "default": mod
+      };
+    };
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var PostgrestBuilder_1 = __importDefault(require_PostgrestBuilder());
+    var PostgrestTransformBuilder2 = class extends PostgrestBuilder_1.default {
+      /**
+       * Perform a SELECT on the query result.
+       *
+       * By default, `.insert()`, `.update()`, `.upsert()`, and `.delete()` do not
+       * return modified rows. By calling this method, modified rows are returned in
+       * `data`.
+       *
+       * @param columns - The columns to retrieve, separated by commas
+       */
+      select(columns) {
+        let quoted = false;
+        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : "*").split("").map((c) => {
+          if (/\s/.test(c) && !quoted) {
+            return "";
+          }
+          if (c === '"') {
+            quoted = !quoted;
+          }
+          return c;
+        }).join("");
+        this.url.searchParams.set("select", cleanedColumns);
+        if (this.headers["Prefer"]) {
+          this.headers["Prefer"] += ",";
+        }
+        this.headers["Prefer"] += "return=representation";
+        return this;
+      }
+      /**
+       * Order the query result by `column`.
+       *
+       * You can call this method multiple times to order by multiple columns.
+       *
+       * You can order referenced tables, but it only affects the ordering of the
+       * parent table if you use `!inner` in the query.
+       *
+       * @param column - The column to order by
+       * @param options - Named parameters
+       * @param options.ascending - If `true`, the result will be in ascending order
+       * @param options.nullsFirst - If `true`, `null`s appear first. If `false`,
+       * `null`s appear last.
+       * @param options.referencedTable - Set this to order a referenced table by
+       * its columns
+       * @param options.foreignTable - Deprecated, use `options.referencedTable`
+       * instead
+       */
+      order(column, {
+        ascending = true,
+        nullsFirst,
+        foreignTable,
+        referencedTable = foreignTable
+      } = {}) {
+        const key = referencedTable ? `${referencedTable}.order` : "order";
+        const existingOrder = this.url.searchParams.get(key);
+        this.url.searchParams.set(key, `${existingOrder ? `${existingOrder},` : ""}${column}.${ascending ? "asc" : "desc"}${nullsFirst === void 0 ? "" : nullsFirst ? ".nullsfirst" : ".nullslast"}`);
+        return this;
+      }
+      /**
+       * Limit the query result by `count`.
+       *
+       * @param count - The maximum number of rows to return
+       * @param options - Named parameters
+       * @param options.referencedTable - Set this to limit rows of referenced
+       * tables instead of the parent table
+       * @param options.foreignTable - Deprecated, use `options.referencedTable`
+       * instead
+       */
+      limit(count, {
+        foreignTable,
+        referencedTable = foreignTable
+      } = {}) {
+        const key = typeof referencedTable === "undefined" ? "limit" : `${referencedTable}.limit`;
+        this.url.searchParams.set(key, `${count}`);
+        return this;
+      }
+      /**
+       * Limit the query result by starting at an offset `from` and ending at the offset `to`.
+       * Only records within this range are returned.
+       * This respects the query order and if there is no order clause the range could behave unexpectedly.
+       * The `from` and `to` values are 0-based and inclusive: `range(1, 3)` will include the second, third
+       * and fourth rows of the query.
+       *
+       * @param from - The starting index from which to limit the result
+       * @param to - The last index to which to limit the result
+       * @param options - Named parameters
+       * @param options.referencedTable - Set this to limit rows of referenced
+       * tables instead of the parent table
+       * @param options.foreignTable - Deprecated, use `options.referencedTable`
+       * instead
+       */
+      range(from2, to, {
+        foreignTable,
+        referencedTable = foreignTable
+      } = {}) {
+        const keyOffset = typeof referencedTable === "undefined" ? "offset" : `${referencedTable}.offset`;
+        const keyLimit = typeof referencedTable === "undefined" ? "limit" : `${referencedTable}.limit`;
+        this.url.searchParams.set(keyOffset, `${from2}`);
+        this.url.searchParams.set(keyLimit, `${to - from2 + 1}`);
+        return this;
+      }
+      /**
+       * Set the AbortSignal for the fetch request.
+       *
+       * @param signal - The AbortSignal to use for the fetch request
+       */
+      abortSignal(signal2) {
+        this.signal = signal2;
+        return this;
+      }
+      /**
+       * Return `data` as a single object instead of an array of objects.
+       *
+       * Query result must be one row (e.g. using `.limit(1)`), otherwise this
+       * returns an error.
+       */
+      single() {
+        this.headers["Accept"] = "application/vnd.pgrst.object+json";
+        return this;
+      }
+      /**
+       * Return `data` as a single object instead of an array of objects.
+       *
+       * Query result must be zero or one row (e.g. using `.limit(1)`), otherwise
+       * this returns an error.
+       */
+      maybeSingle() {
+        if (this.method === "GET") {
+          this.headers["Accept"] = "application/json";
+        } else {
+          this.headers["Accept"] = "application/vnd.pgrst.object+json";
+        }
+        this.isMaybeSingle = true;
+        return this;
+      }
+      /**
+       * Return `data` as a string in CSV format.
+       */
+      csv() {
+        this.headers["Accept"] = "text/csv";
+        return this;
+      }
+      /**
+       * Return `data` as an object in [GeoJSON](https://geojson.org) format.
+       */
+      geojson() {
+        this.headers["Accept"] = "application/geo+json";
+        return this;
+      }
+      /**
+       * Return `data` as the EXPLAIN plan for the query.
+       *
+       * You need to enable the
+       * [db_plan_enabled](https://supabase.com/docs/guides/database/debugging-performance#enabling-explain)
+       * setting before using this method.
+       *
+       * @param options - Named parameters
+       *
+       * @param options.analyze - If `true`, the query will be executed and the
+       * actual run time will be returned
+       *
+       * @param options.verbose - If `true`, the query identifier will be returned
+       * and `data` will include the output columns of the query
+       *
+       * @param options.settings - If `true`, include information on configuration
+       * parameters that affect query planning
+       *
+       * @param options.buffers - If `true`, include information on buffer usage
+       *
+       * @param options.wal - If `true`, include information on WAL record generation
+       *
+       * @param options.format - The format of the output, can be `"text"` (default)
+       * or `"json"`
+       */
+      explain({
+        analyze = false,
+        verbose = false,
+        settings = false,
+        buffers = false,
+        wal = false,
+        format = "text"
+      } = {}) {
+        var _a;
+        const options = [analyze ? "analyze" : null, verbose ? "verbose" : null, settings ? "settings" : null, buffers ? "buffers" : null, wal ? "wal" : null].filter(Boolean).join("|");
+        const forMediatype = (_a = this.headers["Accept"]) !== null && _a !== void 0 ? _a : "application/json";
+        this.headers["Accept"] = `application/vnd.pgrst.plan+${format}; for="${forMediatype}"; options=${options};`;
+        if (format === "json") return this;
+        else return this;
+      }
+      /**
+       * Rollback the query.
+       *
+       * `data` will still be returned, but the query is not committed.
+       */
+      rollback() {
+        var _a;
+        if (((_a = this.headers["Prefer"]) !== null && _a !== void 0 ? _a : "").trim().length > 0) {
+          this.headers["Prefer"] += ",tx=rollback";
+        } else {
+          this.headers["Prefer"] = "tx=rollback";
+        }
+        return this;
+      }
+      /**
+       * Override the type of the returned `data`.
+       *
+       * @typeParam NewResult - The new result type to override with
+       */
+      returns() {
+        return this;
+      }
+    };
+    exports.default = PostgrestTransformBuilder2;
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/PostgrestFilterBuilder.js
+var require_PostgrestFilterBuilder = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/PostgrestFilterBuilder.js"(exports) {
+    "use strict";
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : {
+        "default": mod
+      };
+    };
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var PostgrestTransformBuilder_1 = __importDefault(require_PostgrestTransformBuilder());
+    var PostgrestFilterBuilder2 = class extends PostgrestTransformBuilder_1.default {
+      /**
+       * Match only rows where `column` is equal to `value`.
+       *
+       * To check if the value of `column` is NULL, you should use `.is()` instead.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      eq(column, value) {
+        this.url.searchParams.append(column, `eq.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` is not equal to `value`.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      neq(column, value) {
+        this.url.searchParams.append(column, `neq.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` is greater than `value`.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      gt(column, value) {
+        this.url.searchParams.append(column, `gt.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` is greater than or equal to `value`.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      gte(column, value) {
+        this.url.searchParams.append(column, `gte.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` is less than `value`.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      lt(column, value) {
+        this.url.searchParams.append(column, `lt.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` is less than or equal to `value`.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      lte(column, value) {
+        this.url.searchParams.append(column, `lte.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` matches `pattern` case-sensitively.
+       *
+       * @param column - The column to filter on
+       * @param pattern - The pattern to match with
+       */
+      like(column, pattern) {
+        this.url.searchParams.append(column, `like.${pattern}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` matches all of `patterns` case-sensitively.
+       *
+       * @param column - The column to filter on
+       * @param patterns - The patterns to match with
+       */
+      likeAllOf(column, patterns) {
+        this.url.searchParams.append(column, `like(all).{${patterns.join(",")}}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` matches any of `patterns` case-sensitively.
+       *
+       * @param column - The column to filter on
+       * @param patterns - The patterns to match with
+       */
+      likeAnyOf(column, patterns) {
+        this.url.searchParams.append(column, `like(any).{${patterns.join(",")}}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` matches `pattern` case-insensitively.
+       *
+       * @param column - The column to filter on
+       * @param pattern - The pattern to match with
+       */
+      ilike(column, pattern) {
+        this.url.searchParams.append(column, `ilike.${pattern}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` matches all of `patterns` case-insensitively.
+       *
+       * @param column - The column to filter on
+       * @param patterns - The patterns to match with
+       */
+      ilikeAllOf(column, patterns) {
+        this.url.searchParams.append(column, `ilike(all).{${patterns.join(",")}}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` matches any of `patterns` case-insensitively.
+       *
+       * @param column - The column to filter on
+       * @param patterns - The patterns to match with
+       */
+      ilikeAnyOf(column, patterns) {
+        this.url.searchParams.append(column, `ilike(any).{${patterns.join(",")}}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` IS `value`.
+       *
+       * For non-boolean columns, this is only relevant for checking if the value of
+       * `column` is NULL by setting `value` to `null`.
+       *
+       * For boolean columns, you can also set `value` to `true` or `false` and it
+       * will behave the same way as `.eq()`.
+       *
+       * @param column - The column to filter on
+       * @param value - The value to filter with
+       */
+      is(column, value) {
+        this.url.searchParams.append(column, `is.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows where `column` is included in the `values` array.
+       *
+       * @param column - The column to filter on
+       * @param values - The values array to filter with
+       */
+      in(column, values) {
+        const cleanedValues = Array.from(new Set(values)).map((s) => {
+          if (typeof s === "string" && new RegExp("[,()]").test(s)) return `"${s}"`;
+          else return `${s}`;
+        }).join(",");
+        this.url.searchParams.append(column, `in.(${cleanedValues})`);
+        return this;
+      }
+      /**
+       * Only relevant for jsonb, array, and range columns. Match only rows where
+       * `column` contains every element appearing in `value`.
+       *
+       * @param column - The jsonb, array, or range column to filter on
+       * @param value - The jsonb, array, or range value to filter with
+       */
+      contains(column, value) {
+        if (typeof value === "string") {
+          this.url.searchParams.append(column, `cs.${value}`);
+        } else if (Array.isArray(value)) {
+          this.url.searchParams.append(column, `cs.{${value.join(",")}}`);
+        } else {
+          this.url.searchParams.append(column, `cs.${JSON.stringify(value)}`);
+        }
+        return this;
+      }
+      /**
+       * Only relevant for jsonb, array, and range columns. Match only rows where
+       * every element appearing in `column` is contained by `value`.
+       *
+       * @param column - The jsonb, array, or range column to filter on
+       * @param value - The jsonb, array, or range value to filter with
+       */
+      containedBy(column, value) {
+        if (typeof value === "string") {
+          this.url.searchParams.append(column, `cd.${value}`);
+        } else if (Array.isArray(value)) {
+          this.url.searchParams.append(column, `cd.{${value.join(",")}}`);
+        } else {
+          this.url.searchParams.append(column, `cd.${JSON.stringify(value)}`);
+        }
+        return this;
+      }
+      /**
+       * Only relevant for range columns. Match only rows where every element in
+       * `column` is greater than any element in `range`.
+       *
+       * @param column - The range column to filter on
+       * @param range - The range to filter with
+       */
+      rangeGt(column, range) {
+        this.url.searchParams.append(column, `sr.${range}`);
+        return this;
+      }
+      /**
+       * Only relevant for range columns. Match only rows where every element in
+       * `column` is either contained in `range` or greater than any element in
+       * `range`.
+       *
+       * @param column - The range column to filter on
+       * @param range - The range to filter with
+       */
+      rangeGte(column, range) {
+        this.url.searchParams.append(column, `nxl.${range}`);
+        return this;
+      }
+      /**
+       * Only relevant for range columns. Match only rows where every element in
+       * `column` is less than any element in `range`.
+       *
+       * @param column - The range column to filter on
+       * @param range - The range to filter with
+       */
+      rangeLt(column, range) {
+        this.url.searchParams.append(column, `sl.${range}`);
+        return this;
+      }
+      /**
+       * Only relevant for range columns. Match only rows where every element in
+       * `column` is either contained in `range` or less than any element in
+       * `range`.
+       *
+       * @param column - The range column to filter on
+       * @param range - The range to filter with
+       */
+      rangeLte(column, range) {
+        this.url.searchParams.append(column, `nxr.${range}`);
+        return this;
+      }
+      /**
+       * Only relevant for range columns. Match only rows where `column` is
+       * mutually exclusive to `range` and there can be no element between the two
+       * ranges.
+       *
+       * @param column - The range column to filter on
+       * @param range - The range to filter with
+       */
+      rangeAdjacent(column, range) {
+        this.url.searchParams.append(column, `adj.${range}`);
+        return this;
+      }
+      /**
+       * Only relevant for array and range columns. Match only rows where
+       * `column` and `value` have an element in common.
+       *
+       * @param column - The array or range column to filter on
+       * @param value - The array or range value to filter with
+       */
+      overlaps(column, value) {
+        if (typeof value === "string") {
+          this.url.searchParams.append(column, `ov.${value}`);
+        } else {
+          this.url.searchParams.append(column, `ov.{${value.join(",")}}`);
+        }
+        return this;
+      }
+      /**
+       * Only relevant for text and tsvector columns. Match only rows where
+       * `column` matches the query string in `query`.
+       *
+       * @param column - The text or tsvector column to filter on
+       * @param query - The query text to match with
+       * @param options - Named parameters
+       * @param options.config - The text search configuration to use
+       * @param options.type - Change how the `query` text is interpreted
+       */
+      textSearch(column, query, {
+        config: config2,
+        type
+      } = {}) {
+        let typePart = "";
+        if (type === "plain") {
+          typePart = "pl";
+        } else if (type === "phrase") {
+          typePart = "ph";
+        } else if (type === "websearch") {
+          typePart = "w";
+        }
+        const configPart = config2 === void 0 ? "" : `(${config2})`;
+        this.url.searchParams.append(column, `${typePart}fts${configPart}.${query}`);
+        return this;
+      }
+      /**
+       * Match only rows where each column in `query` keys is equal to its
+       * associated value. Shorthand for multiple `.eq()`s.
+       *
+       * @param query - The object to filter with, with column names as keys mapped
+       * to their filter values
+       */
+      match(query) {
+        Object.entries(query).forEach(([column, value]) => {
+          this.url.searchParams.append(column, `eq.${value}`);
+        });
+        return this;
+      }
+      /**
+       * Match only rows which doesn't satisfy the filter.
+       *
+       * Unlike most filters, `opearator` and `value` are used as-is and need to
+       * follow [PostgREST
+       * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
+       * to make sure they are properly sanitized.
+       *
+       * @param column - The column to filter on
+       * @param operator - The operator to be negated to filter with, following
+       * PostgREST syntax
+       * @param value - The value to filter with, following PostgREST syntax
+       */
+      not(column, operator, value) {
+        this.url.searchParams.append(column, `not.${operator}.${value}`);
+        return this;
+      }
+      /**
+       * Match only rows which satisfy at least one of the filters.
+       *
+       * Unlike most filters, `filters` is used as-is and needs to follow [PostgREST
+       * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
+       * to make sure it's properly sanitized.
+       *
+       * It's currently not possible to do an `.or()` filter across multiple tables.
+       *
+       * @param filters - The filters to use, following PostgREST syntax
+       * @param options - Named parameters
+       * @param options.referencedTable - Set this to filter on referenced tables
+       * instead of the parent table
+       * @param options.foreignTable - Deprecated, use `referencedTable` instead
+       */
+      or(filters, {
+        foreignTable,
+        referencedTable = foreignTable
+      } = {}) {
+        const key = referencedTable ? `${referencedTable}.or` : "or";
+        this.url.searchParams.append(key, `(${filters})`);
+        return this;
+      }
+      /**
+       * Match only rows which satisfy the filter. This is an escape hatch - you
+       * should use the specific filter methods wherever possible.
+       *
+       * Unlike most filters, `opearator` and `value` are used as-is and need to
+       * follow [PostgREST
+       * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
+       * to make sure they are properly sanitized.
+       *
+       * @param column - The column to filter on
+       * @param operator - The operator to filter with, following PostgREST syntax
+       * @param value - The value to filter with, following PostgREST syntax
+       */
+      filter(column, operator, value) {
+        this.url.searchParams.append(column, `${operator}.${value}`);
+        return this;
+      }
+    };
+    exports.default = PostgrestFilterBuilder2;
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/PostgrestQueryBuilder.js
+var require_PostgrestQueryBuilder = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/PostgrestQueryBuilder.js"(exports) {
+    "use strict";
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : {
+        "default": mod
+      };
+    };
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var PostgrestFilterBuilder_1 = __importDefault(require_PostgrestFilterBuilder());
+    var PostgrestQueryBuilder2 = class {
+      constructor(url, {
+        headers = {},
+        schema,
+        fetch: fetch2
+      }) {
+        this.url = url;
+        this.headers = headers;
+        this.schema = schema;
+        this.fetch = fetch2;
+      }
+      /**
+       * Perform a SELECT query on the table or view.
+       *
+       * @param columns - The columns to retrieve, separated by commas. Columns can be renamed when returned with `customName:columnName`
+       *
+       * @param options - Named parameters
+       *
+       * @param options.head - When set to `true`, `data` will not be returned.
+       * Useful if you only need the count.
+       *
+       * @param options.count - Count algorithm to use to count rows in the table or view.
+       *
+       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+       * hood.
+       *
+       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+       * statistics under the hood.
+       *
+       * `"estimated"`: Uses exact count for low numbers and planned count for high
+       * numbers.
+       */
+      select(columns, {
+        head: head2 = false,
+        count
+      } = {}) {
+        const method = head2 ? "HEAD" : "GET";
+        let quoted = false;
+        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : "*").split("").map((c) => {
+          if (/\s/.test(c) && !quoted) {
+            return "";
+          }
+          if (c === '"') {
+            quoted = !quoted;
+          }
+          return c;
+        }).join("");
+        this.url.searchParams.set("select", cleanedColumns);
+        if (count) {
+          this.headers["Prefer"] = `count=${count}`;
+        }
+        return new PostgrestFilterBuilder_1.default({
+          method,
+          url: this.url,
+          headers: this.headers,
+          schema: this.schema,
+          fetch: this.fetch,
+          allowEmpty: false
+        });
+      }
+      /**
+       * Perform an INSERT into the table or view.
+       *
+       * By default, inserted rows are not returned. To return it, chain the call
+       * with `.select()`.
+       *
+       * @param values - The values to insert. Pass an object to insert a single row
+       * or an array to insert multiple rows.
+       *
+       * @param options - Named parameters
+       *
+       * @param options.count - Count algorithm to use to count inserted rows.
+       *
+       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+       * hood.
+       *
+       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+       * statistics under the hood.
+       *
+       * `"estimated"`: Uses exact count for low numbers and planned count for high
+       * numbers.
+       *
+       * @param options.defaultToNull - Make missing fields default to `null`.
+       * Otherwise, use the default value for the column. Only applies for bulk
+       * inserts.
+       */
+      insert(values, {
+        count,
+        defaultToNull = true
+      } = {}) {
+        const method = "POST";
+        const prefersHeaders = [];
+        if (this.headers["Prefer"]) {
+          prefersHeaders.push(this.headers["Prefer"]);
+        }
+        if (count) {
+          prefersHeaders.push(`count=${count}`);
+        }
+        if (!defaultToNull) {
+          prefersHeaders.push("missing=default");
+        }
+        this.headers["Prefer"] = prefersHeaders.join(",");
+        if (Array.isArray(values)) {
+          const columns = values.reduce((acc, x) => acc.concat(Object.keys(x)), []);
+          if (columns.length > 0) {
+            const uniqueColumns = [...new Set(columns)].map((column) => `"${column}"`);
+            this.url.searchParams.set("columns", uniqueColumns.join(","));
+          }
+        }
+        return new PostgrestFilterBuilder_1.default({
+          method,
+          url: this.url,
+          headers: this.headers,
+          schema: this.schema,
+          body: values,
+          fetch: this.fetch,
+          allowEmpty: false
+        });
+      }
+      /**
+       * Perform an UPSERT on the table or view. Depending on the column(s) passed
+       * to `onConflict`, `.upsert()` allows you to perform the equivalent of
+       * `.insert()` if a row with the corresponding `onConflict` columns doesn't
+       * exist, or if it does exist, perform an alternative action depending on
+       * `ignoreDuplicates`.
+       *
+       * By default, upserted rows are not returned. To return it, chain the call
+       * with `.select()`.
+       *
+       * @param values - The values to upsert with. Pass an object to upsert a
+       * single row or an array to upsert multiple rows.
+       *
+       * @param options - Named parameters
+       *
+       * @param options.onConflict - Comma-separated UNIQUE column(s) to specify how
+       * duplicate rows are determined. Two rows are duplicates if all the
+       * `onConflict` columns are equal.
+       *
+       * @param options.ignoreDuplicates - If `true`, duplicate rows are ignored. If
+       * `false`, duplicate rows are merged with existing rows.
+       *
+       * @param options.count - Count algorithm to use to count upserted rows.
+       *
+       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+       * hood.
+       *
+       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+       * statistics under the hood.
+       *
+       * `"estimated"`: Uses exact count for low numbers and planned count for high
+       * numbers.
+       *
+       * @param options.defaultToNull - Make missing fields default to `null`.
+       * Otherwise, use the default value for the column. This only applies when
+       * inserting new rows, not when merging with existing rows under
+       * `ignoreDuplicates: false`. This also only applies when doing bulk upserts.
+       */
+      upsert(values, {
+        onConflict,
+        ignoreDuplicates = false,
+        count,
+        defaultToNull = true
+      } = {}) {
+        const method = "POST";
+        const prefersHeaders = [`resolution=${ignoreDuplicates ? "ignore" : "merge"}-duplicates`];
+        if (onConflict !== void 0) this.url.searchParams.set("on_conflict", onConflict);
+        if (this.headers["Prefer"]) {
+          prefersHeaders.push(this.headers["Prefer"]);
+        }
+        if (count) {
+          prefersHeaders.push(`count=${count}`);
+        }
+        if (!defaultToNull) {
+          prefersHeaders.push("missing=default");
+        }
+        this.headers["Prefer"] = prefersHeaders.join(",");
+        if (Array.isArray(values)) {
+          const columns = values.reduce((acc, x) => acc.concat(Object.keys(x)), []);
+          if (columns.length > 0) {
+            const uniqueColumns = [...new Set(columns)].map((column) => `"${column}"`);
+            this.url.searchParams.set("columns", uniqueColumns.join(","));
+          }
+        }
+        return new PostgrestFilterBuilder_1.default({
+          method,
+          url: this.url,
+          headers: this.headers,
+          schema: this.schema,
+          body: values,
+          fetch: this.fetch,
+          allowEmpty: false
+        });
+      }
+      /**
+       * Perform an UPDATE on the table or view.
+       *
+       * By default, updated rows are not returned. To return it, chain the call
+       * with `.select()` after filters.
+       *
+       * @param values - The values to update with
+       *
+       * @param options - Named parameters
+       *
+       * @param options.count - Count algorithm to use to count updated rows.
+       *
+       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+       * hood.
+       *
+       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+       * statistics under the hood.
+       *
+       * `"estimated"`: Uses exact count for low numbers and planned count for high
+       * numbers.
+       */
+      update(values, {
+        count
+      } = {}) {
+        const method = "PATCH";
+        const prefersHeaders = [];
+        if (this.headers["Prefer"]) {
+          prefersHeaders.push(this.headers["Prefer"]);
+        }
+        if (count) {
+          prefersHeaders.push(`count=${count}`);
+        }
+        this.headers["Prefer"] = prefersHeaders.join(",");
+        return new PostgrestFilterBuilder_1.default({
+          method,
+          url: this.url,
+          headers: this.headers,
+          schema: this.schema,
+          body: values,
+          fetch: this.fetch,
+          allowEmpty: false
+        });
+      }
+      /**
+       * Perform a DELETE on the table or view.
+       *
+       * By default, deleted rows are not returned. To return it, chain the call
+       * with `.select()` after filters.
+       *
+       * @param options - Named parameters
+       *
+       * @param options.count - Count algorithm to use to count deleted rows.
+       *
+       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+       * hood.
+       *
+       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+       * statistics under the hood.
+       *
+       * `"estimated"`: Uses exact count for low numbers and planned count for high
+       * numbers.
+       */
+      delete({
+        count
+      } = {}) {
+        const method = "DELETE";
+        const prefersHeaders = [];
+        if (count) {
+          prefersHeaders.push(`count=${count}`);
+        }
+        if (this.headers["Prefer"]) {
+          prefersHeaders.unshift(this.headers["Prefer"]);
+        }
+        this.headers["Prefer"] = prefersHeaders.join(",");
+        return new PostgrestFilterBuilder_1.default({
+          method,
+          url: this.url,
+          headers: this.headers,
+          schema: this.schema,
+          fetch: this.fetch,
+          allowEmpty: false
+        });
+      }
+    };
+    exports.default = PostgrestQueryBuilder2;
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/version.js
+var require_version = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/version.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.version = void 0;
+    exports.version = "0.0.0-automated";
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/constants.js
+var require_constants = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/constants.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.DEFAULT_HEADERS = void 0;
+    var version_1 = require_version();
+    exports.DEFAULT_HEADERS = {
+      "X-Client-Info": `postgrest-js/${version_1.version}`
+    };
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/PostgrestClient.js
+var require_PostgrestClient = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/PostgrestClient.js"(exports) {
+    "use strict";
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : {
+        "default": mod
+      };
+    };
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    var PostgrestQueryBuilder_1 = __importDefault(require_PostgrestQueryBuilder());
+    var PostgrestFilterBuilder_1 = __importDefault(require_PostgrestFilterBuilder());
+    var constants_1 = require_constants();
+    var PostgrestClient2 = class _PostgrestClient {
+      // TODO: Add back shouldThrowOnError once we figure out the typings
+      /**
+       * Creates a PostgREST client.
+       *
+       * @param url - URL of the PostgREST endpoint
+       * @param options - Named parameters
+       * @param options.headers - Custom headers
+       * @param options.schema - Postgres schema to switch to
+       * @param options.fetch - Custom fetch
+       */
+      constructor(url, {
+        headers = {},
+        schema,
+        fetch: fetch2
+      } = {}) {
+        this.url = url;
+        this.headers = Object.assign(Object.assign({}, constants_1.DEFAULT_HEADERS), headers);
+        this.schemaName = schema;
+        this.fetch = fetch2;
+      }
+      /**
+       * Perform a query on a table or a view.
+       *
+       * @param relation - The table or view name to query
+       */
+      from(relation) {
+        const url = new URL(`${this.url}/${relation}`);
+        return new PostgrestQueryBuilder_1.default(url, {
+          headers: Object.assign({}, this.headers),
+          schema: this.schemaName,
+          fetch: this.fetch
+        });
+      }
+      /**
+       * Select a schema to query or perform an function (rpc) call.
+       *
+       * The schema needs to be on the list of exposed schemas inside Supabase.
+       *
+       * @param schema - The schema to query
+       */
+      schema(schema) {
+        return new _PostgrestClient(this.url, {
+          headers: this.headers,
+          schema,
+          fetch: this.fetch
+        });
+      }
+      /**
+       * Perform a function call.
+       *
+       * @param fn - The function name to call
+       * @param args - The arguments to pass to the function call
+       * @param options - Named parameters
+       * @param options.head - When set to `true`, `data` will not be returned.
+       * Useful if you only need the count.
+       * @param options.get - When set to `true`, the function will be called with
+       * read-only access mode.
+       * @param options.count - Count algorithm to use to count rows returned by the
+       * function. Only applicable for [set-returning
+       * functions](https://www.postgresql.org/docs/current/functions-srf.html).
+       *
+       * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+       * hood.
+       *
+       * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+       * statistics under the hood.
+       *
+       * `"estimated"`: Uses exact count for low numbers and planned count for high
+       * numbers.
+       */
+      rpc(fn, args = {}, {
+        head: head2 = false,
+        get: get3 = false,
+        count
+      } = {}) {
+        let method;
+        const url = new URL(`${this.url}/rpc/${fn}`);
+        let body;
+        if (head2 || get3) {
+          method = head2 ? "HEAD" : "GET";
+          Object.entries(args).filter(([_, value]) => value !== void 0).map(([name, value]) => [name, Array.isArray(value) ? `{${value.join(",")}}` : `${value}`]).forEach(([name, value]) => {
+            url.searchParams.append(name, value);
+          });
+        } else {
+          method = "POST";
+          body = args;
+        }
+        const headers = Object.assign({}, this.headers);
+        if (count) {
+          headers["Prefer"] = `count=${count}`;
+        }
+        return new PostgrestFilterBuilder_1.default({
+          method,
+          url,
+          headers,
+          schema: this.schemaName,
+          body,
+          fetch: this.fetch,
+          allowEmpty: false
+        });
+      }
+    };
+    exports.default = PostgrestClient2;
+  }
+});
+
+// node_modules/@supabase/postgrest-js/dist/cjs/index.js
+var require_cjs = __commonJS({
+  "node_modules/@supabase/postgrest-js/dist/cjs/index.js"(exports) {
+    "use strict";
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : {
+        "default": mod
+      };
+    };
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.PostgrestBuilder = exports.PostgrestTransformBuilder = exports.PostgrestFilterBuilder = exports.PostgrestQueryBuilder = exports.PostgrestClient = void 0;
+    var PostgrestClient_1 = __importDefault(require_PostgrestClient());
+    exports.PostgrestClient = PostgrestClient_1.default;
+    var PostgrestQueryBuilder_1 = __importDefault(require_PostgrestQueryBuilder());
+    exports.PostgrestQueryBuilder = PostgrestQueryBuilder_1.default;
+    var PostgrestFilterBuilder_1 = __importDefault(require_PostgrestFilterBuilder());
+    exports.PostgrestFilterBuilder = PostgrestFilterBuilder_1.default;
+    var PostgrestTransformBuilder_1 = __importDefault(require_PostgrestTransformBuilder());
+    exports.PostgrestTransformBuilder = PostgrestTransformBuilder_1.default;
+    var PostgrestBuilder_1 = __importDefault(require_PostgrestBuilder());
+    exports.PostgrestBuilder = PostgrestBuilder_1.default;
+    exports.default = {
+      PostgrestClient: PostgrestClient_1.default,
+      PostgrestQueryBuilder: PostgrestQueryBuilder_1.default,
+      PostgrestFilterBuilder: PostgrestFilterBuilder_1.default,
+      PostgrestTransformBuilder: PostgrestTransformBuilder_1.default,
+      PostgrestBuilder: PostgrestBuilder_1.default
+    };
+  }
+});
 
 // node_modules/@angular/core/fesm2022/primitives/signals.mjs
 function defaultEquals(a, b) {
@@ -362,8 +1608,8 @@ ${errors.map((err, i) => `${i + 1}) ${err.toString()}`).join("\n  ")}` : "";
 // node_modules/rxjs/dist/esm/internal/util/arrRemove.js
 function arrRemove(arr, item) {
   if (arr) {
-    const index = arr.indexOf(item);
-    0 <= index && arr.splice(index, 1);
+    const index2 = arr.indexOf(item);
+    0 <= index2 && arr.splice(index2, 1);
   }
 }
 
@@ -1811,9 +3057,9 @@ function isValidDate(value) {
 // node_modules/rxjs/dist/esm/internal/operators/map.js
 function map(project, thisArg) {
   return operate((source, subscriber) => {
-    let index = 0;
+    let index2 = 0;
     source.subscribe(createOperatorSubscriber(subscriber, (value) => {
-      subscriber.next(project.call(thisArg, value, index++));
+      subscriber.next(project.call(thisArg, value, index2++));
     }));
   });
 }
@@ -1927,7 +3173,7 @@ function maybeSchedule(scheduler, execute, subscription) {
 function mergeInternals(source, subscriber, project, concurrent, onBeforeNext, expand, innerSubScheduler, additionalFinalizer) {
   const buffer = [];
   let active = 0;
-  let index = 0;
+  let index2 = 0;
   let isComplete = false;
   const checkComplete = () => {
     if (isComplete && !buffer.length && !active) {
@@ -1939,7 +3185,7 @@ function mergeInternals(source, subscriber, project, concurrent, onBeforeNext, e
     expand && subscriber.next(value);
     active++;
     let innerComplete = false;
-    innerFrom(project(value, index++)).subscribe(createOperatorSubscriber(subscriber, (innerValue) => {
+    innerFrom(project(value, index2++)).subscribe(createOperatorSubscriber(subscriber, (innerValue) => {
       onBeforeNext === null || onBeforeNext === void 0 ? void 0 : onBeforeNext(innerValue);
       if (expand) {
         outerNext(innerValue);
@@ -2079,8 +3325,8 @@ function timer(dueTime = 0, intervalOrScheduler, scheduler = async) {
 // node_modules/rxjs/dist/esm/internal/operators/filter.js
 function filter(predicate, thisArg) {
   return operate((source, subscriber) => {
-    let index = 0;
-    source.subscribe(createOperatorSubscriber(subscriber, (value) => predicate.call(thisArg, value, index++) && subscriber.next(value)));
+    let index2 = 0;
+    source.subscribe(createOperatorSubscriber(subscriber, (value) => predicate.call(thisArg, value, index2++) && subscriber.next(value)));
   });
 }
 
@@ -2113,9 +3359,9 @@ function scanInternals(accumulator, seed, hasSeed, emitOnNext, emitBeforeComplet
   return (source, subscriber) => {
     let hasState = hasSeed;
     let state = seed;
-    let index = 0;
+    let index2 = 0;
     source.subscribe(createOperatorSubscriber(subscriber, (value) => {
-      const i = index++;
+      const i = index2++;
       state = hasState ? accumulator(state, value, i) : (hasState = true, value);
       emitOnNext && subscriber.next(state);
     }, emitBeforeComplete && (() => {
@@ -2178,7 +3424,7 @@ function delayWhen(delayDurationSelector, subscriptionDelay) {
   if (subscriptionDelay) {
     return (source) => concat(subscriptionDelay.pipe(take(1), ignoreElements()), source.pipe(delayWhen(delayDurationSelector)));
   }
-  return mergeMap((value, index) => innerFrom(delayDurationSelector(value, index)).pipe(take(1), mapTo(value)));
+  return mergeMap((value, index2) => innerFrom(delayDurationSelector(value, index2)).pipe(take(1), mapTo(value)));
 }
 
 // node_modules/rxjs/dist/esm/internal/operators/delay.js
@@ -2259,13 +3505,13 @@ function startWith(...values) {
 function switchMap(project, resultSelector) {
   return operate((source, subscriber) => {
     let innerSubscriber = null;
-    let index = 0;
+    let index2 = 0;
     let isComplete = false;
     const checkComplete = () => isComplete && !innerSubscriber && subscriber.complete();
     source.subscribe(createOperatorSubscriber(subscriber, (value) => {
       innerSubscriber === null || innerSubscriber === void 0 ? void 0 : innerSubscriber.unsubscribe();
       let innerIndex = 0;
-      const outerIndex = index++;
+      const outerIndex = index2++;
       innerFrom(project(value, outerIndex)).subscribe(innerSubscriber = createOperatorSubscriber(subscriber, (innerValue) => subscriber.next(resultSelector ? resultSelector(value, innerValue, outerIndex, innerIndex++) : innerValue), () => {
         innerSubscriber = null;
         checkComplete();
@@ -3005,14 +4251,14 @@ function makeParamDecorator(name, props, parentClass) {
       const annotationInstance = new ParamDecoratorFactory(...args);
       ParamDecorator.annotation = annotationInstance;
       return ParamDecorator;
-      function ParamDecorator(cls, unusedKey, index) {
+      function ParamDecorator(cls, unusedKey, index2) {
         const parameters = cls.hasOwnProperty(PARAMETERS) ? cls[PARAMETERS] : Object.defineProperty(cls, PARAMETERS, {
           value: []
         })[PARAMETERS];
-        while (parameters.length <= index) {
+        while (parameters.length <= index2) {
           parameters.push(null);
         }
-        (parameters[index] = parameters[index] || []).push(annotationInstance);
+        (parameters[index2] = parameters[index2] || []).push(annotationInstance);
         return cls;
       }
     }
@@ -3243,11 +4489,11 @@ function assertElement(node) {
     throwError2(`The provided value must be an element but got ${stringify(node)}`);
   }
 }
-function assertIndexInRange(arr, index) {
+function assertIndexInRange(arr, index2) {
   assertDefined(arr, "Array must be defined.");
   const maxLen = arr.length;
-  if (index < 0 || index >= maxLen) {
-    throwError2(`Index expected to be less than ${maxLen} but got ${index}`);
+  if (index2 < 0 || index2 >= maxLen) {
+    throwError2(`Index expected to be less than ${maxLen} but got ${index2}`);
   }
 }
 function assertOneOf(value, ...validValues) {
@@ -3540,11 +4786,11 @@ function injectInjectorOnly(token, flags = InjectFlags.Default) {
 function \u0275\u0275inject(token, flags = InjectFlags.Default) {
   return (getInjectImplementation() || injectInjectorOnly)(resolveForwardRef(token), flags);
 }
-function \u0275\u0275invalidFactoryDep(index) {
-  throw new RuntimeError(202, ngDevMode && `This constructor is not compatible with Angular Dependency Injection because its dependency at index ${index} of the parameter list is invalid.
+function \u0275\u0275invalidFactoryDep(index2) {
+  throw new RuntimeError(202, ngDevMode && `This constructor is not compatible with Angular Dependency Injection because its dependency at index ${index2} of the parameter list is invalid.
 This can happen if the dependency type is a primitive like a string or if an ancestor of this class is missing an Angular decorator.
 
-Please check that 1) the type for the parameter at index ${index} is correct and 2) the correct Angular decorators are defined for this class and its ancestors.`);
+Please check that 1) the type for the parameter at index ${index2} is correct and 2) the correct Angular decorators are defined for this class and its ancestors.`);
 }
 function inject(token, flags = InjectFlags.Default) {
   return \u0275\u0275inject(token, convertToBitFlags(flags));
@@ -3693,18 +4939,18 @@ function flatten(list) {
 function deepForEach(input2, fn) {
   input2.forEach((value) => Array.isArray(value) ? deepForEach(value, fn) : fn(value));
 }
-function addToArray(arr, index, value) {
-  if (index >= arr.length) {
+function addToArray(arr, index2, value) {
+  if (index2 >= arr.length) {
     arr.push(value);
   } else {
-    arr.splice(index, 0, value);
+    arr.splice(index2, 0, value);
   }
 }
-function removeFromArray(arr, index) {
-  if (index >= arr.length - 1) {
+function removeFromArray(arr, index2) {
+  if (index2 >= arr.length - 1) {
     return arr.pop();
   } else {
-    return arr.splice(index, 1)[0];
+    return arr.splice(index2, 1)[0];
   }
 }
 function newArray(size, value) {
@@ -3714,20 +4960,20 @@ function newArray(size, value) {
   }
   return list;
 }
-function arraySplice(array, index, count) {
+function arraySplice(array, index2, count) {
   const length = array.length - count;
-  while (index < length) {
-    array[index] = array[index + count];
-    index++;
+  while (index2 < length) {
+    array[index2] = array[index2 + count];
+    index2++;
   }
   while (count--) {
     array.pop();
   }
 }
-function arrayInsert2(array, index, value1, value2) {
-  ngDevMode && assertLessThanOrEqual(index, array.length, "Can't insert past array end.");
+function arrayInsert2(array, index2, value1, value2) {
+  ngDevMode && assertLessThanOrEqual(index2, array.length, "Can't insert past array end.");
   let end = array.length;
-  if (end == index) {
+  if (end == index2) {
     array.push(value1, value2);
   } else if (end === 1) {
     array.push(value2, array[0]);
@@ -3735,29 +4981,29 @@ function arrayInsert2(array, index, value1, value2) {
   } else {
     end--;
     array.push(array[end - 1], array[end]);
-    while (end > index) {
+    while (end > index2) {
       const previousEnd = end - 2;
       array[end] = array[previousEnd];
       end--;
     }
-    array[index] = value1;
-    array[index + 1] = value2;
+    array[index2] = value1;
+    array[index2 + 1] = value2;
   }
 }
 function keyValueArraySet(keyValueArray, key, value) {
-  let index = keyValueArrayIndexOf(keyValueArray, key);
-  if (index >= 0) {
-    keyValueArray[index | 1] = value;
+  let index2 = keyValueArrayIndexOf(keyValueArray, key);
+  if (index2 >= 0) {
+    keyValueArray[index2 | 1] = value;
   } else {
-    index = ~index;
-    arrayInsert2(keyValueArray, index, key, value);
+    index2 = ~index2;
+    arrayInsert2(keyValueArray, index2, key, value);
   }
-  return index;
+  return index2;
 }
 function keyValueArrayGet(keyValueArray, key) {
-  const index = keyValueArrayIndexOf(keyValueArray, key);
-  if (index >= 0) {
-    return keyValueArray[index | 1];
+  const index2 = keyValueArrayIndexOf(keyValueArray, key);
+  if (index2 >= 0) {
+    return keyValueArray[index2 | 1];
   }
   return void 0;
 }
@@ -5297,16 +6543,16 @@ function assertDirectiveDef(obj) {
     throwError2(`Expected a DirectiveDef/ComponentDef and this object does not seem to have the expected shape.`);
   }
 }
-function assertIndexInDeclRange(tView, index) {
-  assertBetween(HEADER_OFFSET, tView.bindingStartIndex, index);
+function assertIndexInDeclRange(tView, index2) {
+  assertBetween(HEADER_OFFSET, tView.bindingStartIndex, index2);
 }
-function assertIndexInExpandoRange(lView, index) {
+function assertIndexInExpandoRange(lView, index2) {
   const tView = lView[1];
-  assertBetween(tView.expandoStartIndex, lView.length, index);
+  assertBetween(tView.expandoStartIndex, lView.length, index2);
 }
-function assertBetween(lower, upper, index) {
-  if (!(lower <= index && index < upper)) {
-    throwError2(`Index out of range (expecting ${lower} <= ${index} < ${upper})`);
+function assertBetween(lower, upper, index2) {
+  if (!(lower <= index2 && index2 < upper)) {
+    throwError2(`Index out of range (expecting ${lower} <= ${index2} < ${upper})`);
   }
 }
 function assertProjectionSlots(lView, errMessage) {
@@ -5438,10 +6684,10 @@ function unwrapLView(value) {
   }
   return null;
 }
-function getNativeByIndex(index, lView) {
-  ngDevMode && assertIndexInRange(lView, index);
-  ngDevMode && assertGreaterThanOrEqual(index, HEADER_OFFSET, "Expected to be past HEADER_OFFSET");
-  return unwrapRNode(lView[index]);
+function getNativeByIndex(index2, lView) {
+  ngDevMode && assertIndexInRange(lView, index2);
+  ngDevMode && assertGreaterThanOrEqual(index2, HEADER_OFFSET, "Expected to be past HEADER_OFFSET");
+  return unwrapRNode(lView[index2]);
 }
 function getNativeByTNode(tNode, lView) {
   ngDevMode && assertTNodeForLView(tNode, lView);
@@ -5449,16 +6695,16 @@ function getNativeByTNode(tNode, lView) {
   const node = unwrapRNode(lView[tNode.index]);
   return node;
 }
-function getTNode(tView, index) {
-  ngDevMode && assertGreaterThan(index, -1, "wrong index for TNode");
-  ngDevMode && assertLessThan(index, tView.data.length, "wrong index for TNode");
-  const tNode = tView.data[index];
+function getTNode(tView, index2) {
+  ngDevMode && assertGreaterThan(index2, -1, "wrong index for TNode");
+  ngDevMode && assertLessThan(index2, tView.data.length, "wrong index for TNode");
+  const tNode = tView.data[index2];
   ngDevMode && tNode !== null && assertTNode(tNode);
   return tNode;
 }
-function load(view, index) {
-  ngDevMode && assertIndexInRange(view, index);
-  return view[index];
+function load(view, index2) {
+  ngDevMode && assertIndexInRange(view, index2);
+  return view[index2];
 }
 function getComponentLViewByIndex(nodeIndex, hostView) {
   ngDevMode && assertIndexInRange(hostView, nodeIndex);
@@ -5475,10 +6721,10 @@ function viewAttachedToChangeDetector(view) {
 function viewAttachedToContainer(view) {
   return isLContainer(view[PARENT]);
 }
-function getConstant(consts, index) {
-  if (index === null || index === void 0) return null;
-  ngDevMode && assertIndexInRange(consts, index);
-  return consts[index];
+function getConstant(consts, index2) {
+  if (index2 === null || index2 === void 0) return null;
+  ngDevMode && assertIndexInRange(consts, index2);
+  return consts[index2];
 }
 function resetPreOrderHookFlags(lView) {
   lView[PREORDER_HOOK_FLAGS] = 0;
@@ -5659,11 +6905,11 @@ function setIsRefreshingViews(mode) {
 }
 function getBindingRoot() {
   const lFrame = instructionState.lFrame;
-  let index = lFrame.bindingRootIndex;
-  if (index === -1) {
-    index = lFrame.bindingRootIndex = lFrame.tView.bindingStartIndex;
+  let index2 = lFrame.bindingRootIndex;
+  if (index2 === -1) {
+    index2 = lFrame.bindingRootIndex = lFrame.tView.bindingStartIndex;
   }
-  return index;
+  return index2;
 }
 function getBindingIndex() {
   return instructionState.lFrame.bindingIndex;
@@ -5676,9 +6922,9 @@ function nextBindingIndex() {
 }
 function incrementBindingIndex(count) {
   const lFrame = instructionState.lFrame;
-  const index = lFrame.bindingIndex;
+  const index2 = lFrame.bindingIndex;
   lFrame.bindingIndex = lFrame.bindingIndex + count;
-  return index;
+  return index2;
 }
 function isInI18nBlock() {
   return instructionState.lFrame.inI18n;
@@ -5832,10 +7078,10 @@ function nextContextImpl(level) {
 function getSelectedIndex() {
   return instructionState.lFrame.selectedIndex;
 }
-function setSelectedIndex(index) {
-  ngDevMode && index !== -1 && assertGreaterThanOrEqual(index, HEADER_OFFSET, "Index must be past HEADER_OFFSET (or -1).");
-  ngDevMode && assertLessThan(index, instructionState.lFrame.lView.length, "Can't set index passed end of LView");
-  instructionState.lFrame.selectedIndex = index;
+function setSelectedIndex(index2) {
+  ngDevMode && index2 !== -1 && assertGreaterThanOrEqual(index2, HEADER_OFFSET, "Index must be past HEADER_OFFSET (or -1).");
+  ngDevMode && assertLessThan(index2, instructionState.lFrame.lView.length, "Can't set index passed end of LView");
+  instructionState.lFrame.selectedIndex = index2;
 }
 function getSelectedTNode() {
   const lFrame = instructionState.lFrame;
@@ -6374,19 +7620,19 @@ function locateDirectiveOrProvider(tNode, tView, token, canAccessViewProviders, 
   }
   return null;
 }
-function getNodeInjectable(lView, tView, index, tNode) {
-  let value = lView[index];
+function getNodeInjectable(lView, tView, index2, tNode) {
+  let value = lView[index2];
   const tData = tView.data;
   if (isFactory(value)) {
     const factory = value;
     if (factory.resolving) {
-      throwCyclicDependencyError(stringifyForError(tData[index]));
+      throwCyclicDependencyError(stringifyForError(tData[index2]));
     }
     const previousIncludeViewProviders = setIncludeViewProviders(factory.canSeeViewProviders);
     factory.resolving = true;
     let prevInjectContext;
     if (ngDevMode) {
-      const token = tData[index].type || tData[index];
+      const token = tData[index2].type || tData[index2];
       const injector = new NodeInjector(tNode, lView);
       prevInjectContext = setInjectorProfilerContext({
         injector,
@@ -6397,11 +7643,11 @@ function getNodeInjectable(lView, tView, index, tNode) {
     const success = enterDI(lView, tNode, InjectFlags.Default);
     ngDevMode && assertEqual(success, true, "Because flags do not contain `SkipSelf' we expect this to always succeed.");
     try {
-      value = lView[index] = factory.factory(void 0, tData, lView, tNode);
+      value = lView[index2] = factory.factory(void 0, tData, lView, tNode);
       ngDevMode && emitInstanceCreatedByInjectorEvent(value);
-      if (tView.firstCreatePass && index >= tNode.directiveStart) {
-        ngDevMode && assertDirectiveDef(tData[index]);
-        registerPreOrderHooks(index, tData[index], tView);
+      if (tView.firstCreatePass && index2 >= tNode.directiveStart) {
+        ngDevMode && assertDirectiveDef(tData[index2]);
+        registerPreOrderHooks(index2, tData[index2], tView);
       }
     } finally {
       ngDevMode && setInjectorProfilerContext(prevInjectContext);
@@ -6940,23 +8186,23 @@ var NgZone = class _NgZone {
       throw new RuntimeError(908, ngDevMode && `In this configuration Angular requires Zone.js`);
     }
     Zone.assertZonePatched();
-    const self = this;
-    self._nesting = 0;
-    self._outer = self._inner = Zone.current;
+    const self2 = this;
+    self2._nesting = 0;
+    self2._outer = self2._inner = Zone.current;
     if (ngDevMode) {
-      self._inner = self._inner.fork(new AsyncStackTaggingZoneSpec("Angular"));
+      self2._inner = self2._inner.fork(new AsyncStackTaggingZoneSpec("Angular"));
     }
     if (Zone["TaskTrackingZoneSpec"]) {
-      self._inner = self._inner.fork(new Zone["TaskTrackingZoneSpec"]());
+      self2._inner = self2._inner.fork(new Zone["TaskTrackingZoneSpec"]());
     }
     if (enableLongStackTrace && Zone["longStackTraceZoneSpec"]) {
-      self._inner = self._inner.fork(Zone["longStackTraceZoneSpec"]);
+      self2._inner = self2._inner.fork(Zone["longStackTraceZoneSpec"]);
     }
-    self.shouldCoalesceEventChangeDetection = !shouldCoalesceRunChangeDetection && shouldCoalesceEventChangeDetection;
-    self.shouldCoalesceRunChangeDetection = shouldCoalesceRunChangeDetection;
-    self.callbackScheduled = false;
-    self.scheduleInRootZone = scheduleInRootZone;
-    forkInnerZoneWithAngularBehavior(self);
+    self2.shouldCoalesceEventChangeDetection = !shouldCoalesceRunChangeDetection && shouldCoalesceEventChangeDetection;
+    self2.shouldCoalesceRunChangeDetection = shouldCoalesceRunChangeDetection;
+    self2.callbackScheduled = false;
+    self2.scheduleInRootZone = scheduleInRootZone;
+    forkInnerZoneWithAngularBehavior(self2);
   }
   /**
     This method checks whether the method call happens within an Angular Zone instance.
@@ -7349,8 +8595,8 @@ var _QueryList = class _QueryList {
   /**
    * Returns the QueryList entry at `index`.
    */
-  get(index) {
-    return this._results[index];
+  get(index2) {
+    return this._results[index2];
   }
   /**
    * See
@@ -7530,10 +8776,10 @@ function getLContext(target) {
         if (!lView) {
           return null;
         }
-        const index = findViaNativeElement(lView, rElement);
-        if (index >= 0) {
-          const native = unwrapRNode(lView[index]);
-          const context2 = createLContext(lView, index, native);
+        const index2 = findViaNativeElement(lView, rElement);
+        if (index2 >= 0) {
+          const native = unwrapRNode(lView[index2]);
+          const context2 = createLContext(lView, index2, native);
           attachPatchData(native, context2);
           mpValue = context2;
           break;
@@ -8797,17 +10043,17 @@ function destroyViewTree(rootView) {
     lViewOrLContainer = next;
   }
 }
-function insertView(tView, lView, lContainer, index) {
+function insertView(tView, lView, lContainer, index2) {
   ngDevMode && assertLView(lView);
   ngDevMode && assertLContainer(lContainer);
-  const indexInContainer = CONTAINER_HEADER_OFFSET + index;
+  const indexInContainer = CONTAINER_HEADER_OFFSET + index2;
   const containerLength = lContainer.length;
-  if (index > 0) {
+  if (index2 > 0) {
     lContainer[indexInContainer - 1][NEXT] = lView;
   }
-  if (index < containerLength - CONTAINER_HEADER_OFFSET) {
+  if (index2 < containerLength - CONTAINER_HEADER_OFFSET) {
     lView[NEXT] = lContainer[indexInContainer];
-    addToArray(lContainer, CONTAINER_HEADER_OFFSET + index, lView);
+    addToArray(lContainer, CONTAINER_HEADER_OFFSET + index2, lView);
   } else {
     lContainer.push(lView);
     lView[NEXT] = null;
@@ -9286,23 +10532,23 @@ function \u0275\u0275advance(delta = 1) {
   ngDevMode && assertGreaterThan(delta, 0, "Can only advance forward");
   selectIndexInternal(getTView(), getLView(), getSelectedIndex() + delta, !!ngDevMode && isInCheckNoChangesMode());
 }
-function selectIndexInternal(tView, lView, index, checkNoChangesMode) {
-  ngDevMode && assertIndexInDeclRange(lView[TVIEW], index);
+function selectIndexInternal(tView, lView, index2, checkNoChangesMode) {
+  ngDevMode && assertIndexInDeclRange(lView[TVIEW], index2);
   if (!checkNoChangesMode) {
     const hooksInitPhaseCompleted = (lView[FLAGS] & 3) === 3;
     if (hooksInitPhaseCompleted) {
       const preOrderCheckHooks = tView.preOrderCheckHooks;
       if (preOrderCheckHooks !== null) {
-        executeCheckHooks(lView, preOrderCheckHooks, index);
+        executeCheckHooks(lView, preOrderCheckHooks, index2);
       }
     } else {
       const preOrderHooks = tView.preOrderHooks;
       if (preOrderHooks !== null) {
-        executeInitAndCheckHooks(lView, preOrderHooks, 0, index);
+        executeInitAndCheckHooks(lView, preOrderHooks, 0, index2);
       }
     }
   }
-  setSelectedIndex(index);
+  setSelectedIndex(index2);
 }
 function \u0275\u0275directiveInject(token, flags = InjectFlags.Default) {
   const lView = getLView();
@@ -9363,7 +10609,7 @@ function processHostBindingOpCodes(tView, lView) {
     setSelectedIndex(-1);
   }
 }
-function createLView(parentLView, tView, context2, flags, host, tHostNode, environment, renderer, injector, embeddedViewInjector, hydrationInfo) {
+function createLView(parentLView, tView, context2, flags, host, tHostNode, environment2, renderer, injector, embeddedViewInjector, hydrationInfo) {
   const lView = tView.blueprint.slice();
   lView[HOST] = host;
   lView[FLAGS] = flags | 4 | 128 | 8 | 64;
@@ -9374,7 +10620,7 @@ function createLView(parentLView, tView, context2, flags, host, tHostNode, envir
   ngDevMode && tView.declTNode && parentLView && assertTNodeForLView(tView.declTNode, parentLView);
   lView[PARENT] = lView[DECLARATION_VIEW] = parentLView;
   lView[CONTEXT] = context2;
-  lView[ENVIRONMENT] = environment || parentLView && parentLView[ENVIRONMENT];
+  lView[ENVIRONMENT] = environment2 || parentLView && parentLView[ENVIRONMENT];
   ngDevMode && assertDefined(lView[ENVIRONMENT], "LViewEnvironment is required");
   lView[RENDERER] = renderer || parentLView && parentLView[RENDERER];
   ngDevMode && assertDefined(lView[RENDERER], "Renderer is required");
@@ -9387,14 +10633,14 @@ function createLView(parentLView, tView, context2, flags, host, tHostNode, envir
   lView[DECLARATION_COMPONENT_VIEW] = tView.type == 2 ? parentLView[DECLARATION_COMPONENT_VIEW] : lView;
   return lView;
 }
-function getOrCreateTNode(tView, index, type, name, attrs) {
-  ngDevMode && index !== 0 && // 0 are bogus nodes and they are OK. See `createContainerRef` in
+function getOrCreateTNode(tView, index2, type, name, attrs) {
+  ngDevMode && index2 !== 0 && // 0 are bogus nodes and they are OK. See `createContainerRef` in
   // `view_engine_compatibility` for additional context.
-  assertGreaterThanOrEqual(index, HEADER_OFFSET, "TNodes can't be in the LView header.");
+  assertGreaterThanOrEqual(index2, HEADER_OFFSET, "TNodes can't be in the LView header.");
   ngDevMode && assertPureTNodeType(type);
-  let tNode = tView.data[index];
+  let tNode = tView.data[index2];
   if (tNode === null) {
-    tNode = createTNodeAtIndex(tView, index, type, name, attrs);
+    tNode = createTNodeAtIndex(tView, index2, type, name, attrs);
     if (isInI18nBlock()) {
       tNode.flags |= 32;
     }
@@ -9405,16 +10651,16 @@ function getOrCreateTNode(tView, index, type, name, attrs) {
     const parent = getCurrentParentTNode();
     tNode.injectorIndex = parent === null ? -1 : parent.injectorIndex;
     ngDevMode && assertTNodeForTView(tNode, tView);
-    ngDevMode && assertEqual(index, tNode.index, "Expecting same index");
+    ngDevMode && assertEqual(index2, tNode.index, "Expecting same index");
   }
   setCurrentTNode(tNode, true);
   return tNode;
 }
-function createTNodeAtIndex(tView, index, type, name, attrs) {
+function createTNodeAtIndex(tView, index2, type, name, attrs) {
   const currentTNode = getCurrentTNodePlaceholderOk();
   const isParent = isCurrentTNodeParent();
   const parent = isParent ? currentTNode : currentTNode && currentTNode.parent;
-  const tNode = tView.data[index] = createTNode(tView, parent, type, index, name, attrs);
+  const tNode = tView.data[index2] = createTNode(tView, parent, type, index2, name, attrs);
   if (tView.firstChild === null) {
     tView.firstChild = tNode;
   }
@@ -9497,8 +10743,8 @@ function saveResolvedLocalsInData(viewData, tNode, localRefExtractor = getNative
   if (localNames !== null) {
     let localIndex = tNode.index + 1;
     for (let i = 0; i < localNames.length; i += 2) {
-      const index = localNames[i + 1];
-      const value = index === -1 ? localRefExtractor(tNode, viewData) : viewData[index];
+      const index2 = localNames[i + 1];
+      const value = index2 === -1 ? localRefExtractor(tNode, viewData) : viewData[index2];
       viewData[localIndex++] = value;
     }
   }
@@ -9585,10 +10831,10 @@ function storeCleanupWithContext(tView, lView, context2, cleanupFn) {
     }
   }
 }
-function createTNode(tView, tParent, type, index, value, attrs) {
-  ngDevMode && index !== 0 && // 0 are bogus nodes and they are OK. See `createContainerRef` in
+function createTNode(tView, tParent, type, index2, value, attrs) {
+  ngDevMode && index2 !== 0 && // 0 are bogus nodes and they are OK. See `createContainerRef` in
   // `view_engine_compatibility` for additional context.
-  assertGreaterThanOrEqual(index, HEADER_OFFSET, "TNodes can't be in the LView header.");
+  assertGreaterThanOrEqual(index2, HEADER_OFFSET, "TNodes can't be in the LView header.");
   ngDevMode && assertNotSame(attrs, void 0, "'undefined' is not valid value for 'attrs'");
   ngDevMode && ngDevMode.tNode++;
   ngDevMode && tParent && assertTNodeForTView(tParent, tView);
@@ -9599,7 +10845,7 @@ function createTNode(tView, tParent, type, index, value, attrs) {
   }
   const tNode = {
     type,
-    index,
+    index: index2,
     insertBeforeIndex: null,
     injectorIndex,
     directiveStart: -1,
@@ -9973,9 +11219,9 @@ function cacheMatchingLocalNames(tNode, localRefs, exportsMap) {
   if (localRefs) {
     const localNames = tNode.localNames = [];
     for (let i = 0; i < localRefs.length; i += 2) {
-      const index = exportsMap[localRefs[i + 1]];
-      if (index == null) throw new RuntimeError(-301, ngDevMode && `Export of name '${localRefs[i + 1]}' not found!`);
-      localNames.push(localRefs[i], index);
+      const index2 = exportsMap[localRefs[i + 1]];
+      if (index2 == null) throw new RuntimeError(-301, ngDevMode && `Export of name '${localRefs[i + 1]}' not found!`);
+      localNames.push(localRefs[i], index2);
     }
   }
 }
@@ -9989,12 +11235,12 @@ function saveNameToExportMap(directiveIdx, def, exportsMap) {
     if (isComponentDef(def)) exportsMap[""] = directiveIdx;
   }
 }
-function initTNodeFlags(tNode, index, numberOfDirectives) {
+function initTNodeFlags(tNode, index2, numberOfDirectives) {
   ngDevMode && assertNotEqual(numberOfDirectives, tNode.directiveEnd - tNode.directiveStart, "Reached the max number of directives");
   tNode.flags |= 1;
-  tNode.directiveStart = index;
-  tNode.directiveEnd = index + numberOfDirectives;
-  tNode.providerIndexes = index;
+  tNode.directiveStart = index2;
+  tNode.directiveEnd = index2 + numberOfDirectives;
+  tNode.providerIndexes = index2;
 }
 function configureViewWithDirective(tView, tNode, lView, directiveIndex, def) {
   ngDevMode && assertGreaterThanOrEqual(directiveIndex, HEADER_OFFSET, "Must be in Expando section");
@@ -10179,20 +11425,20 @@ function handleError(lView, error) {
 }
 function setInputsForProperty(tView, lView, inputs, publicName, value) {
   for (let i = 0; i < inputs.length; ) {
-    const index = inputs[i++];
+    const index2 = inputs[i++];
     const privateName = inputs[i++];
     const flags = inputs[i++];
-    const instance = lView[index];
-    ngDevMode && assertIndexInRange(lView, index);
-    const def = tView.data[index];
+    const instance = lView[index2];
+    ngDevMode && assertIndexInRange(lView, index2);
+    const def = tView.data[index2];
     writeToDirectiveInput(def, instance, publicName, privateName, flags, value);
   }
 }
-function textBindingInternal(lView, index, value) {
+function textBindingInternal(lView, index2, value) {
   ngDevMode && assertString(value, "Value should be a string");
   ngDevMode && assertNotSame(value, NO_CHANGE, "value should not be NO_CHANGE");
-  ngDevMode && assertIndexInRange(lView, index);
-  const element = getNativeByIndex(index, lView);
+  ngDevMode && assertIndexInRange(lView, index2);
+  const element = getNativeByIndex(index2, lView);
   ngDevMode && assertDefined(element, "native element should exist");
   updateTextNode(lView[RENDERER], element, value);
 }
@@ -10277,8 +11523,8 @@ function createAndRenderEmbeddedLView(declarationLView, templateTNode, context2,
     setActiveConsumer(prevConsumer);
   }
 }
-function getLViewFromLContainer(lContainer, index) {
-  const adjustedIndex = CONTAINER_HEADER_OFFSET + index;
+function getLViewFromLContainer(lContainer, index2) {
+  const adjustedIndex = CONTAINER_HEADER_OFFSET + index2;
   if (adjustedIndex < lContainer.length) {
     const lView = lContainer[adjustedIndex];
     ngDevMode && assertLView(lView);
@@ -10289,11 +11535,11 @@ function getLViewFromLContainer(lContainer, index) {
 function shouldAddViewToDom(tNode, dehydratedView) {
   return !dehydratedView || dehydratedView.firstChild === null || hasInSkipHydrationBlockFlag(tNode);
 }
-function addLViewToLContainer(lContainer, lView, index, addToDOM = true) {
+function addLViewToLContainer(lContainer, lView, index2, addToDOM = true) {
   const tView = lView[TVIEW];
-  insertView(tView, lView, lContainer, index);
+  insertView(tView, lView, lContainer, index2);
   if (addToDOM) {
-    const beforeNode = getBeforeNodeForView(index, lContainer);
+    const beforeNode = getBeforeNodeForView(index2, lContainer);
     const renderer = lView[RENDERER];
     const parentRNode = nativeParentNode(renderer, lContainer[NATIVE]);
     if (parentRNode !== null) {
@@ -10305,8 +11551,8 @@ function addLViewToLContainer(lContainer, lView, index, addToDOM = true) {
     hydrationInfo.firstChild = null;
   }
 }
-function removeLViewFromLContainer(lContainer, index) {
-  const lView = detachView(lContainer, index);
+function removeLViewFromLContainer(lContainer, index2) {
+  const lView = detachView(lContainer, index2);
   if (lView !== void 0) {
     destroyLView(lView[TVIEW], lView);
   }
@@ -10416,8 +11662,8 @@ function viewShouldHaveReactiveConsumer(tView) {
 }
 var MAXIMUM_REFRESH_RERUNS$1 = 100;
 function detectChangesInternal(lView, notifyErrorHandler = true, mode = 0) {
-  const environment = lView[ENVIRONMENT];
-  const rendererFactory = environment.rendererFactory;
+  const environment2 = lView[ENVIRONMENT];
+  const rendererFactory = environment2.rendererFactory;
   const checkNoChangesMode = !!ngDevMode && isInCheckNoChangesMode();
   if (!checkNoChangesMode) {
     rendererFactory.begin?.();
@@ -10432,7 +11678,7 @@ function detectChangesInternal(lView, notifyErrorHandler = true, mode = 0) {
   } finally {
     if (!checkNoChangesMode) {
       rendererFactory.end?.();
-      environment.inlineEffectRunner?.flush();
+      environment2.inlineEffectRunner?.flush();
     }
   }
 }
@@ -10743,11 +11989,11 @@ var ViewRef$1 = class {
       const parent = this._lView[PARENT];
       if (isLContainer(parent)) {
         const viewRefs = parent[VIEW_REFS];
-        const index = viewRefs ? viewRefs.indexOf(this) : -1;
-        if (index > -1) {
-          ngDevMode && assertEqual(index, parent.indexOf(this._lView) - CONTAINER_HEADER_OFFSET, "An attached view should be in the same position within its container as its ViewRef in the VIEW_REFS array.");
-          detachView(parent, index);
-          removeFromArray(viewRefs, index);
+        const index2 = viewRefs ? viewRefs.indexOf(this) : -1;
+        if (index2 > -1) {
+          ngDevMode && assertEqual(index2, parent.indexOf(this._lView) - CONTAINER_HEADER_OFFSET, "An attached view should be in the same position within its container as its ViewRef in the VIEW_REFS array.");
+          detachView(parent, index2);
+          removeFromArray(viewRefs, index2);
         }
       }
       this._attachedToViewContainer = false;
@@ -11069,20 +12315,20 @@ function isNewTNodeCreatedBefore(existingTNode, newTNode) {
   return isI18nText(newTNode) || existingTNode.index > newTNode.index;
 }
 function getInsertBeforeIndex(tNode) {
-  const index = tNode.insertBeforeIndex;
-  return Array.isArray(index) ? index[0] : index;
+  const index2 = tNode.insertBeforeIndex;
+  return Array.isArray(index2) ? index2[0] : index2;
 }
 function setInsertBeforeIndex(tNode, value) {
-  const index = tNode.insertBeforeIndex;
-  if (Array.isArray(index)) {
-    index[0] = value;
+  const index2 = tNode.insertBeforeIndex;
+  if (Array.isArray(index2)) {
+    index2[0] = value;
   } else {
     setI18nHandling(getInsertInFrontOfRNodeWithI18n, processI18nInsertBefore);
     tNode.insertBeforeIndex = value;
   }
 }
-function getTIcu(tView, index) {
-  const value = tView.data[index];
+function getTIcu(tView, index2) {
+  const value = tView.data[index2];
   if (value === null || typeof value === "string") return null;
   if (ngDevMode && !(value.hasOwnProperty("tView") || value.hasOwnProperty("currentCaseLViewIndex"))) {
     throwError2("We expect to get 'null'|'TIcu'|'TIcuContainer', but got: " + value);
@@ -11091,11 +12337,11 @@ function getTIcu(tView, index) {
   ngDevMode && assertTIcu(tIcu);
   return tIcu;
 }
-function setTIcu(tView, index, tIcu) {
-  const tNode = tView.data[index];
+function setTIcu(tView, index2, tIcu) {
+  const tNode = tView.data[index2];
   ngDevMode && assertEqual(tNode === null || tNode.hasOwnProperty("tView"), true, "We expect to get 'null'|'TIcuContainer'");
   if (tNode === null) {
-    tView.data[index] = tIcu;
+    tView.data[index2] = tIcu;
   } else {
     ngDevMode && assertTNodeType(
       tNode,
@@ -11105,19 +12351,19 @@ function setTIcu(tView, index, tIcu) {
     tNode.value = tIcu;
   }
 }
-function setTNodeInsertBeforeIndex(tNode, index) {
+function setTNodeInsertBeforeIndex(tNode, index2) {
   ngDevMode && assertTNode(tNode);
   let insertBeforeIndex = tNode.insertBeforeIndex;
   if (insertBeforeIndex === null) {
     setI18nHandling(getInsertInFrontOfRNodeWithI18n, processI18nInsertBefore);
-    insertBeforeIndex = tNode.insertBeforeIndex = [null, index];
+    insertBeforeIndex = tNode.insertBeforeIndex = [null, index2];
   } else {
     assertEqual(Array.isArray(insertBeforeIndex), true, "Expecting array here");
-    insertBeforeIndex.push(index);
+    insertBeforeIndex.push(index2);
   }
 }
-function createTNodePlaceholder(tView, previousTNodes, index) {
-  const tNode = createTNodeAtIndex(tView, index, 64, null, null);
+function createTNodePlaceholder(tView, previousTNodes, index2) {
+  const tNode = createTNodeAtIndex(tView, index2, 64, null, null);
   addTNodeAndUpdateInsertBeforeIndex(previousTNodes, tNode);
   return tNode;
 }
@@ -11195,8 +12441,8 @@ function loadIcuContainerVisitor() {
 var REF_EXTRACTOR_REGEXP = new RegExp(`^(\\d+)*(${REFERENCE_NODE_BODY}|${REFERENCE_NODE_HOST})*(.*)`);
 var _prepareI18nBlockForHydrationImpl = () => {
 };
-function prepareI18nBlockForHydration(lView, index, parentTNode, subTemplateIndex) {
-  _prepareI18nBlockForHydrationImpl(lView, index, parentTNode, subTemplateIndex);
+function prepareI18nBlockForHydration(lView, index2, parentTNode, subTemplateIndex) {
+  _prepareI18nBlockForHydrationImpl(lView, index2, parentTNode, subTemplateIndex);
 }
 var _claimDehydratedIcuCaseImpl = () => {
 };
@@ -11833,7 +13079,7 @@ var ComponentFactory = class extends ComponentFactory$1 {
       const sanitizer = rootViewInjector.get(Sanitizer, null);
       const afterRenderEventManager = rootViewInjector.get(AfterRenderEventManager, null);
       const changeDetectionScheduler = rootViewInjector.get(ChangeDetectionScheduler, null);
-      const environment = {
+      const environment2 = {
         rendererFactory,
         sanitizer,
         // We don't use inline effects (yet).
@@ -11860,7 +13106,7 @@ var ComponentFactory = class extends ComponentFactory$1 {
         );
       }
       const rootTView = createTView(0, null, null, 1, 0, null, null, null, null, null, null);
-      const rootLView = createLView(null, rootTView, null, rootFlags, null, null, environment, hostRenderer, rootViewInjector, null, hydrationInfo);
+      const rootLView = createLView(null, rootTView, null, rootFlags, null, null, environment2, hostRenderer, rootViewInjector, null, hydrationInfo);
       enterView(rootLView);
       let component;
       let tElementNode;
@@ -11878,7 +13124,7 @@ var ComponentFactory = class extends ComponentFactory$1 {
           rootDirectives = [rootComponentDef];
         }
         const hostTNode = createRootComponentTNode(rootLView, hostRNode);
-        const componentView = createRootComponentView(hostTNode, hostRNode, rootComponentDef, rootDirectives, rootLView, environment, hostRenderer);
+        const componentView = createRootComponentView(hostTNode, hostRNode, rootComponentDef, rootDirectives, rootLView, environment2, hostRenderer);
         tElementNode = getTNode(rootTView, HEADER_OFFSET);
         if (hostRNode) {
           setRootNodeAttributes(hostRenderer, rootComponentDef, hostRNode, rootSelectorOrNode);
@@ -11951,26 +13197,26 @@ var ComponentRef = class extends ComponentRef$1 {
 };
 function createRootComponentTNode(lView, rNode) {
   const tView = lView[TVIEW];
-  const index = HEADER_OFFSET;
-  ngDevMode && assertIndexInRange(lView, index);
-  lView[index] = rNode;
-  return getOrCreateTNode(tView, index, 2, "#host", null);
+  const index2 = HEADER_OFFSET;
+  ngDevMode && assertIndexInRange(lView, index2);
+  lView[index2] = rNode;
+  return getOrCreateTNode(tView, index2, 2, "#host", null);
 }
-function createRootComponentView(tNode, hostRNode, rootComponentDef, rootDirectives, rootView, environment, hostRenderer) {
+function createRootComponentView(tNode, hostRNode, rootComponentDef, rootDirectives, rootView, environment2, hostRenderer) {
   const tView = rootView[TVIEW];
   applyRootComponentStyling(rootDirectives, tNode, hostRNode, hostRenderer);
   let hydrationInfo = null;
   if (hostRNode !== null) {
     hydrationInfo = retrieveHydrationInfo(hostRNode, rootView[INJECTOR]);
   }
-  const viewRenderer = environment.rendererFactory.createRenderer(hostRNode, rootComponentDef);
+  const viewRenderer = environment2.rendererFactory.createRenderer(hostRNode, rootComponentDef);
   let lViewFlags = 16;
   if (rootComponentDef.signals) {
     lViewFlags = 4096;
   } else if (rootComponentDef.onPush) {
     lViewFlags = 64;
   }
-  const componentView = createLView(rootView, getOrCreateComponentTView(rootComponentDef), null, lViewFlags, rootView[tNode.index], tNode, environment, viewRenderer, null, null, hydrationInfo);
+  const componentView = createLView(rootView, getOrCreateComponentTView(rootComponentDef), null, lViewFlags, rootView[tNode.index], tNode, environment2, viewRenderer, null, null, hydrationInfo);
   if (tView.firstCreatePass) {
     markAsComponentHost(tView, tNode, rootDirectives.length - 1);
   }
@@ -12085,35 +13331,35 @@ var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
       this.remove(this.length - 1);
     }
   }
-  get(index) {
+  get(index2) {
     const viewRefs = getViewRefs(this._lContainer);
-    return viewRefs !== null && viewRefs[index] || null;
+    return viewRefs !== null && viewRefs[index2] || null;
   }
   get length() {
     return this._lContainer.length - CONTAINER_HEADER_OFFSET;
   }
   createEmbeddedView(templateRef, context2, indexOrOptions) {
-    let index;
+    let index2;
     let injector;
     if (typeof indexOrOptions === "number") {
-      index = indexOrOptions;
+      index2 = indexOrOptions;
     } else if (indexOrOptions != null) {
-      index = indexOrOptions.index;
+      index2 = indexOrOptions.index;
       injector = indexOrOptions.injector;
     }
     const dehydratedView = findMatchingDehydratedView(this._lContainer, templateRef.ssrId);
     const viewRef = templateRef.createEmbeddedViewImpl(context2 || {}, injector, dehydratedView);
-    this.insertImpl(viewRef, index, shouldAddViewToDom(this._hostTNode, dehydratedView));
+    this.insertImpl(viewRef, index2, shouldAddViewToDom(this._hostTNode, dehydratedView));
     return viewRef;
   }
   createComponent(componentFactoryOrType, indexOrOptions, injector, projectableNodes, environmentInjector) {
     const isComponentFactory = componentFactoryOrType && !isType(componentFactoryOrType);
-    let index;
+    let index2;
     if (isComponentFactory) {
       if (ngDevMode) {
         assertEqual(typeof indexOrOptions !== "object", true, "It looks like Component factory was provided as the first argument and an options object as the second argument. This combination of arguments is incompatible. You can either change the first argument to provide Component type or change the second argument to be a number (representing an index at which to insert the new component's host view into this container)");
       }
-      index = indexOrOptions;
+      index2 = indexOrOptions;
     } else {
       if (ngDevMode) {
         assertDefined(getComponentDef(componentFactoryOrType), `Provided Component class doesn't contain Component definition. Please check whether provided class has @Component decorator.`);
@@ -12123,7 +13369,7 @@ var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
       if (ngDevMode && options.environmentInjector && options.ngModuleRef) {
         throwError2(`Cannot pass both environmentInjector and ngModuleRef options to createComponent().`);
       }
-      index = options.index;
+      index2 = options.index;
       injector = options.injector;
       projectableNodes = options.projectableNodes;
       environmentInjector = options.environmentInjector || options.ngModuleRef;
@@ -12141,13 +13387,13 @@ var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
     const dehydratedView = findMatchingDehydratedView(this._lContainer, componentDef?.id ?? null);
     const rNode = dehydratedView?.firstChild ?? null;
     const componentRef = componentFactory.create(contextInjector, projectableNodes, rNode, environmentInjector);
-    this.insertImpl(componentRef.hostView, index, shouldAddViewToDom(this._hostTNode, dehydratedView));
+    this.insertImpl(componentRef.hostView, index2, shouldAddViewToDom(this._hostTNode, dehydratedView));
     return componentRef;
   }
-  insert(viewRef, index) {
-    return this.insertImpl(viewRef, index, true);
+  insert(viewRef, index2) {
+    return this.insertImpl(viewRef, index2, true);
   }
-  insertImpl(viewRef, index, addToDOM) {
+  insertImpl(viewRef, index2, addToDOM) {
     const lView = viewRef._lView;
     if (ngDevMode && viewRef.destroyed) {
       throw new Error("Cannot insert a destroyed View in a ViewContainer!");
@@ -12163,7 +13409,7 @@ var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
         prevVCRef.detach(prevVCRef.indexOf(viewRef));
       }
     }
-    const adjustedIdx = this._adjustIndex(index);
+    const adjustedIdx = this._adjustIndex(index2);
     const lContainer = this._lContainer;
     addLViewToLContainer(lContainer, lView, adjustedIdx, addToDOM);
     viewRef.attachToViewContainerRef();
@@ -12180,29 +13426,29 @@ var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
     const viewRefsArr = getViewRefs(this._lContainer);
     return viewRefsArr !== null ? viewRefsArr.indexOf(viewRef) : -1;
   }
-  remove(index) {
-    const adjustedIdx = this._adjustIndex(index, -1);
+  remove(index2) {
+    const adjustedIdx = this._adjustIndex(index2, -1);
     const detachedView = detachView(this._lContainer, adjustedIdx);
     if (detachedView) {
       removeFromArray(getOrCreateViewRefs(this._lContainer), adjustedIdx);
       destroyLView(detachedView[TVIEW], detachedView);
     }
   }
-  detach(index) {
-    const adjustedIdx = this._adjustIndex(index, -1);
+  detach(index2) {
+    const adjustedIdx = this._adjustIndex(index2, -1);
     const view = detachView(this._lContainer, adjustedIdx);
     const wasDetached = view && removeFromArray(getOrCreateViewRefs(this._lContainer), adjustedIdx) != null;
     return wasDetached ? new ViewRef$1(view) : null;
   }
-  _adjustIndex(index, shift = 0) {
-    if (index == null) {
+  _adjustIndex(index2, shift = 0) {
+    if (index2 == null) {
       return this.length + shift;
     }
     if (ngDevMode) {
-      assertGreaterThan(index, -1, `ViewRef index must be positive, got ${index}`);
-      assertLessThan(index, this.length + 1 + shift, "index");
+      assertGreaterThan(index2, -1, `ViewRef index must be positive, got ${index2}`);
+      assertLessThan(index2, this.length + 1 + shift, "index");
     }
-    return index;
+    return index2;
   }
 };
 function getViewRefs(lContainer) {
@@ -12348,9 +13594,9 @@ var TQueries_ = class _TQueries_ {
       this.queries[i].template(tView, tNode);
     }
   }
-  getByIndex(index) {
-    ngDevMode && assertIndexInRange(this.queries, index);
-    return this.queries[index];
+  getByIndex(index2) {
+    ngDevMode && assertIndexInRange(this.queries, index2);
+    return this.queries[index2];
   }
   get length() {
     return this.queries.length;
@@ -12590,9 +13836,9 @@ function saveContentQueryAndDirectiveIndex(tView, directiveIndex) {
     tViewContentQueries.push(tView.queries.length - 1, directiveIndex);
   }
 }
-function getTQuery(tView, index) {
+function getTQuery(tView, index2) {
   ngDevMode && assertDefined(tView.queries, "TQueries must be defined to retrieve a TQuery");
-  return tView.queries.getByIndex(index);
+  return tView.queries.getByIndex(index2);
 }
 function getQueryResults(lView, queryIndex) {
   const tView = lView[TVIEW];
@@ -12823,10 +14069,10 @@ function resolveComponentResources(resourceResolver) {
     } else if (component.styleUrls?.length) {
       const styleOffset = component.styles.length;
       const styleUrls = component.styleUrls;
-      component.styleUrls.forEach((styleUrl, index) => {
+      component.styleUrls.forEach((styleUrl, index2) => {
         styles.push("");
         promises.push(cachedResourceResolve(styleUrl).then((style) => {
-          styles[styleOffset + index] = style;
+          styles[styleOffset + index2] = style;
           styleUrls.splice(styleUrls.indexOf(styleUrl), 1);
           if (styleUrls.length == 0) {
             component.styleUrls = void 0;
@@ -13378,11 +14624,11 @@ function bindingUpdated4(lView, bindingIndex, exp1, exp2, exp3, exp4) {
 function isDetachedByI18n(tNode) {
   return (tNode.flags & 32) === 32;
 }
-function templateFirstCreatePass(index, tView, lView, templateFn, decls, vars, tagName, attrs, localRefsIndex) {
+function templateFirstCreatePass(index2, tView, lView, templateFn, decls, vars, tagName, attrs, localRefsIndex) {
   ngDevMode && assertFirstCreatePass(tView);
   ngDevMode && ngDevMode.firstCreatePass++;
   const tViewConsts = tView.consts;
-  const tNode = getOrCreateTNode(tView, index, 4, tagName || null, attrs || null);
+  const tNode = getOrCreateTNode(tView, index2, 4, tagName || null, attrs || null);
   resolveDirectives(tView, lView, tNode, getConstant(tViewConsts, localRefsIndex));
   registerPostOrderHooks(tView, tNode);
   const embeddedTView = tNode.tView = createTView(
@@ -13405,11 +14651,11 @@ function templateFirstCreatePass(index, tView, lView, templateFn, decls, vars, t
   }
   return tNode;
 }
-function declareTemplate(declarationLView, declarationTView, index, templateFn, decls, vars, tagName, attrs, localRefsIndex, localRefExtractor) {
-  const adjustedIndex = index + HEADER_OFFSET;
+function declareTemplate(declarationLView, declarationTView, index2, templateFn, decls, vars, tagName, attrs, localRefsIndex, localRefExtractor) {
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const tNode = declarationTView.firstCreatePass ? templateFirstCreatePass(adjustedIndex, declarationTView, declarationLView, templateFn, decls, vars, tagName, attrs, localRefsIndex) : declarationTView.data[adjustedIndex];
   setCurrentTNode(tNode, false);
-  const comment = _locateOrCreateContainerAnchor(declarationTView, declarationLView, tNode, index);
+  const comment = _locateOrCreateContainerAnchor(declarationTView, declarationLView, tNode, index2);
   if (wasLastNodeCreated()) {
     appendChild(declarationTView, declarationLView, comment, tNode);
   }
@@ -13426,15 +14672,15 @@ function declareTemplate(declarationLView, declarationTView, index, templateFn, 
   }
   return tNode;
 }
-function \u0275\u0275template(index, templateFn, decls, vars, tagName, attrsIndex, localRefsIndex, localRefExtractor) {
+function \u0275\u0275template(index2, templateFn, decls, vars, tagName, attrsIndex, localRefsIndex, localRefExtractor) {
   const lView = getLView();
   const tView = getTView();
   const attrs = getConstant(tView.consts, attrsIndex);
-  declareTemplate(lView, tView, index, templateFn, decls, vars, tagName, attrs, localRefsIndex, localRefExtractor);
+  declareTemplate(lView, tView, index2, templateFn, decls, vars, tagName, attrs, localRefsIndex, localRefExtractor);
   return \u0275\u0275template;
 }
 var _locateOrCreateContainerAnchor = createContainerAnchorImpl;
-function createContainerAnchorImpl(tView, lView, tNode, index) {
+function createContainerAnchorImpl(tView, lView, tNode, index2) {
   lastNodeWasCreated(true);
   return lView[RENDERER].createComment(ngDevMode ? "container" : "");
 }
@@ -13846,18 +15092,18 @@ var _TimerScheduler = class _TimerScheduler {
     arrayInsert2(target, insertAtIndex, invokeAt, callback);
   }
   removeFromQueue(target, callback) {
-    let index = -1;
+    let index2 = -1;
     for (let i = 0; i < target.length; i += 2) {
       const queuedCallback = target[i + 1];
       if (queuedCallback === callback) {
-        index = i;
+        index2 = i;
         break;
       }
     }
-    if (index > -1) {
-      arraySplice(target, index, 2);
+    if (index2 > -1) {
+      arraySplice(target, index2, 2);
     }
-    return index;
+    return index2;
   }
   scheduleTimer() {
     const callback = () => {
@@ -13954,11 +15200,11 @@ function \u0275\u0275deferEnableTimerScheduling(tView, tDetails, placeholderConf
     applyDeferBlockStateWithSchedulingImpl = applyDeferBlockStateWithScheduling;
   }
 }
-function \u0275\u0275defer(index, primaryTmplIndex, dependencyResolverFn, loadingTmplIndex, placeholderTmplIndex, errorTmplIndex, loadingConfigIndex, placeholderConfigIndex, enableTimerScheduling) {
+function \u0275\u0275defer(index2, primaryTmplIndex, dependencyResolverFn, loadingTmplIndex, placeholderTmplIndex, errorTmplIndex, loadingConfigIndex, placeholderConfigIndex, enableTimerScheduling) {
   const lView = getLView();
   const tView = getTView();
-  const adjustedIndex = index + HEADER_OFFSET;
-  const tNode = declareTemplate(lView, tView, index, null, 0, 0);
+  const adjustedIndex = index2 + HEADER_OFFSET;
+  const tNode = declareTemplate(lView, tView, index2, null, 0, 0);
   if (tView.firstCreatePass) {
     performanceMarkFeature("NgDefer");
     const tDetails = {
@@ -14668,12 +15914,12 @@ function setTStylingRangeNextDuplicate(tStylingRange) {
   ngDevMode && assertNumber(tStylingRange, "expected number");
   return tStylingRange | 1;
 }
-function insertTStylingBinding(tData, tNode, tStylingKeyWithStatic, index, isHostBinding, isClassBinding) {
+function insertTStylingBinding(tData, tNode, tStylingKeyWithStatic, index2, isHostBinding, isClassBinding) {
   ngDevMode && assertFirstUpdatePass(getTView());
   let tBindings = isClassBinding ? tNode.classBindings : tNode.styleBindings;
   let tmplHead = getTStylingRangePrev(tBindings);
   let tmplTail = getTStylingRangeNext(tBindings);
-  tData[index] = tStylingKeyWithStatic;
+  tData[index2] = tStylingKeyWithStatic;
   let isKeyDuplicateOfStatic = false;
   let tStylingKey;
   if (Array.isArray(tStylingKeyWithStatic)) {
@@ -14689,34 +15935,34 @@ function insertTStylingBinding(tData, tNode, tStylingKeyWithStatic, index, isHos
     const hasTemplateBindings = tmplTail !== 0;
     if (hasTemplateBindings) {
       const previousNode = getTStylingRangePrev(tData[tmplHead + 1]);
-      tData[index + 1] = toTStylingRange(previousNode, tmplHead);
+      tData[index2 + 1] = toTStylingRange(previousNode, tmplHead);
       if (previousNode !== 0) {
-        tData[previousNode + 1] = setTStylingRangeNext(tData[previousNode + 1], index);
+        tData[previousNode + 1] = setTStylingRangeNext(tData[previousNode + 1], index2);
       }
-      tData[tmplHead + 1] = setTStylingRangePrev(tData[tmplHead + 1], index);
+      tData[tmplHead + 1] = setTStylingRangePrev(tData[tmplHead + 1], index2);
     } else {
-      tData[index + 1] = toTStylingRange(tmplHead, 0);
+      tData[index2 + 1] = toTStylingRange(tmplHead, 0);
       if (tmplHead !== 0) {
-        tData[tmplHead + 1] = setTStylingRangeNext(tData[tmplHead + 1], index);
+        tData[tmplHead + 1] = setTStylingRangeNext(tData[tmplHead + 1], index2);
       }
-      tmplHead = index;
+      tmplHead = index2;
     }
   } else {
-    tData[index + 1] = toTStylingRange(tmplTail, 0);
+    tData[index2 + 1] = toTStylingRange(tmplTail, 0);
     ngDevMode && assertEqual(tmplHead !== 0 && tmplTail === 0, false, "Adding template bindings after hostBindings is not allowed.");
     if (tmplHead === 0) {
-      tmplHead = index;
+      tmplHead = index2;
     } else {
-      tData[tmplTail + 1] = setTStylingRangeNext(tData[tmplTail + 1], index);
+      tData[tmplTail + 1] = setTStylingRangeNext(tData[tmplTail + 1], index2);
     }
-    tmplTail = index;
+    tmplTail = index2;
   }
   if (isKeyDuplicateOfStatic) {
-    tData[index + 1] = setTStylingRangePrevDuplicate(tData[index + 1]);
+    tData[index2 + 1] = setTStylingRangePrevDuplicate(tData[index2 + 1]);
   }
-  markDuplicates(tData, tStylingKey, index, true);
-  markDuplicates(tData, tStylingKey, index, false);
-  markDuplicateOfResidualStyling(tNode, tStylingKey, tData, index, isClassBinding);
+  markDuplicates(tData, tStylingKey, index2, true);
+  markDuplicates(tData, tStylingKey, index2, false);
+  markDuplicateOfResidualStyling(tNode, tStylingKey, tData, index2, isClassBinding);
   tBindings = toTStylingRange(tmplHead, tmplTail);
   if (isClassBinding) {
     tNode.classBindings = tBindings;
@@ -14724,14 +15970,14 @@ function insertTStylingBinding(tData, tNode, tStylingKeyWithStatic, index, isHos
     tNode.styleBindings = tBindings;
   }
 }
-function markDuplicateOfResidualStyling(tNode, tStylingKey, tData, index, isClassBinding) {
+function markDuplicateOfResidualStyling(tNode, tStylingKey, tData, index2, isClassBinding) {
   const residual = isClassBinding ? tNode.residualClasses : tNode.residualStyles;
   if (residual != null && typeof tStylingKey == "string" && keyValueArrayIndexOf(residual, tStylingKey) >= 0) {
-    tData[index + 1] = setTStylingRangeNextDuplicate(tData[index + 1]);
+    tData[index2 + 1] = setTStylingRangeNextDuplicate(tData[index2 + 1]);
   }
 }
-function markDuplicates(tData, tStylingKey, index, isPrevDir) {
-  const tStylingAtIndex = tData[index + 1];
+function markDuplicates(tData, tStylingKey, index2, isPrevDir) {
+  const tStylingAtIndex = tData[index2 + 1];
   const isMap = tStylingKey === null;
   let cursor = isPrevDir ? getTStylingRangePrev(tStylingAtIndex) : getTStylingRangeNext(tStylingAtIndex);
   let foundDuplicate = false;
@@ -14746,7 +15992,7 @@ function markDuplicates(tData, tStylingKey, index, isPrevDir) {
     cursor = isPrevDir ? getTStylingRangePrev(tStyleRangeAtCursor) : getTStylingRangeNext(tStyleRangeAtCursor);
   }
   if (foundDuplicate) {
-    tData[index + 1] = isPrevDir ? setTStylingRangePrevDuplicate(tStylingAtIndex) : setTStylingRangeNextDuplicate(tStylingAtIndex);
+    tData[index2 + 1] = isPrevDir ? setTStylingRangePrevDuplicate(tStylingAtIndex) : setTStylingRangeNextDuplicate(tStylingAtIndex);
   }
 }
 function isStylingMatch(tStylingKeyCursor, tStylingKey) {
@@ -14779,13 +16025,13 @@ function parseClassName(text) {
   resetParserState(text);
   return parseClassNameNext(text, consumeWhitespace(text, 0, parserState.textEnd));
 }
-function parseClassNameNext(text, index) {
+function parseClassNameNext(text, index2) {
   const end = parserState.textEnd;
-  if (end === index) {
+  if (end === index2) {
     return -1;
   }
-  index = parserState.keyEnd = consumeClassToken(text, parserState.key = index, end);
-  return consumeWhitespace(text, index, end);
+  index2 = parserState.keyEnd = consumeClassToken(text, parserState.key = index2, end);
+  return consumeWhitespace(text, index2, end);
 }
 function parseStyle(text) {
   resetParserState(text);
@@ -14793,23 +16039,23 @@ function parseStyle(text) {
 }
 function parseStyleNext(text, startIndex) {
   const end = parserState.textEnd;
-  let index = parserState.key = consumeWhitespace(text, startIndex, end);
-  if (end === index) {
+  let index2 = parserState.key = consumeWhitespace(text, startIndex, end);
+  if (end === index2) {
     return -1;
   }
-  index = parserState.keyEnd = consumeStyleKey(text, index, end);
-  index = consumeSeparator(
+  index2 = parserState.keyEnd = consumeStyleKey(text, index2, end);
+  index2 = consumeSeparator(
     text,
-    index,
+    index2,
     end,
     58
     /* CharCode.COLON */
   );
-  index = parserState.value = consumeWhitespace(text, index, end);
-  index = parserState.valueEnd = consumeStyleValue(text, index, end);
+  index2 = parserState.value = consumeWhitespace(text, index2, end);
+  index2 = parserState.valueEnd = consumeStyleValue(text, index2, end);
   return consumeSeparator(
     text,
-    index,
+    index2,
     end,
     59
     /* CharCode.SEMI_COLON */
@@ -14877,11 +16123,11 @@ function consumeStyleValue(text, startIndex, endIndex) {
 }
 function consumeQuotedText(text, quoteCharCode, startIndex, endIndex) {
   let ch1 = -1;
-  let index = startIndex;
-  while (index < endIndex) {
-    const ch = text.charCodeAt(index++);
+  let index2 = startIndex;
+  while (index2 < endIndex) {
+    const ch = text.charCodeAt(index2++);
     if (ch == quoteCharCode && ch1 !== 92) {
-      return index;
+      return index2;
     }
     if (ch == 92 && ch1 === 92) {
       ch1 = 0;
@@ -14891,9 +16137,9 @@ function consumeQuotedText(text, quoteCharCode, startIndex, endIndex) {
   }
   throw ngDevMode ? malformedStyleError(text, String.fromCharCode(quoteCharCode), endIndex) : new Error();
 }
-function malformedStyleError(text, expecting, index) {
+function malformedStyleError(text, expecting, index2) {
   ngDevMode && assertEqual(typeof text === "string", true, "String expected here");
-  throw throwError2(`Malformed style at location ${index} in string '` + text.substring(0, index) + "[>>" + text.substring(index, index + 1) + "<<]" + text.slice(index + 1) + `'. Expecting '${expecting}'.`);
+  throw throwError2(`Malformed style at location ${index2} in string '` + text.substring(0, index2) + "[>>" + text.substring(index2, index2 + 1) + "<<]" + text.slice(index2 + 1) + `'. Expecting '${expecting}'.`);
 }
 function \u0275\u0275property(propName, value, sanitizer) {
   const lView = getLView();
@@ -15169,15 +16415,15 @@ function updateStyling(tView, tNode, lView, renderer, prop, value, isClassBased,
     applyStyling(renderer, isClassBased, rNode, prop, value);
   }
 }
-function findStylingValue(tData, tNode, lView, prop, index, isClassBased) {
+function findStylingValue(tData, tNode, lView, prop, index2, isClassBased) {
   const isPrevDirection = tNode === null;
   let value = void 0;
-  while (index > 0) {
-    const rawKey = tData[index];
+  while (index2 > 0) {
+    const rawKey = tData[index2];
     const containsStatics = Array.isArray(rawKey);
     const key = containsStatics ? rawKey[1] : rawKey;
     const isStylingMap = key === null;
-    let valueAtLViewIndex = lView[index + 1];
+    let valueAtLViewIndex = lView[index2 + 1];
     if (valueAtLViewIndex === NO_CHANGE) {
       valueAtLViewIndex = isStylingMap ? EMPTY_ARRAY : void 0;
     }
@@ -15191,8 +16437,8 @@ function findStylingValue(tData, tNode, lView, prop, index, isClassBased) {
         return value;
       }
     }
-    const tRange = tData[index + 1];
-    index = isPrevDirection ? getTStylingRangePrev(tRange) : getTStylingRangeNext(tRange);
+    const tRange = tData[index2 + 1];
+    index2 = isPrevDirection ? getTStylingRangePrev(tRange) : getTStylingRangeNext(tRange);
   }
   if (tNode !== null) {
     let residual = isClassBased ? tNode.residualClasses : tNode.residualStyles;
@@ -15270,7 +16516,7 @@ function \u0275\u0275componentInstance() {
 var LiveCollection = class {
   destroy(item) {
   }
-  updateValue(index, value) {
+  updateValue(index2, value) {
   }
   // operations below could be implemented on top of the operations defined so far, but having
   // them explicitly allow clear expression of intent and potentially more performant
@@ -15444,20 +16690,20 @@ function reconcile(liveCollection, newCollection, trackByFn) {
     }
   }
 }
-function attachPreviouslyDetached(prevCollection, detachedItems, index, key) {
+function attachPreviouslyDetached(prevCollection, detachedItems, index2, key) {
   if (detachedItems !== void 0 && detachedItems.has(key)) {
-    prevCollection.attach(index, detachedItems.get(key));
+    prevCollection.attach(index2, detachedItems.get(key));
     detachedItems.delete(key);
     return true;
   }
   return false;
 }
-function createOrAttach(liveCollection, detachedItems, trackByFn, index, value) {
-  if (!attachPreviouslyDetached(liveCollection, detachedItems, index, trackByFn(index, value))) {
-    const newItem = liveCollection.create(index, value);
-    liveCollection.attach(index, newItem);
+function createOrAttach(liveCollection, detachedItems, trackByFn, index2, value) {
+  if (!attachPreviouslyDetached(liveCollection, detachedItems, index2, trackByFn(index2, value))) {
+    const newItem = liveCollection.create(index2, value);
+    liveCollection.attach(index2, newItem);
   } else {
-    liveCollection.updateValue(index, value);
+    liveCollection.updateValue(index2, value);
   }
 }
 function initLiveItemsInTheFuture(liveCollection, start, end, trackByFn) {
@@ -15561,8 +16807,8 @@ var RepeaterContext = class {
     return this.lContainer.length - CONTAINER_HEADER_OFFSET;
   }
 };
-function \u0275\u0275repeaterTrackByIndex(index) {
-  return index;
+function \u0275\u0275repeaterTrackByIndex(index2) {
+  return index2;
 }
 function \u0275\u0275repeaterTrackByIdentity(_, value) {
   return value;
@@ -15574,7 +16820,7 @@ var RepeaterMetadata = class {
     this.liveCollection = liveCollection;
   }
 };
-function \u0275\u0275repeaterCreate(index, templateFn, decls, vars, tagName, attrsIndex, trackByFn, trackByUsesComponentInstance, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, emptyAttrsIndex) {
+function \u0275\u0275repeaterCreate(index2, templateFn, decls, vars, tagName, attrsIndex, trackByFn, trackByUsesComponentInstance, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, emptyAttrsIndex) {
   performanceMarkFeature("NgControlFlow");
   ngDevMode && assertFunction(trackByFn, `A track expression must be a function, was ${typeof trackByFn} instead.`);
   const lView = getLView();
@@ -15587,12 +16833,12 @@ function \u0275\u0275repeaterCreate(index, templateFn, decls, vars, tagName, att
     trackByFn.bind(hostLView[DECLARATION_COMPONENT_VIEW][CONTEXT])
   ) : trackByFn;
   const metadata = new RepeaterMetadata(hasEmptyBlock, boundTrackBy);
-  hostLView[HEADER_OFFSET + index] = metadata;
-  declareTemplate(lView, tView, index + 1, templateFn, decls, vars, tagName, getConstant(tView.consts, attrsIndex));
+  hostLView[HEADER_OFFSET + index2] = metadata;
+  declareTemplate(lView, tView, index2 + 1, templateFn, decls, vars, tagName, getConstant(tView.consts, attrsIndex));
   if (hasEmptyBlock) {
     ngDevMode && assertDefined(emptyDecls, "Missing number of declarations for the empty repeater block.");
     ngDevMode && assertDefined(emptyVars, "Missing number of bindings for the empty repeater block.");
-    declareTemplate(lView, tView, index + 2, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, getConstant(tView.consts, emptyAttrsIndex));
+    declareTemplate(lView, tView, index2 + 2, emptyTemplateFn, emptyDecls, emptyVars, emptyTagName, getConstant(tView.consts, emptyAttrsIndex));
   }
 }
 function isViewExpensiveToRecreate(lView) {
@@ -15636,21 +16882,21 @@ var LiveCollectionLContainerImpl = class extends LiveCollection {
   get length() {
     return this.lContainer.length - CONTAINER_HEADER_OFFSET;
   }
-  at(index) {
-    return this.getLView(index)[CONTEXT].$implicit;
+  at(index2) {
+    return this.getLView(index2)[CONTEXT].$implicit;
   }
-  attach(index, lView) {
+  attach(index2, lView) {
     const dehydratedView = lView[HYDRATION];
-    this.needsIndexUpdate ||= index !== this.length;
-    addLViewToLContainer(this.lContainer, lView, index, shouldAddViewToDom(this.templateTNode, dehydratedView));
+    this.needsIndexUpdate ||= index2 !== this.length;
+    addLViewToLContainer(this.lContainer, lView, index2, shouldAddViewToDom(this.templateTNode, dehydratedView));
   }
-  detach(index) {
-    this.needsIndexUpdate ||= index !== this.length - 1;
-    return detachExistingView(this.lContainer, index);
+  detach(index2) {
+    this.needsIndexUpdate ||= index2 !== this.length - 1;
+    return detachExistingView(this.lContainer, index2);
   }
-  create(index, value) {
+  create(index2, value) {
     const dehydratedView = findMatchingDehydratedView(this.lContainer, this.templateTNode.tView.ssrId);
-    const embeddedLView = createAndRenderEmbeddedLView(this.hostLView, this.templateTNode, new RepeaterContext(this.lContainer, value, index), {
+    const embeddedLView = createAndRenderEmbeddedLView(this.hostLView, this.templateTNode, new RepeaterContext(this.lContainer, value, index2), {
       dehydratedView
     });
     this.operationsCounter?.recordCreate();
@@ -15660,8 +16906,8 @@ var LiveCollectionLContainerImpl = class extends LiveCollection {
     destroyLView(lView[TVIEW], lView);
     this.operationsCounter?.recordDestroy();
   }
-  updateValue(index, value) {
-    this.getLView(index)[CONTEXT].$implicit = value;
+  updateValue(index2, value) {
+    this.getLView(index2)[CONTEXT].$implicit = value;
   }
   reset() {
     this.needsIndexUpdate = false;
@@ -15674,8 +16920,8 @@ var LiveCollectionLContainerImpl = class extends LiveCollection {
       }
     }
   }
-  getLView(index) {
-    return getExistingLViewFromLContainer(this.lContainer, index);
+  getLView(index2) {
+    return getExistingLViewFromLContainer(this.lContainer, index2);
   }
 };
 function \u0275\u0275repeater(collection) {
@@ -15722,32 +16968,32 @@ function \u0275\u0275repeater(collection) {
     setActiveConsumer(prevConsumer);
   }
 }
-function getLContainer(lView, index) {
-  const lContainer = lView[index];
+function getLContainer(lView, index2) {
+  const lContainer = lView[index2];
   ngDevMode && assertLContainer(lContainer);
   return lContainer;
 }
-function detachExistingView(lContainer, index) {
-  const existingLView = detachView(lContainer, index);
+function detachExistingView(lContainer, index2) {
+  const existingLView = detachView(lContainer, index2);
   ngDevMode && assertLView(existingLView);
   return existingLView;
 }
-function getExistingLViewFromLContainer(lContainer, index) {
-  const existingLView = getLViewFromLContainer(lContainer, index);
+function getExistingLViewFromLContainer(lContainer, index2) {
+  const existingLView = getLViewFromLContainer(lContainer, index2);
   ngDevMode && assertLView(existingLView);
   return existingLView;
 }
-function getExistingTNode(tView, index) {
-  const tNode = getTNode(tView, index);
+function getExistingTNode(tView, index2) {
+  const tNode = getTNode(tView, index2);
   ngDevMode && assertTNode(tNode);
   return tNode;
 }
-function elementStartFirstCreatePass(index, tView, lView, name, attrsIndex, localRefsIndex) {
+function elementStartFirstCreatePass(index2, tView, lView, name, attrsIndex, localRefsIndex) {
   ngDevMode && assertFirstCreatePass(tView);
   ngDevMode && ngDevMode.firstCreatePass++;
   const tViewConsts = tView.consts;
   const attrs = getConstant(tViewConsts, attrsIndex);
-  const tNode = getOrCreateTNode(tView, index, 2, name, attrs);
+  const tNode = getOrCreateTNode(tView, index2, 2, name, attrs);
   resolveDirectives(tView, lView, tNode, getConstant(tViewConsts, localRefsIndex));
   if (tNode.attrs !== null) {
     computeStaticStyling(tNode, tNode.attrs, false);
@@ -15760,15 +17006,15 @@ function elementStartFirstCreatePass(index, tView, lView, name, attrsIndex, loca
   }
   return tNode;
 }
-function \u0275\u0275elementStart(index, name, attrsIndex, localRefsIndex) {
+function \u0275\u0275elementStart(index2, name, attrsIndex, localRefsIndex) {
   const lView = getLView();
   const tView = getTView();
-  const adjustedIndex = HEADER_OFFSET + index;
+  const adjustedIndex = HEADER_OFFSET + index2;
   ngDevMode && assertEqual(getBindingIndex(), tView.bindingStartIndex, "elements should be created before any bindings");
   ngDevMode && assertIndexInRange(lView, adjustedIndex);
   const renderer = lView[RENDERER];
   const tNode = tView.firstCreatePass ? elementStartFirstCreatePass(adjustedIndex, tView, lView, name, attrsIndex, localRefsIndex) : tView.data[adjustedIndex];
-  const native = _locateOrCreateElementNode(tView, lView, tNode, renderer, name, index);
+  const native = _locateOrCreateElementNode(tView, lView, tNode, renderer, name, index2);
   lView[adjustedIndex] = native;
   const hasDirectives = isDirectiveHost(tNode);
   if (ngDevMode && tView.firstCreatePass) {
@@ -15827,20 +17073,20 @@ function \u0275\u0275elementEnd() {
   }
   return \u0275\u0275elementEnd;
 }
-function \u0275\u0275element(index, name, attrsIndex, localRefsIndex) {
-  \u0275\u0275elementStart(index, name, attrsIndex, localRefsIndex);
+function \u0275\u0275element(index2, name, attrsIndex, localRefsIndex) {
+  \u0275\u0275elementStart(index2, name, attrsIndex, localRefsIndex);
   \u0275\u0275elementEnd();
   return \u0275\u0275element;
 }
-var _locateOrCreateElementNode = (tView, lView, tNode, renderer, name, index) => {
+var _locateOrCreateElementNode = (tView, lView, tNode, renderer, name, index2) => {
   lastNodeWasCreated(true);
   return createElementNode(renderer, name, getNamespace$1());
 };
-function elementContainerStartFirstCreatePass(index, tView, lView, attrsIndex, localRefsIndex) {
+function elementContainerStartFirstCreatePass(index2, tView, lView, attrsIndex, localRefsIndex) {
   ngDevMode && ngDevMode.firstCreatePass++;
   const tViewConsts = tView.consts;
   const attrs = getConstant(tViewConsts, attrsIndex);
-  const tNode = getOrCreateTNode(tView, index, 8, "ng-container", attrs);
+  const tNode = getOrCreateTNode(tView, index2, 8, "ng-container", attrs);
   if (attrs !== null) {
     computeStaticStyling(tNode, attrs, true);
   }
@@ -15851,15 +17097,15 @@ function elementContainerStartFirstCreatePass(index, tView, lView, attrsIndex, l
   }
   return tNode;
 }
-function \u0275\u0275elementContainerStart(index, attrsIndex, localRefsIndex) {
+function \u0275\u0275elementContainerStart(index2, attrsIndex, localRefsIndex) {
   const lView = getLView();
   const tView = getTView();
-  const adjustedIndex = index + HEADER_OFFSET;
+  const adjustedIndex = index2 + HEADER_OFFSET;
   ngDevMode && assertIndexInRange(lView, adjustedIndex);
   ngDevMode && assertEqual(getBindingIndex(), tView.bindingStartIndex, "element containers should be created before any bindings");
   const tNode = tView.firstCreatePass ? elementContainerStartFirstCreatePass(adjustedIndex, tView, lView, attrsIndex, localRefsIndex) : tView.data[adjustedIndex];
   setCurrentTNode(tNode, true);
-  const comment = _locateOrCreateElementContainerNode(tView, lView, tNode, index);
+  const comment = _locateOrCreateElementContainerNode(tView, lView, tNode, index2);
   lView[adjustedIndex] = comment;
   if (wasLastNodeCreated()) {
     appendChild(tView, lView, comment, tNode);
@@ -15897,12 +17143,12 @@ function \u0275\u0275elementContainerEnd() {
   }
   return \u0275\u0275elementContainerEnd;
 }
-function \u0275\u0275elementContainer(index, attrsIndex, localRefsIndex) {
-  \u0275\u0275elementContainerStart(index, attrsIndex, localRefsIndex);
+function \u0275\u0275elementContainer(index2, attrsIndex, localRefsIndex) {
+  \u0275\u0275elementContainerStart(index2, attrsIndex, localRefsIndex);
   \u0275\u0275elementContainerEnd();
   return \u0275\u0275elementContainer;
 }
-var _locateOrCreateElementContainerNode = (tView, lView, tNode, index) => {
+var _locateOrCreateElementContainerNode = (tView, lView, tNode, index2) => {
   lastNodeWasCreated(true);
   return createCommentNode(lView[RENDERER], ngDevMode ? "ng-container" : "");
 };
@@ -16040,10 +17286,10 @@ function setMaskBit(hasChange) {
   }
   changeMaskCounter++;
 }
-function applyI18n(tView, lView, index) {
+function applyI18n(tView, lView, index2) {
   if (changeMaskCounter > 0) {
     ngDevMode && assertDefined(tView, `tView should be defined`);
-    const tI18n = tView.data[index];
+    const tI18n = tView.data[index2];
     const updateOpCodes = Array.isArray(tI18n) ? tI18n : tI18n.update;
     const bindingsStartIndex = getBindingIndex() - changeMaskCounter - 1;
     applyUpdateOpCodes(tView, lView, updateOpCodes, bindingsStartIndex, changeMask);
@@ -16062,7 +17308,7 @@ function createNodeWithoutHydration(lView, textOrName, nodeType) {
       return createElementNode(renderer, textOrName, null);
   }
 }
-var _locateOrCreateNode = (lView, index, textOrName, nodeType) => {
+var _locateOrCreateNode = (lView, index2, textOrName, nodeType) => {
   lastNodeWasCreated(true);
   return createNodeWithoutHydration(lView, textOrName, nodeType);
 };
@@ -16073,11 +17319,11 @@ function applyCreateOpCodes(lView, createOpCodes, parentRNode, insertInFrontOf) 
     const text = createOpCodes[i];
     const isComment = (opCode & I18nCreateOpCode.COMMENT) === I18nCreateOpCode.COMMENT;
     const appendNow = (opCode & I18nCreateOpCode.APPEND_EAGERLY) === I18nCreateOpCode.APPEND_EAGERLY;
-    const index = opCode >>> I18nCreateOpCode.SHIFT;
-    let rNode = lView[index];
+    const index2 = opCode >>> I18nCreateOpCode.SHIFT;
+    let rNode = lView[index2];
     let lastNodeWasCreated2 = false;
     if (rNode === null) {
-      rNode = lView[index] = _locateOrCreateNode(lView, index, text, isComment ? Node.COMMENT_NODE : Node.TEXT_NODE);
+      rNode = lView[index2] = _locateOrCreateNode(lView, index2, text, isComment ? Node.COMMENT_NODE : Node.TEXT_NODE);
       lastNodeWasCreated2 = wasLastNodeCreated();
     }
     if (appendNow && parentRNode !== null && lastNodeWasCreated2) {
@@ -16273,24 +17519,24 @@ function applyIcuSwitchCaseRemove(tView, tIcu, lView) {
   }
 }
 function getCaseIndex(icuExpression, bindingValue) {
-  let index = icuExpression.cases.indexOf(bindingValue);
-  if (index === -1) {
+  let index2 = icuExpression.cases.indexOf(bindingValue);
+  if (index2 === -1) {
     switch (icuExpression.type) {
       case 1: {
         const resolvedCase = getPluralCase(bindingValue, getLocaleId());
-        index = icuExpression.cases.indexOf(resolvedCase);
-        if (index === -1 && resolvedCase !== "other") {
-          index = icuExpression.cases.indexOf("other");
+        index2 = icuExpression.cases.indexOf(resolvedCase);
+        if (index2 === -1 && resolvedCase !== "other") {
+          index2 = icuExpression.cases.indexOf("other");
         }
         break;
       }
       case 0: {
-        index = icuExpression.cases.indexOf("other");
+        index2 = icuExpression.cases.indexOf("other");
         break;
       }
     }
   }
-  return index === -1 ? null : index;
+  return index2 === -1 ? null : index2;
 }
 function i18nCreateOpCodesToString(opcodes) {
   const createOpCodes = opcodes || (Array.isArray(this) ? this : []);
@@ -16300,10 +17546,10 @@ function i18nCreateOpCodesToString(opcodes) {
     const text = createOpCodes[i];
     const isComment = (opCode & I18nCreateOpCode.COMMENT) === I18nCreateOpCode.COMMENT;
     const appendNow = (opCode & I18nCreateOpCode.APPEND_EAGERLY) === I18nCreateOpCode.APPEND_EAGERLY;
-    const index = opCode >>> I18nCreateOpCode.SHIFT;
-    lines.push(`lView[${index}] = document.${isComment ? "createComment" : "createText"}(${JSON.stringify(text)});`);
+    const index2 = opCode >>> I18nCreateOpCode.SHIFT;
+    lines.push(`lView[${index2}] = document.${isComment ? "createComment" : "createText"}(${JSON.stringify(text)});`);
     if (appendNow) {
-      lines.push(`parent.appendChild(lView[${index}]);`);
+      lines.push(`parent.appendChild(lView[${index2}]);`);
     }
   }
   return lines;
@@ -16464,7 +17710,7 @@ function attachDebugGetter(obj, debugGetter) {
     throw new Error("This method should be guarded with `ngDevMode` so that it can be tree shaken in production!");
   }
 }
-function i18nStartFirstCreatePass(tView, parentTNodeIndex, lView, index, message, subTemplateIndex) {
+function i18nStartFirstCreatePass(tView, parentTNodeIndex, lView, index2, message, subTemplateIndex) {
   const rootTNode = getCurrentParentTNode();
   const createOpCodes = [];
   const updateOpCodes = [];
@@ -16493,7 +17739,7 @@ function i18nStartFirstCreatePass(tView, parentTNodeIndex, lView, index, message
           if (typeof icuExpression !== "object") {
             throw new Error(`Unable to parse ICU expression in "${message}" message.`);
           }
-          const icuContainerTNode = createTNodeAndAddOpCode(tView, rootTNode, existingTNodeStack[0], lView, createOpCodes, ngDevMode ? `ICU ${index}:${icuExpression.mainBinding}` : "", true);
+          const icuContainerTNode = createTNodeAndAddOpCode(tView, rootTNode, existingTNodeStack[0], lView, createOpCodes, ngDevMode ? `ICU ${index2}:${icuExpression.mainBinding}` : "", true);
           const icuNodeIndex = icuContainerTNode.index;
           ngDevMode && assertGreaterThanOrEqual(icuNodeIndex, HEADER_OFFSET, "Index must be in absolute LView offset");
           icuStart(astStack[0], tView, lView, updateOpCodes, parentTNodeIndex, icuExpression, icuNodeIndex);
@@ -16508,18 +17754,18 @@ function i18nStartFirstCreatePass(tView, parentTNodeIndex, lView, index, message
         35
         /* CharCode.HASH */
       );
-      const index2 = HEADER_OFFSET + Number.parseInt(value.substring(isClosing ? 2 : 1));
+      const index3 = HEADER_OFFSET + Number.parseInt(value.substring(isClosing ? 2 : 1));
       if (isClosing) {
         existingTNodeStack.shift();
         astStack.shift();
         setCurrentTNode(getCurrentParentTNode(), false);
       } else {
-        const tNode = createTNodePlaceholder(tView, existingTNodeStack[0], index2);
+        const tNode = createTNodePlaceholder(tView, existingTNodeStack[0], index3);
         existingTNodeStack.unshift([]);
         setCurrentTNode(tNode, true);
         const placeholderNode = {
           kind: 2,
-          index: index2,
+          index: index3,
           children: [],
           type: type === 35 ? 0 : 1
           /* I18nPlaceholderType.SUBTEMPLATE */
@@ -16529,7 +17775,7 @@ function i18nStartFirstCreatePass(tView, parentTNodeIndex, lView, index, message
       }
     }
   }
-  tView.data[index] = {
+  tView.data[index2] = {
     create: createOpCodes,
     update: updateOpCodes,
     ast: astStack[0],
@@ -16567,23 +17813,23 @@ function createTNodeAndAddOpCode(tView, rootTNode, existingTNodes, lView, create
 function i18nStartFirstCreatePassProcessTextNode(ast, tView, rootTNode, existingTNodes, createOpCodes, updateOpCodes, lView, text) {
   const hasBinding = text.match(BINDING_REGEXP);
   const tNode = createTNodeAndAddOpCode(tView, rootTNode, existingTNodes, lView, createOpCodes, hasBinding ? null : text, false);
-  const index = tNode.index;
+  const index2 = tNode.index;
   if (hasBinding) {
-    generateBindingUpdateOpCodes(updateOpCodes, text, index, null, 0, null);
+    generateBindingUpdateOpCodes(updateOpCodes, text, index2, null, 0, null);
   }
   ast.push({
     kind: 0,
-    index
+    index: index2
   });
 }
-function i18nAttributesFirstPass(tView, index, values) {
+function i18nAttributesFirstPass(tView, index2, values) {
   const previousElement = getCurrentTNode();
   const previousElementIndex = previousElement.index;
   const updateOpCodes = [];
   if (ngDevMode) {
     attachDebugGetter(updateOpCodes, i18nUpdateOpCodesToString);
   }
-  if (tView.firstCreatePass && tView.data[index] === null) {
+  if (tView.firstCreatePass && tView.data[index2] === null) {
     for (let i = 0; i < values.length; i += 2) {
       const attrName = values[i];
       const message = values[i + 1];
@@ -16594,7 +17840,7 @@ function i18nAttributesFirstPass(tView, index, values) {
         generateBindingUpdateOpCodes(updateOpCodes, message, previousElementIndex, attrName, countBindings(updateOpCodes), null);
       }
     }
-    tView.data[index] = updateOpCodes;
+    tView.data[index2] = updateOpCodes;
   }
 }
 function generateBindingUpdateOpCodes(updateOpCodes, str, destinationNode, attrName, bindingStart, sanitizeFn) {
@@ -16642,23 +17888,23 @@ function toMaskBit(bindingIndex) {
 function removeInnerTemplateTranslation(message) {
   let match2;
   let res = "";
-  let index = 0;
+  let index2 = 0;
   let inTemplate = false;
   let tagMatched;
   while ((match2 = SUBTEMPLATE_REGEXP.exec(message)) !== null) {
     if (!inTemplate) {
-      res += message.substring(index, match2.index + match2[0].length);
+      res += message.substring(index2, match2.index + match2[0].length);
       tagMatched = match2[1];
       inTemplate = true;
     } else {
       if (match2[0] === `${MARKER}/*${tagMatched}${MARKER}`) {
-        index = match2.index;
+        index2 = match2.index;
         inTemplate = false;
       }
     }
   }
   ngDevMode && assertEqual(inTemplate, false, `Tag mismatch: unable to find the end of the sub-template in the translation "${message}"`);
-  res += message.slice(index);
+  res += message.slice(index2);
   return res;
 }
 function getTranslationForTemplate(message, subTemplateIndex) {
@@ -16783,28 +18029,28 @@ function i18nParseTextIntoPartsAndICU(pattern) {
 }
 function parseIcuCase(ast, tView, tIcu, lView, updateOpCodes, parentIdx, caseName, unsafeCaseHtml, nestedIcus) {
   const create = [];
-  const remove2 = [];
+  const remove3 = [];
   const update = [];
   if (ngDevMode) {
     attachDebugGetter(create, icuCreateOpCodesToString);
-    attachDebugGetter(remove2, i18nRemoveOpCodesToString);
+    attachDebugGetter(remove3, i18nRemoveOpCodesToString);
     attachDebugGetter(update, i18nUpdateOpCodesToString);
   }
   tIcu.cases.push(caseName);
   tIcu.create.push(create);
-  tIcu.remove.push(remove2);
+  tIcu.remove.push(remove3);
   tIcu.update.push(update);
   const inertBodyHelper2 = getInertBodyHelper(getDocument());
   const inertBodyElement = inertBodyHelper2.getInertBodyElement(unsafeCaseHtml);
   ngDevMode && assertDefined(inertBodyElement, "Unable to generate inert body element");
   const inertRootNode = getTemplateContent(inertBodyElement) || inertBodyElement;
   if (inertRootNode) {
-    return walkIcuTree(ast, tView, tIcu, lView, updateOpCodes, create, remove2, update, inertRootNode, parentIdx, nestedIcus, 0);
+    return walkIcuTree(ast, tView, tIcu, lView, updateOpCodes, create, remove3, update, inertRootNode, parentIdx, nestedIcus, 0);
   } else {
     return 0;
   }
 }
-function walkIcuTree(ast, tView, tIcu, lView, sharedUpdateOpCodes, create, remove2, update, parentNode, parentIdx, nestedIcus, depth) {
+function walkIcuTree(ast, tView, tIcu, lView, sharedUpdateOpCodes, create, remove3, update, parentNode, parentIdx, nestedIcus, depth) {
   let bindingMask = 0;
   let currentNode = parentNode.firstChild;
   while (currentNode) {
@@ -16841,15 +18087,15 @@ function walkIcuTree(ast, tView, tIcu, lView, sharedUpdateOpCodes, create, remov
             children: []
           };
           ast.push(elementNode);
-          bindingMask = walkIcuTree(elementNode.children, tView, tIcu, lView, sharedUpdateOpCodes, create, remove2, update, currentNode, newIndex, nestedIcus, depth + 1) | bindingMask;
-          addRemoveNode(remove2, newIndex, depth);
+          bindingMask = walkIcuTree(elementNode.children, tView, tIcu, lView, sharedUpdateOpCodes, create, remove3, update, currentNode, newIndex, nestedIcus, depth + 1) | bindingMask;
+          addRemoveNode(remove3, newIndex, depth);
         }
         break;
       case Node.TEXT_NODE:
         const value = currentNode.textContent || "";
         const hasBinding = value.match(BINDING_REGEXP);
         addCreateNodeAndAppend(create, null, hasBinding ? "" : value, parentIdx, newIndex);
-        addRemoveNode(remove2, newIndex, depth);
+        addRemoveNode(remove3, newIndex, depth);
         if (hasBinding) {
           bindingMask = generateBindingUpdateOpCodes(update, value, newIndex, null, 0, null) | bindingMask;
         }
@@ -16865,7 +18111,7 @@ function walkIcuTree(ast, tView, tIcu, lView, sharedUpdateOpCodes, create, remov
           const icuExpression = nestedIcus[nestedIcuIndex];
           addCreateNodeAndAppend(create, ICU_MARKER, ngDevMode ? `nested ICU ${nestedIcuIndex}` : "", parentIdx, newIndex);
           icuStart(ast, tView, lView, sharedUpdateOpCodes, parentIdx, icuExpression, newIndex);
-          addRemoveNestedIcu(remove2, newIndex, depth);
+          addRemoveNestedIcu(remove3, newIndex, depth);
         }
         break;
     }
@@ -16873,31 +18119,31 @@ function walkIcuTree(ast, tView, tIcu, lView, sharedUpdateOpCodes, create, remov
   }
   return bindingMask;
 }
-function addRemoveNode(remove2, index, depth) {
+function addRemoveNode(remove3, index2, depth) {
   if (depth === 0) {
-    remove2.push(index);
+    remove3.push(index2);
   }
 }
-function addRemoveNestedIcu(remove2, index, depth) {
+function addRemoveNestedIcu(remove3, index2, depth) {
   if (depth === 0) {
-    remove2.push(~index);
-    remove2.push(index);
+    remove3.push(~index2);
+    remove3.push(index2);
   }
 }
-function addUpdateIcuSwitch(update, icuExpression, index) {
+function addUpdateIcuSwitch(update, icuExpression, index2) {
   update.push(
     toMaskBit(icuExpression.mainBinding),
     2,
     -1 - icuExpression.mainBinding,
-    index << 2 | 2
+    index2 << 2 | 2
     /* I18nUpdateOpCode.IcuSwitch */
   );
 }
-function addUpdateIcuUpdate(update, bindingMask, index) {
+function addUpdateIcuUpdate(update, bindingMask, index2) {
   update.push(
     bindingMask,
     1,
-    index << 2 | 3
+    index2 << 2 | 3
     /* I18nUpdateOpCode.IcuUpdate */
   );
 }
@@ -16977,10 +18223,10 @@ function i18nPostprocess(message, replacements = {}) {
   });
   return result;
 }
-function \u0275\u0275i18nStart(index, messageIndex, subTemplateIndex = -1) {
+function \u0275\u0275i18nStart(index2, messageIndex, subTemplateIndex = -1) {
   const tView = getTView();
   const lView = getLView();
-  const adjustedIndex = HEADER_OFFSET + index;
+  const adjustedIndex = HEADER_OFFSET + index2;
   ngDevMode && assertDefined(tView, `tView should be defined`);
   const message = getConstant(tView.consts, messageIndex);
   const parentTNode = getCurrentParentTNode();
@@ -17004,23 +18250,23 @@ function \u0275\u0275i18nStart(index, messageIndex, subTemplateIndex = -1) {
 function \u0275\u0275i18nEnd() {
   setInI18nBlock(false);
 }
-function \u0275\u0275i18n(index, messageIndex, subTemplateIndex) {
-  \u0275\u0275i18nStart(index, messageIndex, subTemplateIndex);
+function \u0275\u0275i18n(index2, messageIndex, subTemplateIndex) {
+  \u0275\u0275i18nStart(index2, messageIndex, subTemplateIndex);
   \u0275\u0275i18nEnd();
 }
-function \u0275\u0275i18nAttributes(index, attrsIndex) {
+function \u0275\u0275i18nAttributes(index2, attrsIndex) {
   const tView = getTView();
   ngDevMode && assertDefined(tView, `tView should be defined`);
   const attrs = getConstant(tView.consts, attrsIndex);
-  i18nAttributesFirstPass(tView, index + HEADER_OFFSET, attrs);
+  i18nAttributesFirstPass(tView, index2 + HEADER_OFFSET, attrs);
 }
 function \u0275\u0275i18nExp(value) {
   const lView = getLView();
   setMaskBit(bindingUpdated(lView, nextBindingIndex(), value));
   return \u0275\u0275i18nExp;
 }
-function \u0275\u0275i18nApply(index) {
-  applyI18n(getTView(), getLView(), index + HEADER_OFFSET);
+function \u0275\u0275i18nApply(index2) {
+  applyI18n(getTView(), getLView(), index2 + HEADER_OFFSET);
 }
 function \u0275\u0275i18nPostprocess(message, replacements = {}) {
   return i18nPostprocess(message, replacements);
@@ -17103,10 +18349,10 @@ function listenerInternal(tView, lView, renderer, tNode, eventName, listenerFn, 
     const propsLength = props.length;
     if (propsLength) {
       for (let i = 0; i < propsLength; i += 2) {
-        const index = props[i];
-        ngDevMode && assertIndexInRange(lView, index);
+        const index2 = props[i];
+        ngDevMode && assertIndexInRange(lView, index2);
         const minifiedName = props[i + 1];
-        const directiveInstance = lView[index];
+        const directiveInstance = lView[index2];
         const output = directiveInstance[minifiedName];
         if (ngDevMode && !isOutputSubscribable(output)) {
           throw new Error(`@Output ${minifiedName} not initialized in '${directiveInstance.constructor.name}'.`);
@@ -17380,16 +18626,16 @@ function \u0275\u0275viewQuerySignal(target, predicate, flags, read) {
 function \u0275\u0275queryAdvance(indexOffset = 1) {
   setCurrentQueryIndex(getCurrentQueryIndex() + indexOffset);
 }
-function store(tView, lView, index, value) {
-  if (index >= tView.data.length) {
-    tView.data[index] = null;
-    tView.blueprint[index] = null;
+function store(tView, lView, index2, value) {
+  if (index2 >= tView.data.length) {
+    tView.data[index2] = null;
+    tView.blueprint[index2] = null;
   }
-  lView[index] = value;
+  lView[index2] = value;
 }
-function \u0275\u0275reference(index) {
+function \u0275\u0275reference(index2) {
   const contextLView = getContextLView();
-  return load(contextLView, HEADER_OFFSET + index);
+  return load(contextLView, HEADER_OFFSET + index2);
 }
 function \u0275\u0275styleMapInterpolate1(prefix, v0, suffix) {
   const lView = getLView();
@@ -17490,21 +18736,21 @@ function \u0275\u0275stylePropInterpolateV(prop, values, valueSuffix) {
   checkStylingProperty(prop, interpolatedValue, valueSuffix, false);
   return \u0275\u0275stylePropInterpolateV;
 }
-function \u0275\u0275text(index, value = "") {
+function \u0275\u0275text(index2, value = "") {
   const lView = getLView();
   const tView = getTView();
-  const adjustedIndex = index + HEADER_OFFSET;
+  const adjustedIndex = index2 + HEADER_OFFSET;
   ngDevMode && assertEqual(getBindingIndex(), tView.bindingStartIndex, "text nodes should be created before any bindings");
   ngDevMode && assertIndexInRange(lView, adjustedIndex);
   const tNode = tView.firstCreatePass ? getOrCreateTNode(tView, adjustedIndex, 1, value, null) : tView.data[adjustedIndex];
-  const textNative = _locateOrCreateTextNode(tView, lView, tNode, value, index);
+  const textNative = _locateOrCreateTextNode(tView, lView, tNode, value, index2);
   lView[adjustedIndex] = textNative;
   if (wasLastNodeCreated()) {
     appendChild(tView, lView, textNative, tNode);
   }
   setCurrentTNode(tNode, false);
 }
-var _locateOrCreateTextNode = (tView, lView, tNode, value, index) => {
+var _locateOrCreateTextNode = (tView, lView, tNode, value, index2) => {
   lastNodeWasCreated(true);
   return createTextNode(lView[RENDERER], value);
 };
@@ -17611,10 +18857,10 @@ function \u0275\u0275twoWayListener(eventName, listenerFn) {
   return \u0275\u0275twoWayListener;
 }
 var UNINITIALIZED_LET = {};
-function \u0275\u0275declareLet(index) {
+function \u0275\u0275declareLet(index2) {
   const tView = getTView();
   const lView = getLView();
-  const adjustedIndex = index + HEADER_OFFSET;
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const tNode = getOrCreateTNode(tView, adjustedIndex, 128, null, null);
   setCurrentTNode(tNode, false);
   store(tView, lView, adjustedIndex, UNINITIALIZED_LET);
@@ -17624,13 +18870,13 @@ function \u0275\u0275storeLet(value) {
   performanceMarkFeature("NgLet");
   const tView = getTView();
   const lView = getLView();
-  const index = getSelectedIndex();
-  store(tView, lView, index, value);
+  const index2 = getSelectedIndex();
+  store(tView, lView, index2, value);
   return value;
 }
-function \u0275\u0275readContextLet(index) {
+function \u0275\u0275readContextLet(index2) {
   const contextLView = getContextLView();
-  const value = load(contextLView, HEADER_OFFSET + index);
+  const value = load(contextLView, HEADER_OFFSET + index2);
   if (value === UNINITIALIZED_LET) {
     throw new RuntimeError(314, ngDevMode && "Attempting to access a @let declaration whose value is not available yet");
   }
@@ -17775,10 +19021,10 @@ function multiResolve(factories, result) {
   }
   return result;
 }
-function multiFactory(factoryFn, index, isViewProvider, isComponent2, f) {
+function multiFactory(factoryFn, index2, isViewProvider, isComponent2, f) {
   const factory = new NodeInjectorFactory(factoryFn, isViewProvider, \u0275\u0275directiveInject);
   factory.multi = [];
-  factory.index = index;
+  factory.index = index2;
   factory.componentProviders = 0;
   multiFactoryAdd(factory, f, isComponent2 && !isViewProvider);
   return factory;
@@ -17970,10 +19216,10 @@ function pureFunctionVInternal(lView, bindingRoot, slotOffset, pureFn, exps, thi
   }
   return different ? updateBinding(lView, bindingIndex, pureFn.apply(thisArg, exps)) : getPureFunctionReturnValue(lView, bindingIndex);
 }
-function \u0275\u0275pipe(index, pipeName) {
+function \u0275\u0275pipe(index2, pipeName) {
   const tView = getTView();
   let pipeDef;
-  const adjustedIndex = index + HEADER_OFFSET;
+  const adjustedIndex = index2 + HEADER_OFFSET;
   if (tView.firstCreatePass) {
     pipeDef = getPipeDef(pipeName, tView.pipeRegistry);
     tView.data[adjustedIndex] = pipeDef;
@@ -18043,38 +19289,38 @@ function getPipeNotFoundErrorMessage(name) {
   const errorMessage = `The pipe '${name}' could not be found${componentInfoMessage}. ${verifyMessage}`;
   return errorMessage;
 }
-function \u0275\u0275pipeBind1(index, offset, v1) {
-  const adjustedIndex = index + HEADER_OFFSET;
+function \u0275\u0275pipeBind1(index2, offset, v1) {
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction1Internal(lView, getBindingRoot(), offset, pipeInstance.transform, v1, pipeInstance) : pipeInstance.transform(v1);
 }
-function \u0275\u0275pipeBind2(index, slotOffset, v1, v2) {
-  const adjustedIndex = index + HEADER_OFFSET;
+function \u0275\u0275pipeBind2(index2, slotOffset, v1, v2) {
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction2Internal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, v1, v2, pipeInstance) : pipeInstance.transform(v1, v2);
 }
-function \u0275\u0275pipeBind3(index, slotOffset, v1, v2, v3) {
-  const adjustedIndex = index + HEADER_OFFSET;
+function \u0275\u0275pipeBind3(index2, slotOffset, v1, v2, v3) {
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction3Internal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, v1, v2, v3, pipeInstance) : pipeInstance.transform(v1, v2, v3);
 }
-function \u0275\u0275pipeBind4(index, slotOffset, v1, v2, v3, v4) {
-  const adjustedIndex = index + HEADER_OFFSET;
+function \u0275\u0275pipeBind4(index2, slotOffset, v1, v2, v3, v4) {
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunction4Internal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, v1, v2, v3, v4, pipeInstance) : pipeInstance.transform(v1, v2, v3, v4);
 }
-function \u0275\u0275pipeBindV(index, slotOffset, values) {
-  const adjustedIndex = index + HEADER_OFFSET;
+function \u0275\u0275pipeBindV(index2, slotOffset, values) {
+  const adjustedIndex = index2 + HEADER_OFFSET;
   const lView = getLView();
   const pipeInstance = load(lView, adjustedIndex);
   return isPure(lView, adjustedIndex) ? pureFunctionVInternal(lView, getBindingRoot(), slotOffset, pipeInstance.transform, values, pipeInstance) : pipeInstance.transform.apply(pipeInstance, values);
 }
-function isPure(lView, index) {
-  return lView[TVIEW].data[index].pure;
+function isPure(lView, index2) {
+  return lView[TVIEW].data[index2].pure;
 }
 function \u0275\u0275templateRefExtractor(tNode, lView) {
   return createTemplateRef(tNode, lView);
@@ -20346,9 +21592,9 @@ var ApplicationRef = _ApplicationRef;
   }], null, null);
 })();
 function remove(list, el) {
-  const index = list.indexOf(el);
-  if (index > -1) {
-    list.splice(index, 1);
+  const index2 = list.indexOf(el);
+  if (index2 > -1) {
+    list.splice(index2, 1);
   }
 }
 var whenStableStore;
@@ -21284,7 +22530,7 @@ var DefaultIterableDifferFactory = class {
     return new DefaultIterableDiffer(trackByFn);
   }
 };
-var trackByIdentity = (index, item) => item;
+var trackByIdentity = (index2, item) => item;
 var DefaultIterableDiffer = class {
   constructor(trackByFn) {
     this.length = 0;
@@ -21332,8 +22578,8 @@ var DefaultIterableDiffer = class {
           if (localMovePreviousIndex != localCurrentIndex) {
             for (let i = 0; i < localMovePreviousIndex; i++) {
               const offset = i < moveOffsets.length ? moveOffsets[i] : moveOffsets[i] = 0;
-              const index = offset + i;
-              if (localCurrentIndex <= index && index < localMovePreviousIndex) {
+              const index2 = offset + i;
+              if (localCurrentIndex <= index2 && index2 < localMovePreviousIndex) {
                 moveOffsets[i] = offset + 1;
               }
             }
@@ -21394,42 +22640,42 @@ var DefaultIterableDiffer = class {
     this._reset();
     let record = this._itHead;
     let mayBeDirty = false;
-    let index;
+    let index2;
     let item;
     let itemTrackBy;
     if (Array.isArray(collection)) {
       this.length = collection.length;
-      for (let index2 = 0; index2 < this.length; index2++) {
-        item = collection[index2];
-        itemTrackBy = this._trackByFn(index2, item);
+      for (let index3 = 0; index3 < this.length; index3++) {
+        item = collection[index3];
+        itemTrackBy = this._trackByFn(index3, item);
         if (record === null || !Object.is(record.trackById, itemTrackBy)) {
-          record = this._mismatch(record, item, itemTrackBy, index2);
+          record = this._mismatch(record, item, itemTrackBy, index3);
           mayBeDirty = true;
         } else {
           if (mayBeDirty) {
-            record = this._verifyReinsertion(record, item, itemTrackBy, index2);
+            record = this._verifyReinsertion(record, item, itemTrackBy, index3);
           }
           if (!Object.is(record.item, item)) this._addIdentityChange(record, item);
         }
         record = record._next;
       }
     } else {
-      index = 0;
+      index2 = 0;
       iterateListLike(collection, (item2) => {
-        itemTrackBy = this._trackByFn(index, item2);
+        itemTrackBy = this._trackByFn(index2, item2);
         if (record === null || !Object.is(record.trackById, itemTrackBy)) {
-          record = this._mismatch(record, item2, itemTrackBy, index);
+          record = this._mismatch(record, item2, itemTrackBy, index2);
           mayBeDirty = true;
         } else {
           if (mayBeDirty) {
-            record = this._verifyReinsertion(record, item2, itemTrackBy, index);
+            record = this._verifyReinsertion(record, item2, itemTrackBy, index2);
           }
           if (!Object.is(record.item, item2)) this._addIdentityChange(record, item2);
         }
         record = record._next;
-        index++;
+        index2++;
       });
-      this.length = index;
+      this.length = index2;
     }
     this._truncate(record);
     this.collection = collection;
@@ -21477,7 +22723,7 @@ var DefaultIterableDiffer = class {
    *
    * @internal
    */
-  _mismatch(record, item, itemTrackBy, index) {
+  _mismatch(record, item, itemTrackBy, index2) {
     let previousRecord;
     if (record === null) {
       previousRecord = this._itTail;
@@ -21488,14 +22734,14 @@ var DefaultIterableDiffer = class {
     record = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy, null);
     if (record !== null) {
       if (!Object.is(record.item, item)) this._addIdentityChange(record, item);
-      this._reinsertAfter(record, previousRecord, index);
+      this._reinsertAfter(record, previousRecord, index2);
     } else {
-      record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index);
+      record = this._linkedRecords === null ? null : this._linkedRecords.get(itemTrackBy, index2);
       if (record !== null) {
         if (!Object.is(record.item, item)) this._addIdentityChange(record, item);
-        this._moveAfter(record, previousRecord, index);
+        this._moveAfter(record, previousRecord, index2);
       } else {
-        record = this._addAfter(new IterableChangeRecord_(item, itemTrackBy), previousRecord, index);
+        record = this._addAfter(new IterableChangeRecord_(item, itemTrackBy), previousRecord, index2);
       }
     }
     return record;
@@ -21527,13 +22773,13 @@ var DefaultIterableDiffer = class {
    *
    * @internal
    */
-  _verifyReinsertion(record, item, itemTrackBy, index) {
+  _verifyReinsertion(record, item, itemTrackBy, index2) {
     let reinsertRecord = this._unlinkedRecords === null ? null : this._unlinkedRecords.get(itemTrackBy, null);
     if (reinsertRecord !== null) {
-      record = this._reinsertAfter(reinsertRecord, record._prev, index);
-    } else if (record.currentIndex != index) {
-      record.currentIndex = index;
-      this._addToMoves(record, index);
+      record = this._reinsertAfter(reinsertRecord, record._prev, index2);
+    } else if (record.currentIndex != index2) {
+      record.currentIndex = index2;
+      this._addToMoves(record, index2);
     }
     return record;
   }
@@ -21570,7 +22816,7 @@ var DefaultIterableDiffer = class {
     }
   }
   /** @internal */
-  _reinsertAfter(record, prevRecord, index) {
+  _reinsertAfter(record, prevRecord, index2) {
     if (this._unlinkedRecords !== null) {
       this._unlinkedRecords.remove(record);
     }
@@ -21586,20 +22832,20 @@ var DefaultIterableDiffer = class {
     } else {
       next._prevRemoved = prev;
     }
-    this._insertAfter(record, prevRecord, index);
-    this._addToMoves(record, index);
+    this._insertAfter(record, prevRecord, index2);
+    this._addToMoves(record, index2);
     return record;
   }
   /** @internal */
-  _moveAfter(record, prevRecord, index) {
+  _moveAfter(record, prevRecord, index2) {
     this._unlink(record);
-    this._insertAfter(record, prevRecord, index);
-    this._addToMoves(record, index);
+    this._insertAfter(record, prevRecord, index2);
+    this._addToMoves(record, index2);
     return record;
   }
   /** @internal */
-  _addAfter(record, prevRecord, index) {
-    this._insertAfter(record, prevRecord, index);
+  _addAfter(record, prevRecord, index2) {
+    this._insertAfter(record, prevRecord, index2);
     if (this._additionsTail === null) {
       this._additionsTail = this._additionsHead = record;
     } else {
@@ -21608,7 +22854,7 @@ var DefaultIterableDiffer = class {
     return record;
   }
   /** @internal */
-  _insertAfter(record, prevRecord, index) {
+  _insertAfter(record, prevRecord, index2) {
     const next = prevRecord === null ? this._itHead : prevRecord._next;
     record._next = next;
     record._prev = prevRecord;
@@ -21626,7 +22872,7 @@ var DefaultIterableDiffer = class {
       this._linkedRecords = new _DuplicateMap();
     }
     this._linkedRecords.put(record);
-    record.currentIndex = index;
+    record.currentIndex = index2;
     return record;
   }
   /** @internal */
@@ -23324,8 +24570,8 @@ function getLocaleExtraDayPeriods(locale, formStyle, width) {
   const dayPeriods = getLastDefinedValue(dayPeriodsData, formStyle) || [];
   return getLastDefinedValue(dayPeriods, width) || [];
 }
-function getLastDefinedValue(data, index) {
-  for (let i = index; i > -1; i--) {
+function getLastDefinedValue(data, index2) {
+  for (let i = index2; i > -1; i--) {
     if (typeof data[i] !== "undefined") {
       return data[i];
     }
@@ -23576,7 +24822,7 @@ function getDateTranslation(date, locale, name, width, form, extended) {
       if (extended) {
         const rules = getLocaleExtraDayPeriodRules(locale);
         const dayPeriods = getLocaleExtraDayPeriods(locale, form, width);
-        const index = rules.findIndex((rule) => {
+        const index2 = rules.findIndex((rule) => {
           if (Array.isArray(rule)) {
             const [from2, to] = rule;
             const afterFrom = currentHours >= from2.hours && currentMinutes >= from2.minutes;
@@ -23595,8 +24841,8 @@ function getDateTranslation(date, locale, name, width, form, extended) {
           }
           return false;
         });
-        if (index !== -1) {
-          return dayPeriods[index];
+        if (index2 !== -1) {
+          return dayPeriods[index2];
         }
       }
       return getLocaleDayPeriods(locale, form, width)[currentHours < 12 ? 0 : 1];
@@ -24547,10 +25793,10 @@ function getParentInjector(injector) {
   return parentNgModule.injector;
 }
 var NgForOfContext = class {
-  constructor($implicit, ngForOf, index, count) {
+  constructor($implicit, ngForOf, index2, count) {
     this.$implicit = $implicit;
     this.ngForOf = ngForOf;
-    this.index = index;
+    this.index = index2;
     this.count = count;
   }
   get first() {
@@ -26274,10 +27520,10 @@ var _LCPImageObserver = class _LCPImageObserver {
     this.images = /* @__PURE__ */ new Map();
     this.window = null;
     this.observer = null;
-    const isBrowser = isPlatformBrowser2(inject(PLATFORM_ID));
+    const isBrowser2 = isPlatformBrowser2(inject(PLATFORM_ID));
     assertDevMode("LCP checker");
     const win = inject(DOCUMENT2).defaultView;
-    if (isBrowser && typeof PerformanceObserver !== "undefined") {
+    if (isBrowser2 && typeof PerformanceObserver !== "undefined") {
       this.window = win;
       this.observer = this.initPerformanceObserver();
     }
@@ -27189,11 +28435,11 @@ var HttpHeaders = class _HttpHeaders {
       this.lazyInit = () => {
         this.headers = /* @__PURE__ */ new Map();
         headers.split("\n").forEach((line) => {
-          const index = line.indexOf(":");
-          if (index > 0) {
-            const name = line.slice(0, index);
+          const index2 = line.indexOf(":");
+          if (index2 > 0) {
+            const name = line.slice(0, index2);
             const key = name.toLowerCase();
-            const value = line.slice(index + 1).trim();
+            const value = line.slice(index2 + 1).trim();
             this.maybeSetNormalizedName(name, key);
             if (this.headers.has(key)) {
               this.headers.get(key).push(value);
@@ -30059,9 +31305,9 @@ var _KeyEventsPlugin = class _KeyEventsPlugin extends EventManagerPlugin {
       fullKey = "code.";
     }
     MODIFIER_KEYS.forEach((modifierName) => {
-      const index = parts.indexOf(modifierName);
-      if (index > -1) {
-        parts.splice(index, 1);
+      const index2 = parts.indexOf(modifierName);
+      if (index2 > -1) {
+        parts.splice(index2, 1);
         fullKey += modifierName + ".";
       }
     });
@@ -30384,8 +31630,8 @@ var _Meta = class _Meta {
     }
     const element = this._dom.createElement("meta");
     this._setMetaElementAttributes(meta, element);
-    const head = this._doc.getElementsByTagName("head")[0];
-    head.appendChild(element);
+    const head2 = this._doc.getElementsByTagName("head")[0];
+    head2.appendChild(element);
     return element;
   }
   _setMetaElementAttributes(tag, el) {
@@ -30868,9 +32114,9 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
     return null;
   }
   const posParams = {};
-  for (let index = 0; index < parts.length; index++) {
-    const part = parts[index];
-    const segment = segments[index];
+  for (let index2 = 0; index2 < parts.length; index2++) {
+    const part = parts[index2];
+    const segment = segments[index2];
     const isParameter = part[0] === ":";
     if (isParameter) {
       posParams[part.substring(1)] = segment;
@@ -30913,7 +32159,7 @@ function equalArraysOrString(a, b) {
     if (a.length !== b.length) return false;
     const aSorted = [...a].sort();
     const bSorted = [...b].sort();
-    return aSorted.every((val, index) => bSorted[index] === val);
+    return aSorted.every((val, index2) => bSorted[index2] === val);
   } else {
     return a === b;
   }
@@ -31496,10 +32742,10 @@ function computeNavigation(commands) {
   return new Navigation(isAbsolute, numberOfDoubleDots, res);
 }
 var Position = class {
-  constructor(segmentGroup, processChildren, index) {
+  constructor(segmentGroup, processChildren, index2) {
     this.segmentGroup = segmentGroup;
     this.processChildren = processChildren;
-    this.index = index;
+    this.index = index2;
   }
 };
 function findStartingPositionForTargetGroup(nav, root, target) {
@@ -31513,12 +32759,12 @@ function findStartingPositionForTargetGroup(nav, root, target) {
     return new Position(target, true, 0);
   }
   const modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
-  const index = target.segments.length - 1 + modifier;
-  return createPositionApplyingDoubleDots(target, index, nav.numberOfDoubleDots);
+  const index2 = target.segments.length - 1 + modifier;
+  return createPositionApplyingDoubleDots(target, index2, nav.numberOfDoubleDots);
 }
-function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
+function createPositionApplyingDoubleDots(group, index2, numberOfDoubleDots) {
   let g = group;
-  let ci = index;
+  let ci = index2;
   let dd = numberOfDoubleDots;
   while (dd > ci) {
     dd -= ci;
@@ -32671,9 +33917,9 @@ var _RoutedComponentInputBinder = class _RoutedComponentInputBinder {
     const {
       activatedRoute
     } = outlet;
-    const dataSubscription = combineLatest([activatedRoute.queryParams, activatedRoute.params, activatedRoute.data]).pipe(switchMap(([queryParams, params, data], index) => {
+    const dataSubscription = combineLatest([activatedRoute.queryParams, activatedRoute.params, activatedRoute.data]).pipe(switchMap(([queryParams, params, data], index2) => {
       data = __spreadValues(__spreadValues(__spreadValues({}, queryParams), params), data);
-      if (index === 0) {
+      if (index2 === 0) {
         return of(data);
       }
       return Promise.resolve(data);
@@ -38648,14 +39894,14 @@ function setUpControl(control, dir, callSetDisabledState = setDisabledStateDefau
   setUpDisabledChangeHandler(control, dir);
 }
 function cleanUpControl(control, dir, validateControlPresenceOnChange = true) {
-  const noop4 = () => {
+  const noop6 = () => {
     if (validateControlPresenceOnChange && (typeof ngDevMode === "undefined" || ngDevMode)) {
       _noControlError(dir);
     }
   };
   if (dir.valueAccessor) {
-    dir.valueAccessor.registerOnChange(noop4);
-    dir.valueAccessor.registerOnTouched(noop4);
+    dir.valueAccessor.registerOnChange(noop6);
+    dir.valueAccessor.registerOnTouched(noop6);
   }
   cleanUpValidators(control, dir);
   if (control) {
@@ -38721,10 +39967,10 @@ function cleanUpValidators(control, dir) {
       }
     }
   }
-  const noop4 = () => {
+  const noop6 = () => {
   };
-  registerOnValidatorChange(dir._rawValidators, noop4);
-  registerOnValidatorChange(dir._rawAsyncValidators, noop4);
+  registerOnValidatorChange(dir._rawValidators, noop6);
+  registerOnValidatorChange(dir._rawAsyncValidators, noop6);
   return isControlUpdated;
 }
 function setUpViewChangePipeline(control, dir) {
@@ -38833,8 +40079,8 @@ function selectValueAccessor(dir, valueAccessors) {
   return null;
 }
 function removeListItem$1(list, el) {
-  const index = list.indexOf(el);
-  if (index > -1) list.splice(index, 1);
+  const index2 = list.indexOf(el);
+  if (index2 > -1) list.splice(index2, 1);
 }
 function _ngModelWarning(name, type, instance, warningConfig) {
   if (warningConfig === "never") return;
@@ -39116,8 +40362,8 @@ var NgForm = _NgForm;
   });
 })();
 function removeListItem(list, el) {
-  const index = list.indexOf(el);
-  if (index > -1) list.splice(index, 1);
+  const index2 = list.indexOf(el);
+  if (index2 > -1) list.splice(index2, 1);
 }
 function isFormControlState(formState) {
   return typeof formState === "object" && formState !== null && Object.keys(formState).length === 2 && "value" in formState && "disabled" in formState;
@@ -41757,8 +43003,8 @@ var FormArray = class extends AbstractControl {
    *     around from the back, and if index is greatly negative (less than `-length`), the result is
    * undefined. This behavior is the same as `Array.at(index)`.
    */
-  at(index) {
-    return this.controls[this._adjustIndex(index)];
+  at(index2) {
+    return this.controls[this._adjustIndex(index2)];
   }
   /**
    * Insert a new `AbstractControl` at the end of the array.
@@ -41791,8 +43037,8 @@ var FormArray = class extends AbstractControl {
    * `valueChanges` observables emit events with the latest status and value when the control is
    * inserted. When false, no events are emitted.
    */
-  insert(index, control, options = {}) {
-    this.controls.splice(index, 0, control);
+  insert(index2, control, options = {}) {
+    this.controls.splice(index2, 0, control);
     this._registerControl(control);
     this.updateValueAndValidity({
       emitEvent: options.emitEvent
@@ -41810,8 +43056,8 @@ var FormArray = class extends AbstractControl {
    * `valueChanges` observables emit events with the latest status and value when the control is
    * removed. When false, no events are emitted.
    */
-  removeAt(index, options = {}) {
-    let adjustedIndex = this._adjustIndex(index);
+  removeAt(index2, options = {}) {
+    let adjustedIndex = this._adjustIndex(index2);
     if (adjustedIndex < 0) adjustedIndex = 0;
     if (this.controls[adjustedIndex]) this.controls[adjustedIndex]._registerOnCollectionChange(() => {
     });
@@ -41833,8 +43079,8 @@ var FormArray = class extends AbstractControl {
    * `valueChanges` observables emit events with the latest status and value when the control is
    * replaced with a new one. When false, no events are emitted.
    */
-  setControl(index, control, options = {}) {
-    let adjustedIndex = this._adjustIndex(index);
+  setControl(index2, control, options = {}) {
+    let adjustedIndex = this._adjustIndex(index2);
     if (adjustedIndex < 0) adjustedIndex = 0;
     if (this.controls[adjustedIndex]) this.controls[adjustedIndex]._registerOnCollectionChange(() => {
     });
@@ -41891,9 +43137,9 @@ var FormArray = class extends AbstractControl {
    */
   setValue(value, options = {}) {
     assertAllValuesPresent(this, false, value);
-    value.forEach((newValue, index) => {
-      assertControlPresent(this, false, index);
-      this.at(index).setValue(newValue, {
+    value.forEach((newValue, index2) => {
+      assertControlPresent(this, false, index2);
+      this.at(index2).setValue(newValue, {
         onlySelf: true,
         emitEvent: options.emitEvent
       });
@@ -41934,9 +43180,9 @@ var FormArray = class extends AbstractControl {
    */
   patchValue(value, options = {}) {
     if (value == null) return;
-    value.forEach((newValue, index) => {
-      if (this.at(index)) {
-        this.at(index).patchValue(newValue, {
+    value.forEach((newValue, index2) => {
+      if (this.at(index2)) {
+        this.at(index2).patchValue(newValue, {
           onlySelf: true,
           emitEvent: options.emitEvent
         });
@@ -41991,8 +43237,8 @@ var FormArray = class extends AbstractControl {
    * updateValueAndValidity} method.
    */
   reset(value = [], options = {}) {
-    this._forEachChild((control, index) => {
-      control.reset(value[index], {
+    this._forEachChild((control, index2) => {
+      control.reset(value[index2], {
         onlySelf: true,
         emitEvent: options.emitEvent
       });
@@ -42059,8 +43305,8 @@ var FormArray = class extends AbstractControl {
    * indices, the result may remain negative.
    * @internal
    */
-  _adjustIndex(index) {
-    return index < 0 ? index + this.length : index;
+  _adjustIndex(index2) {
+    return index2 < 0 ? index2 + this.length : index2;
   }
   /** @internal */
   _syncPendingControls() {
@@ -42074,8 +43320,8 @@ var FormArray = class extends AbstractControl {
   }
   /** @internal */
   _forEachChild(cb) {
-    this.controls.forEach((control, index) => {
-      cb(control, index);
+    this.controls.forEach((control, index2) => {
+      cb(control, index2);
     });
   }
   /** @internal */
@@ -42581,7 +43827,11 @@ var PublisherService = class _PublisherService {
         this.publishersLoaded = true;
       });
     }
-    return this.publisher$;
+    return of([
+      { id: 1, name: "Marvel Comics" },
+      { id: 2, name: "DC Comics" },
+      { id: 3, name: "Image Comics" }
+    ]);
   }
   getPublisherById(id) {
     return this.http.get(`${this.publisherUrl}/${id}`).pipe(tap((publisher) => {
@@ -42939,16 +44189,16 @@ var HeroService = class _HeroService {
     }));
   }
   setRankingNumber(topHeroes) {
-    return topHeroes.map((h, index) => {
-      h.statistics.ranking = ++index;
+    return topHeroes.map((h, index2) => {
+      h.heroStatistics.ranking = ++index2;
       return h;
     });
   }
   orderByRanking(topHeroes) {
-    return topHeroes.sort((a, b) => a.statistics.ranking - b.statistics.ranking);
+    return topHeroes.sort((a, b) => a.heroStatistics.ranking - b.heroStatistics.ranking);
   }
   sortByPopularity(heroes) {
-    let sortByPopularity = heroes.sort((h1, h2) => h2.statistics.popularity - h1.statistics.popularity);
+    let sortByPopularity = heroes.sort((h1, h2) => h2.heroStatistics.popularity - h1.heroStatistics.popularity);
     return sortByPopularity;
   }
   getHeroes(refreshData) {
@@ -43150,7 +44400,7 @@ var HeroFormComponent = class _HeroFormComponent {
   messageService;
   spinnerService;
   heroService;
-  publisherService;
+  comicPublishersService;
   location;
   actionsService;
   heroForm;
@@ -43190,16 +44440,16 @@ var HeroFormComponent = class _HeroFormComponent {
     2e3
   ];
   defaultYear = 2024;
-  publishers$;
+  comicPublishers$;
   btnText = "Cancel";
   buttonColor = "#104781;";
   isVisibleNotification = false;
   notificationTimeout;
-  constructor(messageService, spinnerService, heroService, publisherService, location2, actionsService) {
+  constructor(messageService, spinnerService, heroService, comicPublishersService, location2, actionsService) {
     this.messageService = messageService;
     this.spinnerService = spinnerService;
     this.heroService = heroService;
-    this.publisherService = publisherService;
+    this.comicPublishersService = comicPublishersService;
     this.location = location2;
     this.actionsService = actionsService;
     this.spinnerState$ = this.spinnerService.spinnerState$;
@@ -43207,12 +44457,12 @@ var HeroFormComponent = class _HeroFormComponent {
   }
   ngOnInit() {
     this.actionsService.setOptions(HeroActions.Create);
-    this.publishers$ = this.publisherService.getPublishers();
+    this.comicPublishers$ = this.comicPublishersService.getPublishers();
     this.isLoadingSpinner = true;
     this.heroForm = new FormGroup({
       name: new FormControl("", Validators.required),
       year: new FormControl(2024),
-      publisher: new FormControl(1)
+      comicPublishers: new FormControl(1)
     });
     this.messageService.add({
       severity: "INFO",
@@ -43237,7 +44487,7 @@ var HeroFormComponent = class _HeroFormComponent {
     this.isLoadingSpinner = true;
     this.messageSpinner = "Saving a Hero...";
     const newHero = this.createHero();
-    const publisherId = this.heroForm.get("publisher")?.value;
+    const comicPublishersId = this.heroForm.get("comicPublishers")?.value;
     if (!newHero.name) {
       this.setNotification("Hero name is required", "error");
       this.isLoadingSpinner = false;
@@ -43255,13 +44505,13 @@ var HeroFormComponent = class _HeroFormComponent {
         this.setNotification("\xA1H\xE9roe ya registrado. Escoge otro nombre!", "error");
         throw new Error("H\xE9roe ya registrado");
       }
-    }), switchMap(() => this.publisherService.getPublisherById(publisherId)), tap((publisher) => {
-      if (!publisher) {
+    }), switchMap(() => this.comicPublishersService.getPublisherById(comicPublishersId)), tap((comicPublishers) => {
+      if (!comicPublishers) {
         this.setNotification("Publisher no encontrado", "error");
         throw new Error("Publisher no encontrado");
       }
-      return publisher;
-    }), switchMap((publisher) => this.heroService.add(__spreadProps(__spreadValues({}, newHero), { publisher }))), tap(() => this.setNotification("\xA1H\xE9roe creado con \xE9xito!", "success")), catchError((error) => {
+      return comicPublishers;
+    }), switchMap((comicPublishers) => this.heroService.add(__spreadProps(__spreadValues({}, newHero), { comicPublishers }))), tap(() => this.setNotification("\xA1H\xE9roe creado con \xE9xito!", "success")), catchError((error) => {
       this.isLoadingSpinner = false;
       setTimeout(() => {
         this.notificationMessage = "";
@@ -43283,14 +44533,20 @@ var HeroFormComponent = class _HeroFormComponent {
     if (!this.heroForm.get("name")?.value) {
       name: this.heroForm.get("name")?.invalid;
     }
-    return {
+    let hero = {
       id: Math.floor(Math.random() * 1e3),
       // Genera un ID ficticio o usa uno real si es necesario
       name: this.heroForm.get("name")?.value,
       year: this.heroForm.get("year")?.value,
-      publisher: null
-      // Se asignará más tarde
+      comicPublishers: null,
+      isTophero: false,
+      heroStatistics: {
+        id: 0,
+        popularity: 0,
+        ranking: 0
+      }
     };
+    return hero;
   }
   // Método para verificar si el héroe ya existe
   checkHeroExists(name) {
@@ -43313,7 +44569,7 @@ var HeroFormComponent = class _HeroFormComponent {
   }
   // En el componente padre
   getPublisherControl() {
-    return this.heroForm.get("publisher");
+    return this.heroForm.get("comicPublishers");
   }
   log(message) {
     this.messageService.add(message);
@@ -43411,7 +44667,7 @@ var HeroFormComponent = class _HeroFormComponent {
       \u0275\u0275advance(8);
       \u0275\u0275property("ngForOf", ctx.years);
       \u0275\u0275advance(8);
-      \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(33, 12, ctx.publishers$));
+      \u0275\u0275property("ngForOf", \u0275\u0275pipeBind1(33, 12, ctx.comicPublishers$));
       \u0275\u0275advance(5);
       \u0275\u0275property("ngStyle", \u0275\u0275pureFunction1(17, _c1, ctx.buttonColor));
       \u0275\u0275advance();
@@ -43538,6 +44794,7087 @@ var SearchBarComponent = class _SearchBarComponent {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(SearchBarComponent, { className: "SearchBarComponent" });
 })();
 
+// src/app/data/rest/supabase/adapter/hero.adapter.ts
+var HeroAdapter = class {
+  static mapHeroResponseToHero(heroResponse) {
+    return {
+      id: heroResponse.id,
+      name: heroResponse.name,
+      year: heroResponse.year,
+      comicPublishers: heroResponse.comic_publishers,
+      heroStatistics: heroResponse.hero_statistics,
+      isTophero: heroResponse.is_top_hero,
+      isSelected: false
+    };
+  }
+  static mapHeroToHeroRequest(hero) {
+    return {
+      name: hero.name,
+      year: hero.year,
+      publisher_id: hero.comicPublishers.id,
+      is_top_hero: hero.isTophero
+    };
+  }
+};
+
+// node_modules/@supabase/functions-js/dist/module/helper.js
+var resolveFetch = (customFetch) => {
+  let _fetch;
+  if (customFetch) {
+    _fetch = customFetch;
+  } else if (typeof fetch === "undefined") {
+    _fetch = (...args) => import("./chunk-YJ3CO45N.js").then(({
+      default: fetch2
+    }) => fetch2(...args));
+  } else {
+    _fetch = fetch;
+  }
+  return (...args) => _fetch(...args);
+};
+
+// node_modules/@supabase/functions-js/dist/module/types.js
+var FunctionsError = class extends Error {
+  constructor(message, name = "FunctionsError", context2) {
+    super(message);
+    this.name = name;
+    this.context = context2;
+  }
+};
+var FunctionsFetchError = class extends FunctionsError {
+  constructor(context2) {
+    super("Failed to send a request to the Edge Function", "FunctionsFetchError", context2);
+  }
+};
+var FunctionsRelayError = class extends FunctionsError {
+  constructor(context2) {
+    super("Relay Error invoking the Edge Function", "FunctionsRelayError", context2);
+  }
+};
+var FunctionsHttpError = class extends FunctionsError {
+  constructor(context2) {
+    super("Edge Function returned a non-2xx status code", "FunctionsHttpError", context2);
+  }
+};
+var FunctionRegion;
+(function(FunctionRegion2) {
+  FunctionRegion2["Any"] = "any";
+  FunctionRegion2["ApNortheast1"] = "ap-northeast-1";
+  FunctionRegion2["ApNortheast2"] = "ap-northeast-2";
+  FunctionRegion2["ApSouth1"] = "ap-south-1";
+  FunctionRegion2["ApSoutheast1"] = "ap-southeast-1";
+  FunctionRegion2["ApSoutheast2"] = "ap-southeast-2";
+  FunctionRegion2["CaCentral1"] = "ca-central-1";
+  FunctionRegion2["EuCentral1"] = "eu-central-1";
+  FunctionRegion2["EuWest1"] = "eu-west-1";
+  FunctionRegion2["EuWest2"] = "eu-west-2";
+  FunctionRegion2["EuWest3"] = "eu-west-3";
+  FunctionRegion2["SaEast1"] = "sa-east-1";
+  FunctionRegion2["UsEast1"] = "us-east-1";
+  FunctionRegion2["UsWest1"] = "us-west-1";
+  FunctionRegion2["UsWest2"] = "us-west-2";
+})(FunctionRegion || (FunctionRegion = {}));
+
+// node_modules/@supabase/functions-js/dist/module/FunctionsClient.js
+var __awaiter2 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var FunctionsClient = class {
+  constructor(url, {
+    headers = {},
+    customFetch,
+    region = FunctionRegion.Any
+  } = {}) {
+    this.url = url;
+    this.headers = headers;
+    this.region = region;
+    this.fetch = resolveFetch(customFetch);
+  }
+  /**
+   * Updates the authorization header
+   * @param token - the new jwt token sent in the authorisation header
+   */
+  setAuth(token) {
+    this.headers.Authorization = `Bearer ${token}`;
+  }
+  /**
+   * Invokes a function
+   * @param functionName - The name of the Function to invoke.
+   * @param options - Options for invoking the Function.
+   */
+  invoke(functionName, options = {}) {
+    var _a;
+    return __awaiter2(this, void 0, void 0, function* () {
+      try {
+        const {
+          headers,
+          method,
+          body: functionArgs
+        } = options;
+        let _headers = {};
+        let {
+          region
+        } = options;
+        if (!region) {
+          region = this.region;
+        }
+        if (region && region !== "any") {
+          _headers["x-region"] = region;
+        }
+        let body;
+        if (functionArgs && (headers && !Object.prototype.hasOwnProperty.call(headers, "Content-Type") || !headers)) {
+          if (typeof Blob !== "undefined" && functionArgs instanceof Blob || functionArgs instanceof ArrayBuffer) {
+            _headers["Content-Type"] = "application/octet-stream";
+            body = functionArgs;
+          } else if (typeof functionArgs === "string") {
+            _headers["Content-Type"] = "text/plain";
+            body = functionArgs;
+          } else if (typeof FormData !== "undefined" && functionArgs instanceof FormData) {
+            body = functionArgs;
+          } else {
+            _headers["Content-Type"] = "application/json";
+            body = JSON.stringify(functionArgs);
+          }
+        }
+        const response = yield this.fetch(`${this.url}/${functionName}`, {
+          method: method || "POST",
+          // headers priority is (high to low):
+          // 1. invoke-level headers
+          // 2. client-level headers
+          // 3. default Content-Type header
+          headers: Object.assign(Object.assign(Object.assign({}, _headers), this.headers), headers),
+          body
+        }).catch((fetchError) => {
+          throw new FunctionsFetchError(fetchError);
+        });
+        const isRelayError = response.headers.get("x-relay-error");
+        if (isRelayError && isRelayError === "true") {
+          throw new FunctionsRelayError(response);
+        }
+        if (!response.ok) {
+          throw new FunctionsHttpError(response);
+        }
+        let responseType = ((_a = response.headers.get("Content-Type")) !== null && _a !== void 0 ? _a : "text/plain").split(";")[0].trim();
+        let data;
+        if (responseType === "application/json") {
+          data = yield response.json();
+        } else if (responseType === "application/octet-stream") {
+          data = yield response.blob();
+        } else if (responseType === "text/event-stream") {
+          data = response;
+        } else if (responseType === "multipart/form-data") {
+          data = yield response.formData();
+        } else {
+          data = yield response.text();
+        }
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        return {
+          data: null,
+          error
+        };
+      }
+    });
+  }
+};
+
+// node_modules/@supabase/postgrest-js/dist/esm/wrapper.mjs
+var import_cjs = __toESM(require_cjs(), 1);
+var {
+  PostgrestClient,
+  PostgrestQueryBuilder,
+  PostgrestFilterBuilder,
+  PostgrestTransformBuilder,
+  PostgrestBuilder
+} = import_cjs.default;
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/lib/version.js
+var version = "2.10.2";
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/lib/constants.js
+var DEFAULT_HEADERS = {
+  "X-Client-Info": `realtime-js/${version}`
+};
+var VSN = "1.0.0";
+var DEFAULT_TIMEOUT = 1e4;
+var WS_CLOSE_NORMAL = 1e3;
+var SOCKET_STATES;
+(function(SOCKET_STATES2) {
+  SOCKET_STATES2[SOCKET_STATES2["connecting"] = 0] = "connecting";
+  SOCKET_STATES2[SOCKET_STATES2["open"] = 1] = "open";
+  SOCKET_STATES2[SOCKET_STATES2["closing"] = 2] = "closing";
+  SOCKET_STATES2[SOCKET_STATES2["closed"] = 3] = "closed";
+})(SOCKET_STATES || (SOCKET_STATES = {}));
+var CHANNEL_STATES;
+(function(CHANNEL_STATES2) {
+  CHANNEL_STATES2["closed"] = "closed";
+  CHANNEL_STATES2["errored"] = "errored";
+  CHANNEL_STATES2["joined"] = "joined";
+  CHANNEL_STATES2["joining"] = "joining";
+  CHANNEL_STATES2["leaving"] = "leaving";
+})(CHANNEL_STATES || (CHANNEL_STATES = {}));
+var CHANNEL_EVENTS;
+(function(CHANNEL_EVENTS2) {
+  CHANNEL_EVENTS2["close"] = "phx_close";
+  CHANNEL_EVENTS2["error"] = "phx_error";
+  CHANNEL_EVENTS2["join"] = "phx_join";
+  CHANNEL_EVENTS2["reply"] = "phx_reply";
+  CHANNEL_EVENTS2["leave"] = "phx_leave";
+  CHANNEL_EVENTS2["access_token"] = "access_token";
+})(CHANNEL_EVENTS || (CHANNEL_EVENTS = {}));
+var TRANSPORTS;
+(function(TRANSPORTS2) {
+  TRANSPORTS2["websocket"] = "websocket";
+})(TRANSPORTS || (TRANSPORTS = {}));
+var CONNECTION_STATE;
+(function(CONNECTION_STATE2) {
+  CONNECTION_STATE2["Connecting"] = "connecting";
+  CONNECTION_STATE2["Open"] = "open";
+  CONNECTION_STATE2["Closing"] = "closing";
+  CONNECTION_STATE2["Closed"] = "closed";
+})(CONNECTION_STATE || (CONNECTION_STATE = {}));
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/lib/serializer.js
+var Serializer = class {
+  constructor() {
+    this.HEADER_LENGTH = 1;
+  }
+  decode(rawPayload, callback) {
+    if (rawPayload.constructor === ArrayBuffer) {
+      return callback(this._binaryDecode(rawPayload));
+    }
+    if (typeof rawPayload === "string") {
+      return callback(JSON.parse(rawPayload));
+    }
+    return callback({});
+  }
+  _binaryDecode(buffer) {
+    const view = new DataView(buffer);
+    const decoder = new TextDecoder();
+    return this._decodeBroadcast(buffer, view, decoder);
+  }
+  _decodeBroadcast(buffer, view, decoder) {
+    const topicSize = view.getUint8(1);
+    const eventSize = view.getUint8(2);
+    let offset = this.HEADER_LENGTH + 2;
+    const topic = decoder.decode(buffer.slice(offset, offset + topicSize));
+    offset = offset + topicSize;
+    const event = decoder.decode(buffer.slice(offset, offset + eventSize));
+    offset = offset + eventSize;
+    const data = JSON.parse(decoder.decode(buffer.slice(offset, buffer.byteLength)));
+    return {
+      ref: null,
+      topic,
+      event,
+      payload: data
+    };
+  }
+};
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/lib/timer.js
+var Timer = class {
+  constructor(callback, timerCalc) {
+    this.callback = callback;
+    this.timerCalc = timerCalc;
+    this.timer = void 0;
+    this.tries = 0;
+    this.callback = callback;
+    this.timerCalc = timerCalc;
+  }
+  reset() {
+    this.tries = 0;
+    clearTimeout(this.timer);
+  }
+  // Cancels any previous scheduleTimeout and schedules callback
+  scheduleTimeout() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      this.tries = this.tries + 1;
+      this.callback();
+    }, this.timerCalc(this.tries + 1));
+  }
+};
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/lib/transformers.js
+var PostgresTypes;
+(function(PostgresTypes2) {
+  PostgresTypes2["abstime"] = "abstime";
+  PostgresTypes2["bool"] = "bool";
+  PostgresTypes2["date"] = "date";
+  PostgresTypes2["daterange"] = "daterange";
+  PostgresTypes2["float4"] = "float4";
+  PostgresTypes2["float8"] = "float8";
+  PostgresTypes2["int2"] = "int2";
+  PostgresTypes2["int4"] = "int4";
+  PostgresTypes2["int4range"] = "int4range";
+  PostgresTypes2["int8"] = "int8";
+  PostgresTypes2["int8range"] = "int8range";
+  PostgresTypes2["json"] = "json";
+  PostgresTypes2["jsonb"] = "jsonb";
+  PostgresTypes2["money"] = "money";
+  PostgresTypes2["numeric"] = "numeric";
+  PostgresTypes2["oid"] = "oid";
+  PostgresTypes2["reltime"] = "reltime";
+  PostgresTypes2["text"] = "text";
+  PostgresTypes2["time"] = "time";
+  PostgresTypes2["timestamp"] = "timestamp";
+  PostgresTypes2["timestamptz"] = "timestamptz";
+  PostgresTypes2["timetz"] = "timetz";
+  PostgresTypes2["tsrange"] = "tsrange";
+  PostgresTypes2["tstzrange"] = "tstzrange";
+})(PostgresTypes || (PostgresTypes = {}));
+var convertChangeData = (columns, record, options = {}) => {
+  var _a;
+  const skipTypes = (_a = options.skipTypes) !== null && _a !== void 0 ? _a : [];
+  return Object.keys(record).reduce((acc, rec_key) => {
+    acc[rec_key] = convertColumn(rec_key, columns, record, skipTypes);
+    return acc;
+  }, {});
+};
+var convertColumn = (columnName, columns, record, skipTypes) => {
+  const column = columns.find((x) => x.name === columnName);
+  const colType = column === null || column === void 0 ? void 0 : column.type;
+  const value = record[columnName];
+  if (colType && !skipTypes.includes(colType)) {
+    return convertCell(colType, value);
+  }
+  return noop4(value);
+};
+var convertCell = (type, value) => {
+  if (type.charAt(0) === "_") {
+    const dataType = type.slice(1, type.length);
+    return toArray(value, dataType);
+  }
+  switch (type) {
+    case PostgresTypes.bool:
+      return toBoolean(value);
+    case PostgresTypes.float4:
+    case PostgresTypes.float8:
+    case PostgresTypes.int2:
+    case PostgresTypes.int4:
+    case PostgresTypes.int8:
+    case PostgresTypes.numeric:
+    case PostgresTypes.oid:
+      return toNumber(value);
+    case PostgresTypes.json:
+    case PostgresTypes.jsonb:
+      return toJson(value);
+    case PostgresTypes.timestamp:
+      return toTimestampString(value);
+    case PostgresTypes.abstime:
+    case PostgresTypes.date:
+    case PostgresTypes.daterange:
+    case PostgresTypes.int4range:
+    case PostgresTypes.int8range:
+    case PostgresTypes.money:
+    case PostgresTypes.reltime:
+    case PostgresTypes.text:
+    case PostgresTypes.time:
+    case PostgresTypes.timestamptz:
+    case PostgresTypes.timetz:
+    case PostgresTypes.tsrange:
+    case PostgresTypes.tstzrange:
+      return noop4(value);
+    default:
+      return noop4(value);
+  }
+};
+var noop4 = (value) => {
+  return value;
+};
+var toBoolean = (value) => {
+  switch (value) {
+    case "t":
+      return true;
+    case "f":
+      return false;
+    default:
+      return value;
+  }
+};
+var toNumber = (value) => {
+  if (typeof value === "string") {
+    const parsedValue = parseFloat(value);
+    if (!Number.isNaN(parsedValue)) {
+      return parsedValue;
+    }
+  }
+  return value;
+};
+var toJson = (value) => {
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value);
+    } catch (error) {
+      console.log(`JSON parse error: ${error}`);
+      return value;
+    }
+  }
+  return value;
+};
+var toArray = (value, type) => {
+  if (typeof value !== "string") {
+    return value;
+  }
+  const lastIdx = value.length - 1;
+  const closeBrace = value[lastIdx];
+  const openBrace = value[0];
+  if (openBrace === "{" && closeBrace === "}") {
+    let arr;
+    const valTrim = value.slice(1, lastIdx);
+    try {
+      arr = JSON.parse("[" + valTrim + "]");
+    } catch (_) {
+      arr = valTrim ? valTrim.split(",") : [];
+    }
+    return arr.map((val) => convertCell(type, val));
+  }
+  return value;
+};
+var toTimestampString = (value) => {
+  if (typeof value === "string") {
+    return value.replace(" ", "T");
+  }
+  return value;
+};
+var httpEndpointURL = (socketUrl) => {
+  let url = socketUrl;
+  url = url.replace(/^ws/i, "http");
+  url = url.replace(/(\/socket\/websocket|\/socket|\/websocket)\/?$/i, "");
+  return url.replace(/\/+$/, "");
+};
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/lib/push.js
+var Push = class {
+  /**
+   * Initializes the Push
+   *
+   * @param channel The Channel
+   * @param event The event, for example `"phx_join"`
+   * @param payload The payload, for example `{user_id: 123}`
+   * @param timeout The push timeout in milliseconds
+   */
+  constructor(channel, event, payload = {}, timeout = DEFAULT_TIMEOUT) {
+    this.channel = channel;
+    this.event = event;
+    this.payload = payload;
+    this.timeout = timeout;
+    this.sent = false;
+    this.timeoutTimer = void 0;
+    this.ref = "";
+    this.receivedResp = null;
+    this.recHooks = [];
+    this.refEvent = null;
+  }
+  resend(timeout) {
+    this.timeout = timeout;
+    this._cancelRefEvent();
+    this.ref = "";
+    this.refEvent = null;
+    this.receivedResp = null;
+    this.sent = false;
+    this.send();
+  }
+  send() {
+    if (this._hasReceived("timeout")) {
+      return;
+    }
+    this.startTimeout();
+    this.sent = true;
+    this.channel.socket.push({
+      topic: this.channel.topic,
+      event: this.event,
+      payload: this.payload,
+      ref: this.ref,
+      join_ref: this.channel._joinRef()
+    });
+  }
+  updatePayload(payload) {
+    this.payload = Object.assign(Object.assign({}, this.payload), payload);
+  }
+  receive(status, callback) {
+    var _a;
+    if (this._hasReceived(status)) {
+      callback((_a = this.receivedResp) === null || _a === void 0 ? void 0 : _a.response);
+    }
+    this.recHooks.push({
+      status,
+      callback
+    });
+    return this;
+  }
+  startTimeout() {
+    if (this.timeoutTimer) {
+      return;
+    }
+    this.ref = this.channel.socket._makeRef();
+    this.refEvent = this.channel._replyEventName(this.ref);
+    const callback = (payload) => {
+      this._cancelRefEvent();
+      this._cancelTimeout();
+      this.receivedResp = payload;
+      this._matchReceive(payload);
+    };
+    this.channel._on(this.refEvent, {}, callback);
+    this.timeoutTimer = setTimeout(() => {
+      this.trigger("timeout", {});
+    }, this.timeout);
+  }
+  trigger(status, response) {
+    if (this.refEvent) this.channel._trigger(this.refEvent, {
+      status,
+      response
+    });
+  }
+  destroy() {
+    this._cancelRefEvent();
+    this._cancelTimeout();
+  }
+  _cancelRefEvent() {
+    if (!this.refEvent) {
+      return;
+    }
+    this.channel._off(this.refEvent, {});
+  }
+  _cancelTimeout() {
+    clearTimeout(this.timeoutTimer);
+    this.timeoutTimer = void 0;
+  }
+  _matchReceive({
+    status,
+    response
+  }) {
+    this.recHooks.filter((h) => h.status === status).forEach((h) => h.callback(response));
+  }
+  _hasReceived(status) {
+    return this.receivedResp && this.receivedResp.status === status;
+  }
+};
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/RealtimePresence.js
+var REALTIME_PRESENCE_LISTEN_EVENTS;
+(function(REALTIME_PRESENCE_LISTEN_EVENTS2) {
+  REALTIME_PRESENCE_LISTEN_EVENTS2["SYNC"] = "sync";
+  REALTIME_PRESENCE_LISTEN_EVENTS2["JOIN"] = "join";
+  REALTIME_PRESENCE_LISTEN_EVENTS2["LEAVE"] = "leave";
+})(REALTIME_PRESENCE_LISTEN_EVENTS || (REALTIME_PRESENCE_LISTEN_EVENTS = {}));
+var RealtimePresence = class _RealtimePresence {
+  /**
+   * Initializes the Presence.
+   *
+   * @param channel - The RealtimeChannel
+   * @param opts - The options,
+   *        for example `{events: {state: 'state', diff: 'diff'}}`
+   */
+  constructor(channel, opts) {
+    this.channel = channel;
+    this.state = {};
+    this.pendingDiffs = [];
+    this.joinRef = null;
+    this.caller = {
+      onJoin: () => {
+      },
+      onLeave: () => {
+      },
+      onSync: () => {
+      }
+    };
+    const events = (opts === null || opts === void 0 ? void 0 : opts.events) || {
+      state: "presence_state",
+      diff: "presence_diff"
+    };
+    this.channel._on(events.state, {}, (newState) => {
+      const {
+        onJoin,
+        onLeave: onLeave2,
+        onSync
+      } = this.caller;
+      this.joinRef = this.channel._joinRef();
+      this.state = _RealtimePresence.syncState(this.state, newState, onJoin, onLeave2);
+      this.pendingDiffs.forEach((diff) => {
+        this.state = _RealtimePresence.syncDiff(this.state, diff, onJoin, onLeave2);
+      });
+      this.pendingDiffs = [];
+      onSync();
+    });
+    this.channel._on(events.diff, {}, (diff) => {
+      const {
+        onJoin,
+        onLeave: onLeave2,
+        onSync
+      } = this.caller;
+      if (this.inPendingSyncState()) {
+        this.pendingDiffs.push(diff);
+      } else {
+        this.state = _RealtimePresence.syncDiff(this.state, diff, onJoin, onLeave2);
+        onSync();
+      }
+    });
+    this.onJoin((key, currentPresences, newPresences) => {
+      this.channel._trigger("presence", {
+        event: "join",
+        key,
+        currentPresences,
+        newPresences
+      });
+    });
+    this.onLeave((key, currentPresences, leftPresences) => {
+      this.channel._trigger("presence", {
+        event: "leave",
+        key,
+        currentPresences,
+        leftPresences
+      });
+    });
+    this.onSync(() => {
+      this.channel._trigger("presence", {
+        event: "sync"
+      });
+    });
+  }
+  /**
+   * Used to sync the list of presences on the server with the
+   * client's state.
+   *
+   * An optional `onJoin` and `onLeave` callback can be provided to
+   * react to changes in the client's local presences across
+   * disconnects and reconnects with the server.
+   *
+   * @internal
+   */
+  static syncState(currentState, newState, onJoin, onLeave2) {
+    const state = this.cloneDeep(currentState);
+    const transformedState = this.transformState(newState);
+    const joins = {};
+    const leaves = {};
+    this.map(state, (key, presences) => {
+      if (!transformedState[key]) {
+        leaves[key] = presences;
+      }
+    });
+    this.map(transformedState, (key, newPresences) => {
+      const currentPresences = state[key];
+      if (currentPresences) {
+        const newPresenceRefs = newPresences.map((m) => m.presence_ref);
+        const curPresenceRefs = currentPresences.map((m) => m.presence_ref);
+        const joinedPresences = newPresences.filter((m) => curPresenceRefs.indexOf(m.presence_ref) < 0);
+        const leftPresences = currentPresences.filter((m) => newPresenceRefs.indexOf(m.presence_ref) < 0);
+        if (joinedPresences.length > 0) {
+          joins[key] = joinedPresences;
+        }
+        if (leftPresences.length > 0) {
+          leaves[key] = leftPresences;
+        }
+      } else {
+        joins[key] = newPresences;
+      }
+    });
+    return this.syncDiff(state, {
+      joins,
+      leaves
+    }, onJoin, onLeave2);
+  }
+  /**
+   * Used to sync a diff of presence join and leave events from the
+   * server, as they happen.
+   *
+   * Like `syncState`, `syncDiff` accepts optional `onJoin` and
+   * `onLeave` callbacks to react to a user joining or leaving from a
+   * device.
+   *
+   * @internal
+   */
+  static syncDiff(state, diff, onJoin, onLeave2) {
+    const {
+      joins,
+      leaves
+    } = {
+      joins: this.transformState(diff.joins),
+      leaves: this.transformState(diff.leaves)
+    };
+    if (!onJoin) {
+      onJoin = () => {
+      };
+    }
+    if (!onLeave2) {
+      onLeave2 = () => {
+      };
+    }
+    this.map(joins, (key, newPresences) => {
+      var _a;
+      const currentPresences = (_a = state[key]) !== null && _a !== void 0 ? _a : [];
+      state[key] = this.cloneDeep(newPresences);
+      if (currentPresences.length > 0) {
+        const joinedPresenceRefs = state[key].map((m) => m.presence_ref);
+        const curPresences = currentPresences.filter((m) => joinedPresenceRefs.indexOf(m.presence_ref) < 0);
+        state[key].unshift(...curPresences);
+      }
+      onJoin(key, currentPresences, newPresences);
+    });
+    this.map(leaves, (key, leftPresences) => {
+      let currentPresences = state[key];
+      if (!currentPresences) return;
+      const presenceRefsToRemove = leftPresences.map((m) => m.presence_ref);
+      currentPresences = currentPresences.filter((m) => presenceRefsToRemove.indexOf(m.presence_ref) < 0);
+      state[key] = currentPresences;
+      onLeave2(key, currentPresences, leftPresences);
+      if (currentPresences.length === 0) delete state[key];
+    });
+    return state;
+  }
+  /** @internal */
+  static map(obj, func) {
+    return Object.getOwnPropertyNames(obj).map((key) => func(key, obj[key]));
+  }
+  /**
+   * Remove 'metas' key
+   * Change 'phx_ref' to 'presence_ref'
+   * Remove 'phx_ref' and 'phx_ref_prev'
+   *
+   * @example
+   * // returns {
+   *  abc123: [
+   *    { presence_ref: '2', user_id: 1 },
+   *    { presence_ref: '3', user_id: 2 }
+   *  ]
+   * }
+   * RealtimePresence.transformState({
+   *  abc123: {
+   *    metas: [
+   *      { phx_ref: '2', phx_ref_prev: '1' user_id: 1 },
+   *      { phx_ref: '3', user_id: 2 }
+   *    ]
+   *  }
+   * })
+   *
+   * @internal
+   */
+  static transformState(state) {
+    state = this.cloneDeep(state);
+    return Object.getOwnPropertyNames(state).reduce((newState, key) => {
+      const presences = state[key];
+      if ("metas" in presences) {
+        newState[key] = presences.metas.map((presence) => {
+          presence["presence_ref"] = presence["phx_ref"];
+          delete presence["phx_ref"];
+          delete presence["phx_ref_prev"];
+          return presence;
+        });
+      } else {
+        newState[key] = presences;
+      }
+      return newState;
+    }, {});
+  }
+  /** @internal */
+  static cloneDeep(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+  /** @internal */
+  onJoin(callback) {
+    this.caller.onJoin = callback;
+  }
+  /** @internal */
+  onLeave(callback) {
+    this.caller.onLeave = callback;
+  }
+  /** @internal */
+  onSync(callback) {
+    this.caller.onSync = callback;
+  }
+  /** @internal */
+  inPendingSyncState() {
+    return !this.joinRef || this.joinRef !== this.channel._joinRef();
+  }
+};
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/RealtimeChannel.js
+var REALTIME_POSTGRES_CHANGES_LISTEN_EVENT;
+(function(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT2) {
+  REALTIME_POSTGRES_CHANGES_LISTEN_EVENT2["ALL"] = "*";
+  REALTIME_POSTGRES_CHANGES_LISTEN_EVENT2["INSERT"] = "INSERT";
+  REALTIME_POSTGRES_CHANGES_LISTEN_EVENT2["UPDATE"] = "UPDATE";
+  REALTIME_POSTGRES_CHANGES_LISTEN_EVENT2["DELETE"] = "DELETE";
+})(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT || (REALTIME_POSTGRES_CHANGES_LISTEN_EVENT = {}));
+var REALTIME_LISTEN_TYPES;
+(function(REALTIME_LISTEN_TYPES2) {
+  REALTIME_LISTEN_TYPES2["BROADCAST"] = "broadcast";
+  REALTIME_LISTEN_TYPES2["PRESENCE"] = "presence";
+  REALTIME_LISTEN_TYPES2["POSTGRES_CHANGES"] = "postgres_changes";
+})(REALTIME_LISTEN_TYPES || (REALTIME_LISTEN_TYPES = {}));
+var REALTIME_SUBSCRIBE_STATES;
+(function(REALTIME_SUBSCRIBE_STATES2) {
+  REALTIME_SUBSCRIBE_STATES2["SUBSCRIBED"] = "SUBSCRIBED";
+  REALTIME_SUBSCRIBE_STATES2["TIMED_OUT"] = "TIMED_OUT";
+  REALTIME_SUBSCRIBE_STATES2["CLOSED"] = "CLOSED";
+  REALTIME_SUBSCRIBE_STATES2["CHANNEL_ERROR"] = "CHANNEL_ERROR";
+})(REALTIME_SUBSCRIBE_STATES || (REALTIME_SUBSCRIBE_STATES = {}));
+var RealtimeChannel = class _RealtimeChannel {
+  constructor(topic, params = {
+    config: {}
+  }, socket) {
+    this.topic = topic;
+    this.params = params;
+    this.socket = socket;
+    this.bindings = {};
+    this.state = CHANNEL_STATES.closed;
+    this.joinedOnce = false;
+    this.pushBuffer = [];
+    this.subTopic = topic.replace(/^realtime:/i, "");
+    this.params.config = Object.assign({
+      broadcast: {
+        ack: false,
+        self: false
+      },
+      presence: {
+        key: ""
+      },
+      private: false
+    }, params.config);
+    this.timeout = this.socket.timeout;
+    this.joinPush = new Push(this, CHANNEL_EVENTS.join, this.params, this.timeout);
+    this.rejoinTimer = new Timer(() => this._rejoinUntilConnected(), this.socket.reconnectAfterMs);
+    this.joinPush.receive("ok", () => {
+      this.state = CHANNEL_STATES.joined;
+      this.rejoinTimer.reset();
+      this.pushBuffer.forEach((pushEvent) => pushEvent.send());
+      this.pushBuffer = [];
+    });
+    this._onClose(() => {
+      this.rejoinTimer.reset();
+      this.socket.log("channel", `close ${this.topic} ${this._joinRef()}`);
+      this.state = CHANNEL_STATES.closed;
+      this.socket._remove(this);
+    });
+    this._onError((reason) => {
+      if (this._isLeaving() || this._isClosed()) {
+        return;
+      }
+      this.socket.log("channel", `error ${this.topic}`, reason);
+      this.state = CHANNEL_STATES.errored;
+      this.rejoinTimer.scheduleTimeout();
+    });
+    this.joinPush.receive("timeout", () => {
+      if (!this._isJoining()) {
+        return;
+      }
+      this.socket.log("channel", `timeout ${this.topic}`, this.joinPush.timeout);
+      this.state = CHANNEL_STATES.errored;
+      this.rejoinTimer.scheduleTimeout();
+    });
+    this._on(CHANNEL_EVENTS.reply, {}, (payload, ref) => {
+      this._trigger(this._replyEventName(ref), payload);
+    });
+    this.presence = new RealtimePresence(this);
+    this.broadcastEndpointURL = httpEndpointURL(this.socket.endPoint) + "/api/broadcast";
+  }
+  /** Subscribe registers your client with the server */
+  subscribe(callback, timeout = this.timeout) {
+    var _a, _b;
+    if (!this.socket.isConnected()) {
+      this.socket.connect();
+    }
+    if (this.joinedOnce) {
+      throw `tried to subscribe multiple times. 'subscribe' can only be called a single time per channel instance`;
+    } else {
+      const {
+        config: {
+          broadcast,
+          presence,
+          private: isPrivate
+        }
+      } = this.params;
+      this._onError((e) => callback && callback("CHANNEL_ERROR", e));
+      this._onClose(() => callback && callback("CLOSED"));
+      const accessTokenPayload = {};
+      const config2 = {
+        broadcast,
+        presence,
+        postgres_changes: (_b = (_a = this.bindings.postgres_changes) === null || _a === void 0 ? void 0 : _a.map((r) => r.filter)) !== null && _b !== void 0 ? _b : [],
+        private: isPrivate
+      };
+      if (this.socket.accessToken) {
+        accessTokenPayload.access_token = this.socket.accessToken;
+      }
+      this.updateJoinPayload(Object.assign({
+        config: config2
+      }, accessTokenPayload));
+      this.joinedOnce = true;
+      this._rejoin(timeout);
+      this.joinPush.receive("ok", ({
+        postgres_changes: serverPostgresFilters
+      }) => {
+        var _a2;
+        this.socket.accessToken && this.socket.setAuth(this.socket.accessToken);
+        if (serverPostgresFilters === void 0) {
+          callback && callback("SUBSCRIBED");
+          return;
+        } else {
+          const clientPostgresBindings = this.bindings.postgres_changes;
+          const bindingsLen = (_a2 = clientPostgresBindings === null || clientPostgresBindings === void 0 ? void 0 : clientPostgresBindings.length) !== null && _a2 !== void 0 ? _a2 : 0;
+          const newPostgresBindings = [];
+          for (let i = 0; i < bindingsLen; i++) {
+            const clientPostgresBinding = clientPostgresBindings[i];
+            const {
+              filter: {
+                event,
+                schema,
+                table,
+                filter: filter2
+              }
+            } = clientPostgresBinding;
+            const serverPostgresFilter = serverPostgresFilters && serverPostgresFilters[i];
+            if (serverPostgresFilter && serverPostgresFilter.event === event && serverPostgresFilter.schema === schema && serverPostgresFilter.table === table && serverPostgresFilter.filter === filter2) {
+              newPostgresBindings.push(Object.assign(Object.assign({}, clientPostgresBinding), {
+                id: serverPostgresFilter.id
+              }));
+            } else {
+              this.unsubscribe();
+              callback && callback("CHANNEL_ERROR", new Error("mismatch between server and client bindings for postgres changes"));
+              return;
+            }
+          }
+          this.bindings.postgres_changes = newPostgresBindings;
+          callback && callback("SUBSCRIBED");
+          return;
+        }
+      }).receive("error", (error) => {
+        callback && callback("CHANNEL_ERROR", new Error(JSON.stringify(Object.values(error).join(", ") || "error")));
+        return;
+      }).receive("timeout", () => {
+        callback && callback("TIMED_OUT");
+        return;
+      });
+    }
+    return this;
+  }
+  presenceState() {
+    return this.presence.state;
+  }
+  track(_0) {
+    return __async(this, arguments, function* (payload, opts = {}) {
+      return yield this.send({
+        type: "presence",
+        event: "track",
+        payload
+      }, opts.timeout || this.timeout);
+    });
+  }
+  untrack() {
+    return __async(this, arguments, function* (opts = {}) {
+      return yield this.send({
+        type: "presence",
+        event: "untrack"
+      }, opts);
+    });
+  }
+  on(type, filter2, callback) {
+    return this._on(type, filter2, callback);
+  }
+  /**
+   * Sends a message into the channel.
+   *
+   * @param args Arguments to send to channel
+   * @param args.type The type of event to send
+   * @param args.event The name of the event being sent
+   * @param args.payload Payload to be sent
+   * @param opts Options to be used during the send process
+   */
+  send(_0) {
+    return __async(this, arguments, function* (args, opts = {}) {
+      var _a, _b;
+      if (!this._canPush() && args.type === "broadcast") {
+        const {
+          event,
+          payload: endpoint_payload
+        } = args;
+        const options = {
+          method: "POST",
+          headers: {
+            Authorization: this.socket.accessToken ? `Bearer ${this.socket.accessToken}` : "",
+            apikey: this.socket.apiKey ? this.socket.apiKey : "",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            messages: [{
+              topic: this.subTopic,
+              event,
+              payload: endpoint_payload
+            }]
+          })
+        };
+        try {
+          const response = yield this._fetchWithTimeout(this.broadcastEndpointURL, options, (_a = opts.timeout) !== null && _a !== void 0 ? _a : this.timeout);
+          yield (_b = response.body) === null || _b === void 0 ? void 0 : _b.cancel();
+          return response.ok ? "ok" : "error";
+        } catch (error) {
+          if (error.name === "AbortError") {
+            return "timed out";
+          } else {
+            return "error";
+          }
+        }
+      } else {
+        return new Promise((resolve) => {
+          var _a2, _b2, _c;
+          const push = this._push(args.type, args, opts.timeout || this.timeout);
+          if (args.type === "broadcast" && !((_c = (_b2 = (_a2 = this.params) === null || _a2 === void 0 ? void 0 : _a2.config) === null || _b2 === void 0 ? void 0 : _b2.broadcast) === null || _c === void 0 ? void 0 : _c.ack)) {
+            resolve("ok");
+          }
+          push.receive("ok", () => resolve("ok"));
+          push.receive("error", () => resolve("error"));
+          push.receive("timeout", () => resolve("timed out"));
+        });
+      }
+    });
+  }
+  updateJoinPayload(payload) {
+    this.joinPush.updatePayload(payload);
+  }
+  /**
+   * Leaves the channel.
+   *
+   * Unsubscribes from server events, and instructs channel to terminate on server.
+   * Triggers onClose() hooks.
+   *
+   * To receive leave acknowledgements, use the a `receive` hook to bind to the server ack, ie:
+   * channel.unsubscribe().receive("ok", () => alert("left!") )
+   */
+  unsubscribe(timeout = this.timeout) {
+    this.state = CHANNEL_STATES.leaving;
+    const onClose = () => {
+      this.socket.log("channel", `leave ${this.topic}`);
+      this._trigger(CHANNEL_EVENTS.close, "leave", this._joinRef());
+    };
+    this.rejoinTimer.reset();
+    this.joinPush.destroy();
+    return new Promise((resolve) => {
+      const leavePush = new Push(this, CHANNEL_EVENTS.leave, {}, timeout);
+      leavePush.receive("ok", () => {
+        onClose();
+        resolve("ok");
+      }).receive("timeout", () => {
+        onClose();
+        resolve("timed out");
+      }).receive("error", () => {
+        resolve("error");
+      });
+      leavePush.send();
+      if (!this._canPush()) {
+        leavePush.trigger("ok", {});
+      }
+    });
+  }
+  /** @internal */
+  _fetchWithTimeout(url, options, timeout) {
+    return __async(this, null, function* () {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      const response = yield this.socket.fetch(url, Object.assign(Object.assign({}, options), {
+        signal: controller.signal
+      }));
+      clearTimeout(id);
+      return response;
+    });
+  }
+  /** @internal */
+  _push(event, payload, timeout = this.timeout) {
+    if (!this.joinedOnce) {
+      throw `tried to push '${event}' to '${this.topic}' before joining. Use channel.subscribe() before pushing events`;
+    }
+    let pushEvent = new Push(this, event, payload, timeout);
+    if (this._canPush()) {
+      pushEvent.send();
+    } else {
+      pushEvent.startTimeout();
+      this.pushBuffer.push(pushEvent);
+    }
+    return pushEvent;
+  }
+  /**
+   * Overridable message hook
+   *
+   * Receives all events for specialized message handling before dispatching to the channel callbacks.
+   * Must return the payload, modified or unmodified.
+   *
+   * @internal
+   */
+  _onMessage(_event, payload, _ref) {
+    return payload;
+  }
+  /** @internal */
+  _isMember(topic) {
+    return this.topic === topic;
+  }
+  /** @internal */
+  _joinRef() {
+    return this.joinPush.ref;
+  }
+  /** @internal */
+  _trigger(type, payload, ref) {
+    var _a, _b;
+    const typeLower = type.toLocaleLowerCase();
+    const {
+      close,
+      error,
+      leave,
+      join
+    } = CHANNEL_EVENTS;
+    const events = [close, error, leave, join];
+    if (ref && events.indexOf(typeLower) >= 0 && ref !== this._joinRef()) {
+      return;
+    }
+    let handledPayload = this._onMessage(typeLower, payload, ref);
+    if (payload && !handledPayload) {
+      throw "channel onMessage callbacks must return the payload, modified or unmodified";
+    }
+    if (["insert", "update", "delete"].includes(typeLower)) {
+      (_a = this.bindings.postgres_changes) === null || _a === void 0 ? void 0 : _a.filter((bind2) => {
+        var _a2, _b2, _c;
+        return ((_a2 = bind2.filter) === null || _a2 === void 0 ? void 0 : _a2.event) === "*" || ((_c = (_b2 = bind2.filter) === null || _b2 === void 0 ? void 0 : _b2.event) === null || _c === void 0 ? void 0 : _c.toLocaleLowerCase()) === typeLower;
+      }).map((bind2) => bind2.callback(handledPayload, ref));
+    } else {
+      (_b = this.bindings[typeLower]) === null || _b === void 0 ? void 0 : _b.filter((bind2) => {
+        var _a2, _b2, _c, _d, _e, _f;
+        if (["broadcast", "presence", "postgres_changes"].includes(typeLower)) {
+          if ("id" in bind2) {
+            const bindId = bind2.id;
+            const bindEvent = (_a2 = bind2.filter) === null || _a2 === void 0 ? void 0 : _a2.event;
+            return bindId && ((_b2 = payload.ids) === null || _b2 === void 0 ? void 0 : _b2.includes(bindId)) && (bindEvent === "*" || (bindEvent === null || bindEvent === void 0 ? void 0 : bindEvent.toLocaleLowerCase()) === ((_c = payload.data) === null || _c === void 0 ? void 0 : _c.type.toLocaleLowerCase()));
+          } else {
+            const bindEvent = (_e = (_d = bind2 === null || bind2 === void 0 ? void 0 : bind2.filter) === null || _d === void 0 ? void 0 : _d.event) === null || _e === void 0 ? void 0 : _e.toLocaleLowerCase();
+            return bindEvent === "*" || bindEvent === ((_f = payload === null || payload === void 0 ? void 0 : payload.event) === null || _f === void 0 ? void 0 : _f.toLocaleLowerCase());
+          }
+        } else {
+          return bind2.type.toLocaleLowerCase() === typeLower;
+        }
+      }).map((bind2) => {
+        if (typeof handledPayload === "object" && "ids" in handledPayload) {
+          const postgresChanges = handledPayload.data;
+          const {
+            schema,
+            table,
+            commit_timestamp,
+            type: type2,
+            errors
+          } = postgresChanges;
+          const enrichedPayload = {
+            schema,
+            table,
+            commit_timestamp,
+            eventType: type2,
+            new: {},
+            old: {},
+            errors
+          };
+          handledPayload = Object.assign(Object.assign({}, enrichedPayload), this._getPayloadRecords(postgresChanges));
+        }
+        bind2.callback(handledPayload, ref);
+      });
+    }
+  }
+  /** @internal */
+  _isClosed() {
+    return this.state === CHANNEL_STATES.closed;
+  }
+  /** @internal */
+  _isJoined() {
+    return this.state === CHANNEL_STATES.joined;
+  }
+  /** @internal */
+  _isJoining() {
+    return this.state === CHANNEL_STATES.joining;
+  }
+  /** @internal */
+  _isLeaving() {
+    return this.state === CHANNEL_STATES.leaving;
+  }
+  /** @internal */
+  _replyEventName(ref) {
+    return `chan_reply_${ref}`;
+  }
+  /** @internal */
+  _on(type, filter2, callback) {
+    const typeLower = type.toLocaleLowerCase();
+    const binding = {
+      type: typeLower,
+      filter: filter2,
+      callback
+    };
+    if (this.bindings[typeLower]) {
+      this.bindings[typeLower].push(binding);
+    } else {
+      this.bindings[typeLower] = [binding];
+    }
+    return this;
+  }
+  /** @internal */
+  _off(type, filter2) {
+    const typeLower = type.toLocaleLowerCase();
+    this.bindings[typeLower] = this.bindings[typeLower].filter((bind2) => {
+      var _a;
+      return !(((_a = bind2.type) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase()) === typeLower && _RealtimeChannel.isEqual(bind2.filter, filter2));
+    });
+    return this;
+  }
+  /** @internal */
+  static isEqual(obj1, obj2) {
+    if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+      return false;
+    }
+    for (const k in obj1) {
+      if (obj1[k] !== obj2[k]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  /** @internal */
+  _rejoinUntilConnected() {
+    this.rejoinTimer.scheduleTimeout();
+    if (this.socket.isConnected()) {
+      this._rejoin();
+    }
+  }
+  /**
+   * Registers a callback that will be executed when the channel closes.
+   *
+   * @internal
+   */
+  _onClose(callback) {
+    this._on(CHANNEL_EVENTS.close, {}, callback);
+  }
+  /**
+   * Registers a callback that will be executed when the channel encounteres an error.
+   *
+   * @internal
+   */
+  _onError(callback) {
+    this._on(CHANNEL_EVENTS.error, {}, (reason) => callback(reason));
+  }
+  /**
+   * Returns `true` if the socket is connected and the channel has been joined.
+   *
+   * @internal
+   */
+  _canPush() {
+    return this.socket.isConnected() && this._isJoined();
+  }
+  /** @internal */
+  _rejoin(timeout = this.timeout) {
+    if (this._isLeaving()) {
+      return;
+    }
+    this.socket._leaveOpenTopic(this.topic);
+    this.state = CHANNEL_STATES.joining;
+    this.joinPush.resend(timeout);
+  }
+  /** @internal */
+  _getPayloadRecords(payload) {
+    const records = {
+      new: {},
+      old: {}
+    };
+    if (payload.type === "INSERT" || payload.type === "UPDATE") {
+      records.new = convertChangeData(payload.columns, payload.record);
+    }
+    if (payload.type === "UPDATE" || payload.type === "DELETE") {
+      records.old = convertChangeData(payload.columns, payload.old_record);
+    }
+    return records;
+  }
+};
+
+// node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js
+var noop5 = () => {
+};
+var NATIVE_WEBSOCKET_AVAILABLE = typeof WebSocket !== "undefined";
+var RealtimeClient = class {
+  /**
+   * Initializes the Socket.
+   *
+   * @param endPoint The string WebSocket endpoint, ie, "ws://example.com/socket", "wss://example.com", "/socket" (inherited host & protocol)
+   * @param httpEndpoint The string HTTP endpoint, ie, "https://example.com", "/" (inherited host & protocol)
+   * @param options.transport The Websocket Transport, for example WebSocket.
+   * @param options.timeout The default timeout in milliseconds to trigger push timeouts.
+   * @param options.params The optional params to pass when connecting.
+   * @param options.headers The optional headers to pass when connecting.
+   * @param options.heartbeatIntervalMs The millisec interval to send a heartbeat message.
+   * @param options.logger The optional function for specialized logging, ie: logger: (kind, msg, data) => { console.log(`${kind}: ${msg}`, data) }
+   * @param options.encode The function to encode outgoing messages. Defaults to JSON: (payload, callback) => callback(JSON.stringify(payload))
+   * @param options.decode The function to decode incoming messages. Defaults to Serializer's decode.
+   * @param options.reconnectAfterMs he optional function that returns the millsec reconnect interval. Defaults to stepped backoff off.
+   */
+  constructor(endPoint, options) {
+    var _a;
+    this.accessToken = null;
+    this.apiKey = null;
+    this.channels = [];
+    this.endPoint = "";
+    this.httpEndpoint = "";
+    this.headers = DEFAULT_HEADERS;
+    this.params = {};
+    this.timeout = DEFAULT_TIMEOUT;
+    this.heartbeatIntervalMs = 3e4;
+    this.heartbeatTimer = void 0;
+    this.pendingHeartbeatRef = null;
+    this.ref = 0;
+    this.logger = noop5;
+    this.conn = null;
+    this.sendBuffer = [];
+    this.serializer = new Serializer();
+    this.stateChangeCallbacks = {
+      open: [],
+      close: [],
+      error: [],
+      message: []
+    };
+    this._resolveFetch = (customFetch) => {
+      let _fetch;
+      if (customFetch) {
+        _fetch = customFetch;
+      } else if (typeof fetch === "undefined") {
+        _fetch = (...args) => import("./chunk-YJ3CO45N.js").then(({
+          default: fetch2
+        }) => fetch2(...args));
+      } else {
+        _fetch = fetch;
+      }
+      return (...args) => _fetch(...args);
+    };
+    this.endPoint = `${endPoint}/${TRANSPORTS.websocket}`;
+    this.httpEndpoint = httpEndpointURL(endPoint);
+    if (options === null || options === void 0 ? void 0 : options.transport) {
+      this.transport = options.transport;
+    } else {
+      this.transport = null;
+    }
+    if (options === null || options === void 0 ? void 0 : options.params) this.params = options.params;
+    if (options === null || options === void 0 ? void 0 : options.headers) this.headers = Object.assign(Object.assign({}, this.headers), options.headers);
+    if (options === null || options === void 0 ? void 0 : options.timeout) this.timeout = options.timeout;
+    if (options === null || options === void 0 ? void 0 : options.logger) this.logger = options.logger;
+    if (options === null || options === void 0 ? void 0 : options.heartbeatIntervalMs) this.heartbeatIntervalMs = options.heartbeatIntervalMs;
+    const accessToken = (_a = options === null || options === void 0 ? void 0 : options.params) === null || _a === void 0 ? void 0 : _a.apikey;
+    if (accessToken) {
+      this.accessToken = accessToken;
+      this.apiKey = accessToken;
+    }
+    this.reconnectAfterMs = (options === null || options === void 0 ? void 0 : options.reconnectAfterMs) ? options.reconnectAfterMs : (tries) => {
+      return [1e3, 2e3, 5e3, 1e4][tries - 1] || 1e4;
+    };
+    this.encode = (options === null || options === void 0 ? void 0 : options.encode) ? options.encode : (payload, callback) => {
+      return callback(JSON.stringify(payload));
+    };
+    this.decode = (options === null || options === void 0 ? void 0 : options.decode) ? options.decode : this.serializer.decode.bind(this.serializer);
+    this.reconnectTimer = new Timer(() => __async(this, null, function* () {
+      this.disconnect();
+      this.connect();
+    }), this.reconnectAfterMs);
+    this.fetch = this._resolveFetch(options === null || options === void 0 ? void 0 : options.fetch);
+  }
+  /**
+   * Connects the socket, unless already connected.
+   */
+  connect() {
+    if (this.conn) {
+      return;
+    }
+    if (this.transport) {
+      this.conn = new this.transport(this._endPointURL(), void 0, {
+        headers: this.headers
+      });
+      return;
+    }
+    if (NATIVE_WEBSOCKET_AVAILABLE) {
+      this.conn = new WebSocket(this._endPointURL());
+      this.setupConnection();
+      return;
+    }
+    this.conn = new WSWebSocketDummy(this._endPointURL(), void 0, {
+      close: () => {
+        this.conn = null;
+      }
+    });
+    import("./chunk-ZUIGTOGI.js").then(({
+      default: WS
+    }) => {
+      this.conn = new WS(this._endPointURL(), void 0, {
+        headers: this.headers
+      });
+      this.setupConnection();
+    });
+  }
+  /**
+   * Disconnects the socket.
+   *
+   * @param code A numeric status code to send on disconnect.
+   * @param reason A custom reason for the disconnect.
+   */
+  disconnect(code, reason) {
+    if (this.conn) {
+      this.conn.onclose = function() {
+      };
+      if (code) {
+        this.conn.close(code, reason !== null && reason !== void 0 ? reason : "");
+      } else {
+        this.conn.close();
+      }
+      this.conn = null;
+      this.heartbeatTimer && clearInterval(this.heartbeatTimer);
+      this.reconnectTimer.reset();
+    }
+  }
+  /**
+   * Returns all created channels
+   */
+  getChannels() {
+    return this.channels;
+  }
+  /**
+   * Unsubscribes and removes a single channel
+   * @param channel A RealtimeChannel instance
+   */
+  removeChannel(channel) {
+    return __async(this, null, function* () {
+      const status = yield channel.unsubscribe();
+      if (this.channels.length === 0) {
+        this.disconnect();
+      }
+      return status;
+    });
+  }
+  /**
+   * Unsubscribes and removes all channels
+   */
+  removeAllChannels() {
+    return __async(this, null, function* () {
+      const values_1 = yield Promise.all(this.channels.map((channel) => channel.unsubscribe()));
+      this.disconnect();
+      return values_1;
+    });
+  }
+  /**
+   * Logs the message.
+   *
+   * For customized logging, `this.logger` can be overridden.
+   */
+  log(kind, msg, data) {
+    this.logger(kind, msg, data);
+  }
+  /**
+   * Returns the current state of the socket.
+   */
+  connectionState() {
+    switch (this.conn && this.conn.readyState) {
+      case SOCKET_STATES.connecting:
+        return CONNECTION_STATE.Connecting;
+      case SOCKET_STATES.open:
+        return CONNECTION_STATE.Open;
+      case SOCKET_STATES.closing:
+        return CONNECTION_STATE.Closing;
+      default:
+        return CONNECTION_STATE.Closed;
+    }
+  }
+  /**
+   * Returns `true` is the connection is open.
+   */
+  isConnected() {
+    return this.connectionState() === CONNECTION_STATE.Open;
+  }
+  channel(topic, params = {
+    config: {}
+  }) {
+    const chan = new RealtimeChannel(`realtime:${topic}`, params, this);
+    this.channels.push(chan);
+    return chan;
+  }
+  /**
+   * Push out a message if the socket is connected.
+   *
+   * If the socket is not connected, the message gets enqueued within a local buffer, and sent out when a connection is next established.
+   */
+  push(data) {
+    const {
+      topic,
+      event,
+      payload,
+      ref
+    } = data;
+    const callback = () => {
+      this.encode(data, (result) => {
+        var _a;
+        (_a = this.conn) === null || _a === void 0 ? void 0 : _a.send(result);
+      });
+    };
+    this.log("push", `${topic} ${event} (${ref})`, payload);
+    if (this.isConnected()) {
+      callback();
+    } else {
+      this.sendBuffer.push(callback);
+    }
+  }
+  /**
+   * Sets the JWT access token used for channel subscription authorization and Realtime RLS.
+   *
+   * @param token A JWT string.
+   */
+  setAuth(token) {
+    this.accessToken = token;
+    this.channels.forEach((channel) => {
+      token && channel.updateJoinPayload({
+        access_token: token
+      });
+      if (channel.joinedOnce && channel._isJoined()) {
+        channel._push(CHANNEL_EVENTS.access_token, {
+          access_token: token
+        });
+      }
+    });
+  }
+  /**
+   * Return the next message ref, accounting for overflows
+   *
+   * @internal
+   */
+  _makeRef() {
+    let newRef = this.ref + 1;
+    if (newRef === this.ref) {
+      this.ref = 0;
+    } else {
+      this.ref = newRef;
+    }
+    return this.ref.toString();
+  }
+  /**
+   * Unsubscribe from channels with the specified topic.
+   *
+   * @internal
+   */
+  _leaveOpenTopic(topic) {
+    let dupChannel = this.channels.find((c) => c.topic === topic && (c._isJoined() || c._isJoining()));
+    if (dupChannel) {
+      this.log("transport", `leaving duplicate topic "${topic}"`);
+      dupChannel.unsubscribe();
+    }
+  }
+  /**
+   * Removes a subscription from the socket.
+   *
+   * @param channel An open subscription.
+   *
+   * @internal
+   */
+  _remove(channel) {
+    this.channels = this.channels.filter((c) => c._joinRef() !== channel._joinRef());
+  }
+  /**
+   * Sets up connection handlers.
+   *
+   * @internal
+   */
+  setupConnection() {
+    if (this.conn) {
+      this.conn.binaryType = "arraybuffer";
+      this.conn.onopen = () => this._onConnOpen();
+      this.conn.onerror = (error) => this._onConnError(error);
+      this.conn.onmessage = (event) => this._onConnMessage(event);
+      this.conn.onclose = (event) => this._onConnClose(event);
+    }
+  }
+  /**
+   * Returns the URL of the websocket.
+   *
+   * @internal
+   */
+  _endPointURL() {
+    return this._appendParams(this.endPoint, Object.assign({}, this.params, {
+      vsn: VSN
+    }));
+  }
+  /** @internal */
+  _onConnMessage(rawMessage) {
+    this.decode(rawMessage.data, (msg) => {
+      let {
+        topic,
+        event,
+        payload,
+        ref
+      } = msg;
+      if (ref && ref === this.pendingHeartbeatRef || event === (payload === null || payload === void 0 ? void 0 : payload.type)) {
+        this.pendingHeartbeatRef = null;
+      }
+      this.log("receive", `${payload.status || ""} ${topic} ${event} ${ref && "(" + ref + ")" || ""}`, payload);
+      this.channels.filter((channel) => channel._isMember(topic)).forEach((channel) => channel._trigger(event, payload, ref));
+      this.stateChangeCallbacks.message.forEach((callback) => callback(msg));
+    });
+  }
+  /** @internal */
+  _onConnOpen() {
+    this.log("transport", `connected to ${this._endPointURL()}`);
+    this._flushSendBuffer();
+    this.reconnectTimer.reset();
+    this.heartbeatTimer && clearInterval(this.heartbeatTimer);
+    this.heartbeatTimer = setInterval(() => this._sendHeartbeat(), this.heartbeatIntervalMs);
+    this.stateChangeCallbacks.open.forEach((callback) => callback());
+  }
+  /** @internal */
+  _onConnClose(event) {
+    this.log("transport", "close", event);
+    this._triggerChanError();
+    this.heartbeatTimer && clearInterval(this.heartbeatTimer);
+    this.reconnectTimer.scheduleTimeout();
+    this.stateChangeCallbacks.close.forEach((callback) => callback(event));
+  }
+  /** @internal */
+  _onConnError(error) {
+    this.log("transport", error.message);
+    this._triggerChanError();
+    this.stateChangeCallbacks.error.forEach((callback) => callback(error));
+  }
+  /** @internal */
+  _triggerChanError() {
+    this.channels.forEach((channel) => channel._trigger(CHANNEL_EVENTS.error));
+  }
+  /** @internal */
+  _appendParams(url, params) {
+    if (Object.keys(params).length === 0) {
+      return url;
+    }
+    const prefix = url.match(/\?/) ? "&" : "?";
+    const query = new URLSearchParams(params);
+    return `${url}${prefix}${query}`;
+  }
+  /** @internal */
+  _flushSendBuffer() {
+    if (this.isConnected() && this.sendBuffer.length > 0) {
+      this.sendBuffer.forEach((callback) => callback());
+      this.sendBuffer = [];
+    }
+  }
+  /** @internal */
+  _sendHeartbeat() {
+    var _a;
+    if (!this.isConnected()) {
+      return;
+    }
+    if (this.pendingHeartbeatRef) {
+      this.pendingHeartbeatRef = null;
+      this.log("transport", "heartbeat timeout. Attempting to re-establish connection");
+      (_a = this.conn) === null || _a === void 0 ? void 0 : _a.close(WS_CLOSE_NORMAL, "hearbeat timeout");
+      return;
+    }
+    this.pendingHeartbeatRef = this._makeRef();
+    this.push({
+      topic: "phoenix",
+      event: "heartbeat",
+      payload: {},
+      ref: this.pendingHeartbeatRef
+    });
+    this.setAuth(this.accessToken);
+  }
+};
+var WSWebSocketDummy = class {
+  constructor(address, _protocols, options) {
+    this.binaryType = "arraybuffer";
+    this.onclose = () => {
+    };
+    this.onerror = () => {
+    };
+    this.onmessage = () => {
+    };
+    this.onopen = () => {
+    };
+    this.readyState = SOCKET_STATES.connecting;
+    this.send = () => {
+    };
+    this.url = null;
+    this.url = address;
+    this.close = options.close;
+  }
+};
+
+// node_modules/@supabase/storage-js/dist/module/lib/errors.js
+var StorageError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.__isStorageError = true;
+    this.name = "StorageError";
+  }
+};
+function isStorageError(error) {
+  return typeof error === "object" && error !== null && "__isStorageError" in error;
+}
+var StorageApiError = class extends StorageError {
+  constructor(message, status) {
+    super(message);
+    this.name = "StorageApiError";
+    this.status = status;
+  }
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      status: this.status
+    };
+  }
+};
+var StorageUnknownError = class extends StorageError {
+  constructor(message, originalError) {
+    super(message);
+    this.name = "StorageUnknownError";
+    this.originalError = originalError;
+  }
+};
+
+// node_modules/@supabase/storage-js/dist/module/lib/helpers.js
+var __awaiter3 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var resolveFetch2 = (customFetch) => {
+  let _fetch;
+  if (customFetch) {
+    _fetch = customFetch;
+  } else if (typeof fetch === "undefined") {
+    _fetch = (...args) => import("./chunk-YJ3CO45N.js").then(({
+      default: fetch2
+    }) => fetch2(...args));
+  } else {
+    _fetch = fetch;
+  }
+  return (...args) => _fetch(...args);
+};
+var resolveResponse = () => __awaiter3(void 0, void 0, void 0, function* () {
+  if (typeof Response === "undefined") {
+    return (yield import("./chunk-YJ3CO45N.js")).Response;
+  }
+  return Response;
+});
+var recursiveToCamel = (item) => {
+  if (Array.isArray(item)) {
+    return item.map((el) => recursiveToCamel(el));
+  } else if (typeof item === "function" || item !== Object(item)) {
+    return item;
+  }
+  const result = {};
+  Object.entries(item).forEach(([key, value]) => {
+    const newKey = key.replace(/([-_][a-z])/gi, (c) => c.toUpperCase().replace(/[-_]/g, ""));
+    result[newKey] = recursiveToCamel(value);
+  });
+  return result;
+};
+
+// node_modules/@supabase/storage-js/dist/module/lib/fetch.js
+var __awaiter4 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var _getErrorMessage = (err) => err.msg || err.message || err.error_description || err.error || JSON.stringify(err);
+var handleError2 = (error, reject, options) => __awaiter4(void 0, void 0, void 0, function* () {
+  const Res = yield resolveResponse();
+  if (error instanceof Res && !(options === null || options === void 0 ? void 0 : options.noResolveJson)) {
+    error.json().then((err) => {
+      reject(new StorageApiError(_getErrorMessage(err), error.status || 500));
+    }).catch((err) => {
+      reject(new StorageUnknownError(_getErrorMessage(err), err));
+    });
+  } else {
+    reject(new StorageUnknownError(_getErrorMessage(error), error));
+  }
+});
+var _getRequestParams = (method, options, parameters, body) => {
+  const params = {
+    method,
+    headers: (options === null || options === void 0 ? void 0 : options.headers) || {}
+  };
+  if (method === "GET") {
+    return params;
+  }
+  params.headers = Object.assign({
+    "Content-Type": "application/json"
+  }, options === null || options === void 0 ? void 0 : options.headers);
+  if (body) {
+    params.body = JSON.stringify(body);
+  }
+  return Object.assign(Object.assign({}, params), parameters);
+};
+function _handleRequest(fetcher, method, url, options, parameters, body) {
+  return __awaiter4(this, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => {
+      fetcher(url, _getRequestParams(method, options, parameters, body)).then((result) => {
+        if (!result.ok) throw result;
+        if (options === null || options === void 0 ? void 0 : options.noResolveJson) return result;
+        return result.json();
+      }).then((data) => resolve(data)).catch((error) => handleError2(error, reject, options));
+    });
+  });
+}
+function get2(fetcher, url, options, parameters) {
+  return __awaiter4(this, void 0, void 0, function* () {
+    return _handleRequest(fetcher, "GET", url, options, parameters);
+  });
+}
+function post(fetcher, url, body, options, parameters) {
+  return __awaiter4(this, void 0, void 0, function* () {
+    return _handleRequest(fetcher, "POST", url, options, parameters, body);
+  });
+}
+function put(fetcher, url, body, options, parameters) {
+  return __awaiter4(this, void 0, void 0, function* () {
+    return _handleRequest(fetcher, "PUT", url, options, parameters, body);
+  });
+}
+function head(fetcher, url, options, parameters) {
+  return __awaiter4(this, void 0, void 0, function* () {
+    return _handleRequest(fetcher, "HEAD", url, Object.assign(Object.assign({}, options), {
+      noResolveJson: true
+    }), parameters);
+  });
+}
+function remove2(fetcher, url, body, options, parameters) {
+  return __awaiter4(this, void 0, void 0, function* () {
+    return _handleRequest(fetcher, "DELETE", url, options, parameters, body);
+  });
+}
+
+// node_modules/@supabase/storage-js/dist/module/packages/StorageFileApi.js
+var __awaiter5 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var DEFAULT_SEARCH_OPTIONS = {
+  limit: 100,
+  offset: 0,
+  sortBy: {
+    column: "name",
+    order: "asc"
+  }
+};
+var DEFAULT_FILE_OPTIONS = {
+  cacheControl: "3600",
+  contentType: "text/plain;charset=UTF-8",
+  upsert: false
+};
+var StorageFileApi = class {
+  constructor(url, headers = {}, bucketId, fetch2) {
+    this.url = url;
+    this.headers = headers;
+    this.bucketId = bucketId;
+    this.fetch = resolveFetch2(fetch2);
+  }
+  /**
+   * Uploads a file to an existing bucket or replaces an existing file at the specified path with a new one.
+   *
+   * @param method HTTP method.
+   * @param path The relative file path. Should be of the format `folder/subfolder/filename.png`. The bucket must already exist before attempting to upload.
+   * @param fileBody The body of the file to be stored in the bucket.
+   */
+  uploadOrUpdate(method, path, fileBody, fileOptions) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        let body;
+        const options = Object.assign(Object.assign({}, DEFAULT_FILE_OPTIONS), fileOptions);
+        let headers = Object.assign(Object.assign({}, this.headers), method === "POST" && {
+          "x-upsert": String(options.upsert)
+        });
+        const metadata = options.metadata;
+        if (typeof Blob !== "undefined" && fileBody instanceof Blob) {
+          body = new FormData();
+          body.append("cacheControl", options.cacheControl);
+          body.append("", fileBody);
+          if (metadata) {
+            body.append("metadata", this.encodeMetadata(metadata));
+          }
+        } else if (typeof FormData !== "undefined" && fileBody instanceof FormData) {
+          body = fileBody;
+          body.append("cacheControl", options.cacheControl);
+          if (metadata) {
+            body.append("metadata", this.encodeMetadata(metadata));
+          }
+        } else {
+          body = fileBody;
+          headers["cache-control"] = `max-age=${options.cacheControl}`;
+          headers["content-type"] = options.contentType;
+          if (metadata) {
+            headers["x-metadata"] = this.toBase64(this.encodeMetadata(metadata));
+          }
+        }
+        if (fileOptions === null || fileOptions === void 0 ? void 0 : fileOptions.headers) {
+          headers = Object.assign(Object.assign({}, headers), fileOptions.headers);
+        }
+        const cleanPath = this._removeEmptyFolders(path);
+        const _path = this._getFinalPath(cleanPath);
+        const res = yield this.fetch(`${this.url}/object/${_path}`, Object.assign({
+          method,
+          body,
+          headers
+        }, (options === null || options === void 0 ? void 0 : options.duplex) ? {
+          duplex: options.duplex
+        } : {}));
+        const data = yield res.json();
+        if (res.ok) {
+          return {
+            data: {
+              path: cleanPath,
+              id: data.Id,
+              fullPath: data.Key
+            },
+            error: null
+          };
+        } else {
+          const error = data;
+          return {
+            data: null,
+            error
+          };
+        }
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Uploads a file to an existing bucket.
+   *
+   * @param path The file path, including the file name. Should be of the format `folder/subfolder/filename.png`. The bucket must already exist before attempting to upload.
+   * @param fileBody The body of the file to be stored in the bucket.
+   */
+  upload(path, fileBody, fileOptions) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      return this.uploadOrUpdate("POST", path, fileBody, fileOptions);
+    });
+  }
+  /**
+   * Upload a file with a token generated from `createSignedUploadUrl`.
+   * @param path The file path, including the file name. Should be of the format `folder/subfolder/filename.png`. The bucket must already exist before attempting to upload.
+   * @param token The token generated from `createSignedUploadUrl`
+   * @param fileBody The body of the file to be stored in the bucket.
+   */
+  uploadToSignedUrl(path, token, fileBody, fileOptions) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      const cleanPath = this._removeEmptyFolders(path);
+      const _path = this._getFinalPath(cleanPath);
+      const url = new URL(this.url + `/object/upload/sign/${_path}`);
+      url.searchParams.set("token", token);
+      try {
+        let body;
+        const options = Object.assign({
+          upsert: DEFAULT_FILE_OPTIONS.upsert
+        }, fileOptions);
+        const headers = Object.assign(Object.assign({}, this.headers), {
+          "x-upsert": String(options.upsert)
+        });
+        if (typeof Blob !== "undefined" && fileBody instanceof Blob) {
+          body = new FormData();
+          body.append("cacheControl", options.cacheControl);
+          body.append("", fileBody);
+        } else if (typeof FormData !== "undefined" && fileBody instanceof FormData) {
+          body = fileBody;
+          body.append("cacheControl", options.cacheControl);
+        } else {
+          body = fileBody;
+          headers["cache-control"] = `max-age=${options.cacheControl}`;
+          headers["content-type"] = options.contentType;
+        }
+        const res = yield this.fetch(url.toString(), {
+          method: "PUT",
+          body,
+          headers
+        });
+        const data = yield res.json();
+        if (res.ok) {
+          return {
+            data: {
+              path: cleanPath,
+              fullPath: data.Key
+            },
+            error: null
+          };
+        } else {
+          const error = data;
+          return {
+            data: null,
+            error
+          };
+        }
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Creates a signed upload URL.
+   * Signed upload URLs can be used to upload files to the bucket without further authentication.
+   * They are valid for 2 hours.
+   * @param path The file path, including the current file name. For example `folder/image.png`.
+   * @param options.upsert If set to true, allows the file to be overwritten if it already exists.
+   */
+  createSignedUploadUrl(path, options) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        let _path = this._getFinalPath(path);
+        const headers = Object.assign({}, this.headers);
+        if (options === null || options === void 0 ? void 0 : options.upsert) {
+          headers["x-upsert"] = "true";
+        }
+        const data = yield post(this.fetch, `${this.url}/object/upload/sign/${_path}`, {}, {
+          headers
+        });
+        const url = new URL(this.url + data.url);
+        const token = url.searchParams.get("token");
+        if (!token) {
+          throw new StorageError("No token returned by API");
+        }
+        return {
+          data: {
+            signedUrl: url.toString(),
+            path,
+            token
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Replaces an existing file at the specified path with a new one.
+   *
+   * @param path The relative file path. Should be of the format `folder/subfolder/filename.png`. The bucket must already exist before attempting to update.
+   * @param fileBody The body of the file to be stored in the bucket.
+   */
+  update(path, fileBody, fileOptions) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      return this.uploadOrUpdate("PUT", path, fileBody, fileOptions);
+    });
+  }
+  /**
+   * Moves an existing file to a new path in the same bucket.
+   *
+   * @param fromPath The original file path, including the current file name. For example `folder/image.png`.
+   * @param toPath The new file path, including the new file name. For example `folder/image-new.png`.
+   * @param options The destination options.
+   */
+  move(fromPath, toPath, options) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        const data = yield post(this.fetch, `${this.url}/object/move`, {
+          bucketId: this.bucketId,
+          sourceKey: fromPath,
+          destinationKey: toPath,
+          destinationBucket: options === null || options === void 0 ? void 0 : options.destinationBucket
+        }, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Copies an existing file to a new path in the same bucket.
+   *
+   * @param fromPath The original file path, including the current file name. For example `folder/image.png`.
+   * @param toPath The new file path, including the new file name. For example `folder/image-copy.png`.
+   * @param options The destination options.
+   */
+  copy(fromPath, toPath, options) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        const data = yield post(this.fetch, `${this.url}/object/copy`, {
+          bucketId: this.bucketId,
+          sourceKey: fromPath,
+          destinationKey: toPath,
+          destinationBucket: options === null || options === void 0 ? void 0 : options.destinationBucket
+        }, {
+          headers: this.headers
+        });
+        return {
+          data: {
+            path: data.Key
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Creates a signed URL. Use a signed URL to share a file for a fixed amount of time.
+   *
+   * @param path The file path, including the current file name. For example `folder/image.png`.
+   * @param expiresIn The number of seconds until the signed URL expires. For example, `60` for a URL which is valid for one minute.
+   * @param options.download triggers the file as a download if set to true. Set this parameter as the name of the file if you want to trigger the download with a different filename.
+   * @param options.transform Transform the asset before serving it to the client.
+   */
+  createSignedUrl(path, expiresIn, options) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        let _path = this._getFinalPath(path);
+        let data = yield post(this.fetch, `${this.url}/object/sign/${_path}`, Object.assign({
+          expiresIn
+        }, (options === null || options === void 0 ? void 0 : options.transform) ? {
+          transform: options.transform
+        } : {}), {
+          headers: this.headers
+        });
+        const downloadQueryParam = (options === null || options === void 0 ? void 0 : options.download) ? `&download=${options.download === true ? "" : options.download}` : "";
+        const signedUrl = encodeURI(`${this.url}${data.signedURL}${downloadQueryParam}`);
+        data = {
+          signedUrl
+        };
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Creates multiple signed URLs. Use a signed URL to share a file for a fixed amount of time.
+   *
+   * @param paths The file paths to be downloaded, including the current file names. For example `['folder/image.png', 'folder2/image2.png']`.
+   * @param expiresIn The number of seconds until the signed URLs expire. For example, `60` for URLs which are valid for one minute.
+   * @param options.download triggers the file as a download if set to true. Set this parameter as the name of the file if you want to trigger the download with a different filename.
+   */
+  createSignedUrls(paths, expiresIn, options) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        const data = yield post(this.fetch, `${this.url}/object/sign/${this.bucketId}`, {
+          expiresIn,
+          paths
+        }, {
+          headers: this.headers
+        });
+        const downloadQueryParam = (options === null || options === void 0 ? void 0 : options.download) ? `&download=${options.download === true ? "" : options.download}` : "";
+        return {
+          data: data.map((datum) => Object.assign(Object.assign({}, datum), {
+            signedUrl: datum.signedURL ? encodeURI(`${this.url}${datum.signedURL}${downloadQueryParam}`) : null
+          })),
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Downloads a file from a private bucket. For public buckets, make a request to the URL returned from `getPublicUrl` instead.
+   *
+   * @param path The full path and file name of the file to be downloaded. For example `folder/image.png`.
+   * @param options.transform Transform the asset before serving it to the client.
+   */
+  download(path, options) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      const wantsTransformation = typeof (options === null || options === void 0 ? void 0 : options.transform) !== "undefined";
+      const renderPath = wantsTransformation ? "render/image/authenticated" : "object";
+      const transformationQuery = this.transformOptsToQueryString((options === null || options === void 0 ? void 0 : options.transform) || {});
+      const queryString = transformationQuery ? `?${transformationQuery}` : "";
+      try {
+        const _path = this._getFinalPath(path);
+        const res = yield get2(this.fetch, `${this.url}/${renderPath}/${_path}${queryString}`, {
+          headers: this.headers,
+          noResolveJson: true
+        });
+        const data = yield res.blob();
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Retrieves the details of an existing file.
+   * @param path
+   */
+  info(path) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      const _path = this._getFinalPath(path);
+      try {
+        const data = yield get2(this.fetch, `${this.url}/object/info/${_path}`, {
+          headers: this.headers
+        });
+        return {
+          data: recursiveToCamel(data),
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Checks the existence of a file.
+   * @param path
+   */
+  exists(path) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      const _path = this._getFinalPath(path);
+      try {
+        yield head(this.fetch, `${this.url}/object/${_path}`, {
+          headers: this.headers
+        });
+        return {
+          data: true,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error) && error instanceof StorageUnknownError) {
+          const originalError = error.originalError;
+          if ([400, 404].includes(originalError === null || originalError === void 0 ? void 0 : originalError.status)) {
+            return {
+              data: false,
+              error
+            };
+          }
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * A simple convenience function to get the URL for an asset in a public bucket. If you do not want to use this function, you can construct the public URL by concatenating the bucket URL with the path to the asset.
+   * This function does not verify if the bucket is public. If a public URL is created for a bucket which is not public, you will not be able to download the asset.
+   *
+   * @param path The path and name of the file to generate the public URL for. For example `folder/image.png`.
+   * @param options.download Triggers the file as a download if set to true. Set this parameter as the name of the file if you want to trigger the download with a different filename.
+   * @param options.transform Transform the asset before serving it to the client.
+   */
+  getPublicUrl(path, options) {
+    const _path = this._getFinalPath(path);
+    const _queryString = [];
+    const downloadQueryParam = (options === null || options === void 0 ? void 0 : options.download) ? `download=${options.download === true ? "" : options.download}` : "";
+    if (downloadQueryParam !== "") {
+      _queryString.push(downloadQueryParam);
+    }
+    const wantsTransformation = typeof (options === null || options === void 0 ? void 0 : options.transform) !== "undefined";
+    const renderPath = wantsTransformation ? "render/image" : "object";
+    const transformationQuery = this.transformOptsToQueryString((options === null || options === void 0 ? void 0 : options.transform) || {});
+    if (transformationQuery !== "") {
+      _queryString.push(transformationQuery);
+    }
+    let queryString = _queryString.join("&");
+    if (queryString !== "") {
+      queryString = `?${queryString}`;
+    }
+    return {
+      data: {
+        publicUrl: encodeURI(`${this.url}/${renderPath}/public/${_path}${queryString}`)
+      }
+    };
+  }
+  /**
+   * Deletes files within the same bucket
+   *
+   * @param paths An array of files to delete, including the path and file name. For example [`'folder/image.png'`].
+   */
+  remove(paths) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        const data = yield remove2(this.fetch, `${this.url}/object/${this.bucketId}`, {
+          prefixes: paths
+        }, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Get file metadata
+   * @param id the file id to retrieve metadata
+   */
+  // async getMetadata(
+  //   id: string
+  // ): Promise<
+  //   | {
+  //       data: Metadata
+  //       error: null
+  //     }
+  //   | {
+  //       data: null
+  //       error: StorageError
+  //     }
+  // > {
+  //   try {
+  //     const data = await get(this.fetch, `${this.url}/metadata/${id}`, { headers: this.headers })
+  //     return { data, error: null }
+  //   } catch (error) {
+  //     if (isStorageError(error)) {
+  //       return { data: null, error }
+  //     }
+  //     throw error
+  //   }
+  // }
+  /**
+   * Update file metadata
+   * @param id the file id to update metadata
+   * @param meta the new file metadata
+   */
+  // async updateMetadata(
+  //   id: string,
+  //   meta: Metadata
+  // ): Promise<
+  //   | {
+  //       data: Metadata
+  //       error: null
+  //     }
+  //   | {
+  //       data: null
+  //       error: StorageError
+  //     }
+  // > {
+  //   try {
+  //     const data = await post(
+  //       this.fetch,
+  //       `${this.url}/metadata/${id}`,
+  //       { ...meta },
+  //       { headers: this.headers }
+  //     )
+  //     return { data, error: null }
+  //   } catch (error) {
+  //     if (isStorageError(error)) {
+  //       return { data: null, error }
+  //     }
+  //     throw error
+  //   }
+  // }
+  /**
+   * Lists all the files within a bucket.
+   * @param path The folder path.
+   */
+  list(path, options, parameters) {
+    return __awaiter5(this, void 0, void 0, function* () {
+      try {
+        const body = Object.assign(Object.assign(Object.assign({}, DEFAULT_SEARCH_OPTIONS), options), {
+          prefix: path || ""
+        });
+        const data = yield post(this.fetch, `${this.url}/object/list/${this.bucketId}`, body, {
+          headers: this.headers
+        }, parameters);
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  encodeMetadata(metadata) {
+    return JSON.stringify(metadata);
+  }
+  toBase64(data) {
+    if (typeof Buffer !== "undefined") {
+      return Buffer.from(data).toString("base64");
+    }
+    return btoa(data);
+  }
+  _getFinalPath(path) {
+    return `${this.bucketId}/${path}`;
+  }
+  _removeEmptyFolders(path) {
+    return path.replace(/^\/|\/$/g, "").replace(/\/+/g, "/");
+  }
+  transformOptsToQueryString(transform) {
+    const params = [];
+    if (transform.width) {
+      params.push(`width=${transform.width}`);
+    }
+    if (transform.height) {
+      params.push(`height=${transform.height}`);
+    }
+    if (transform.resize) {
+      params.push(`resize=${transform.resize}`);
+    }
+    if (transform.format) {
+      params.push(`format=${transform.format}`);
+    }
+    if (transform.quality) {
+      params.push(`quality=${transform.quality}`);
+    }
+    return params.join("&");
+  }
+};
+
+// node_modules/@supabase/storage-js/dist/module/lib/version.js
+var version2 = "2.7.0";
+
+// node_modules/@supabase/storage-js/dist/module/lib/constants.js
+var DEFAULT_HEADERS2 = {
+  "X-Client-Info": `storage-js/${version2}`
+};
+
+// node_modules/@supabase/storage-js/dist/module/packages/StorageBucketApi.js
+var __awaiter6 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var StorageBucketApi = class {
+  constructor(url, headers = {}, fetch2) {
+    this.url = url;
+    this.headers = Object.assign(Object.assign({}, DEFAULT_HEADERS2), headers);
+    this.fetch = resolveFetch2(fetch2);
+  }
+  /**
+   * Retrieves the details of all Storage buckets within an existing project.
+   */
+  listBuckets() {
+    return __awaiter6(this, void 0, void 0, function* () {
+      try {
+        const data = yield get2(this.fetch, `${this.url}/bucket`, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Retrieves the details of an existing Storage bucket.
+   *
+   * @param id The unique identifier of the bucket you would like to retrieve.
+   */
+  getBucket(id) {
+    return __awaiter6(this, void 0, void 0, function* () {
+      try {
+        const data = yield get2(this.fetch, `${this.url}/bucket/${id}`, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Creates a new Storage bucket
+   *
+   * @param id A unique identifier for the bucket you are creating.
+   * @param options.public The visibility of the bucket. Public buckets don't require an authorization token to download objects, but still require a valid token for all other operations. By default, buckets are private.
+   * @param options.fileSizeLimit specifies the max file size in bytes that can be uploaded to this bucket.
+   * The global file size limit takes precedence over this value.
+   * The default value is null, which doesn't set a per bucket file size limit.
+   * @param options.allowedMimeTypes specifies the allowed mime types that this bucket can accept during upload.
+   * The default value is null, which allows files with all mime types to be uploaded.
+   * Each mime type specified can be a wildcard, e.g. image/*, or a specific mime type, e.g. image/png.
+   * @returns newly created bucket id
+   */
+  createBucket(id, options = {
+    public: false
+  }) {
+    return __awaiter6(this, void 0, void 0, function* () {
+      try {
+        const data = yield post(this.fetch, `${this.url}/bucket`, {
+          id,
+          name: id,
+          public: options.public,
+          file_size_limit: options.fileSizeLimit,
+          allowed_mime_types: options.allowedMimeTypes
+        }, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Updates a Storage bucket
+   *
+   * @param id A unique identifier for the bucket you are updating.
+   * @param options.public The visibility of the bucket. Public buckets don't require an authorization token to download objects, but still require a valid token for all other operations.
+   * @param options.fileSizeLimit specifies the max file size in bytes that can be uploaded to this bucket.
+   * The global file size limit takes precedence over this value.
+   * The default value is null, which doesn't set a per bucket file size limit.
+   * @param options.allowedMimeTypes specifies the allowed mime types that this bucket can accept during upload.
+   * The default value is null, which allows files with all mime types to be uploaded.
+   * Each mime type specified can be a wildcard, e.g. image/*, or a specific mime type, e.g. image/png.
+   */
+  updateBucket(id, options) {
+    return __awaiter6(this, void 0, void 0, function* () {
+      try {
+        const data = yield put(this.fetch, `${this.url}/bucket/${id}`, {
+          id,
+          name: id,
+          public: options.public,
+          file_size_limit: options.fileSizeLimit,
+          allowed_mime_types: options.allowedMimeTypes
+        }, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Removes all objects inside a single bucket.
+   *
+   * @param id The unique identifier of the bucket you would like to empty.
+   */
+  emptyBucket(id) {
+    return __awaiter6(this, void 0, void 0, function* () {
+      try {
+        const data = yield post(this.fetch, `${this.url}/bucket/${id}/empty`, {}, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Deletes an existing bucket. A bucket can't be deleted with existing objects inside it.
+   * You must first `empty()` the bucket.
+   *
+   * @param id The unique identifier of the bucket you would like to delete.
+   */
+  deleteBucket(id) {
+    return __awaiter6(this, void 0, void 0, function* () {
+      try {
+        const data = yield remove2(this.fetch, `${this.url}/bucket/${id}`, {}, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isStorageError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+};
+
+// node_modules/@supabase/storage-js/dist/module/StorageClient.js
+var StorageClient = class extends StorageBucketApi {
+  constructor(url, headers = {}, fetch2) {
+    super(url, headers, fetch2);
+  }
+  /**
+   * Perform file operation in a bucket.
+   *
+   * @param id The bucket id to operate on.
+   */
+  from(id) {
+    return new StorageFileApi(this.url, this.headers, id, this.fetch);
+  }
+};
+
+// node_modules/@supabase/supabase-js/dist/module/lib/version.js
+var version3 = "2.45.4";
+
+// node_modules/@supabase/supabase-js/dist/module/lib/constants.js
+var JS_ENV = "";
+if (typeof Deno !== "undefined") {
+  JS_ENV = "deno";
+} else if (typeof document !== "undefined") {
+  JS_ENV = "web";
+} else if (typeof navigator !== "undefined" && navigator.product === "ReactNative") {
+  JS_ENV = "react-native";
+} else {
+  JS_ENV = "node";
+}
+var DEFAULT_HEADERS3 = {
+  "X-Client-Info": `supabase-js-${JS_ENV}/${version3}`
+};
+var DEFAULT_GLOBAL_OPTIONS = {
+  headers: DEFAULT_HEADERS3
+};
+var DEFAULT_DB_OPTIONS = {
+  schema: "public"
+};
+var DEFAULT_AUTH_OPTIONS = {
+  autoRefreshToken: true,
+  persistSession: true,
+  detectSessionInUrl: true,
+  flowType: "implicit"
+};
+var DEFAULT_REALTIME_OPTIONS = {};
+
+// node_modules/@supabase/supabase-js/dist/module/lib/fetch.js
+init_browser();
+var __awaiter7 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var resolveFetch3 = (customFetch) => {
+  let _fetch;
+  if (customFetch) {
+    _fetch = customFetch;
+  } else if (typeof fetch === "undefined") {
+    _fetch = browser_default;
+  } else {
+    _fetch = fetch;
+  }
+  return (...args) => _fetch(...args);
+};
+var resolveHeadersConstructor = () => {
+  if (typeof Headers === "undefined") {
+    return Headers2;
+  }
+  return Headers;
+};
+var fetchWithAuth = (supabaseKey, getAccessToken, customFetch) => {
+  const fetch2 = resolveFetch3(customFetch);
+  const HeadersConstructor = resolveHeadersConstructor();
+  return (input2, init) => __awaiter7(void 0, void 0, void 0, function* () {
+    var _a;
+    const accessToken = (_a = yield getAccessToken()) !== null && _a !== void 0 ? _a : supabaseKey;
+    let headers = new HeadersConstructor(init === null || init === void 0 ? void 0 : init.headers);
+    if (!headers.has("apikey")) {
+      headers.set("apikey", supabaseKey);
+    }
+    if (!headers.has("Authorization")) {
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+    return fetch2(input2, Object.assign(Object.assign({}, init), {
+      headers
+    }));
+  });
+};
+
+// node_modules/@supabase/supabase-js/dist/module/lib/helpers.js
+var __awaiter8 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+function stripTrailingSlash2(url) {
+  return url.replace(/\/$/, "");
+}
+function applySettingDefaults(options, defaults) {
+  const {
+    db: dbOptions,
+    auth: authOptions,
+    realtime: realtimeOptions,
+    global: globalOptions
+  } = options;
+  const {
+    db: DEFAULT_DB_OPTIONS2,
+    auth: DEFAULT_AUTH_OPTIONS2,
+    realtime: DEFAULT_REALTIME_OPTIONS2,
+    global: DEFAULT_GLOBAL_OPTIONS2
+  } = defaults;
+  const result = {
+    db: Object.assign(Object.assign({}, DEFAULT_DB_OPTIONS2), dbOptions),
+    auth: Object.assign(Object.assign({}, DEFAULT_AUTH_OPTIONS2), authOptions),
+    realtime: Object.assign(Object.assign({}, DEFAULT_REALTIME_OPTIONS2), realtimeOptions),
+    global: Object.assign(Object.assign({}, DEFAULT_GLOBAL_OPTIONS2), globalOptions),
+    accessToken: () => __awaiter8(this, void 0, void 0, function* () {
+      return "";
+    })
+  };
+  if (options.accessToken) {
+    result.accessToken = options.accessToken;
+  } else {
+    delete result.accessToken;
+  }
+  return result;
+}
+
+// node_modules/@supabase/auth-js/dist/module/lib/version.js
+var version4 = "2.65.0";
+
+// node_modules/@supabase/auth-js/dist/module/lib/constants.js
+var GOTRUE_URL = "http://localhost:9999";
+var STORAGE_KEY = "supabase.auth.token";
+var DEFAULT_HEADERS4 = {
+  "X-Client-Info": `gotrue-js/${version4}`
+};
+var EXPIRY_MARGIN = 10;
+var API_VERSION_HEADER_NAME = "X-Supabase-Api-Version";
+var API_VERSIONS = {
+  "2024-01-01": {
+    timestamp: Date.parse("2024-01-01T00:00:00.0Z"),
+    name: "2024-01-01"
+  }
+};
+
+// node_modules/@supabase/auth-js/dist/module/lib/helpers.js
+function expiresAt(expiresIn) {
+  const timeNow = Math.round(Date.now() / 1e3);
+  return timeNow + expiresIn;
+}
+function uuid() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0, v = c == "x" ? r : r & 3 | 8;
+    return v.toString(16);
+  });
+}
+var isBrowser = () => typeof document !== "undefined";
+var localStorageWriteTests = {
+  tested: false,
+  writable: false
+};
+var supportsLocalStorage = () => {
+  if (!isBrowser()) {
+    return false;
+  }
+  try {
+    if (typeof globalThis.localStorage !== "object") {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+  if (localStorageWriteTests.tested) {
+    return localStorageWriteTests.writable;
+  }
+  const randomKey = `lswt-${Math.random()}${Math.random()}`;
+  try {
+    globalThis.localStorage.setItem(randomKey, randomKey);
+    globalThis.localStorage.removeItem(randomKey);
+    localStorageWriteTests.tested = true;
+    localStorageWriteTests.writable = true;
+  } catch (e) {
+    localStorageWriteTests.tested = true;
+    localStorageWriteTests.writable = false;
+  }
+  return localStorageWriteTests.writable;
+};
+function parseParametersFromURL(href) {
+  const result = {};
+  const url = new URL(href);
+  if (url.hash && url.hash[0] === "#") {
+    try {
+      const hashSearchParams = new URLSearchParams(url.hash.substring(1));
+      hashSearchParams.forEach((value, key) => {
+        result[key] = value;
+      });
+    } catch (e) {
+    }
+  }
+  url.searchParams.forEach((value, key) => {
+    result[key] = value;
+  });
+  return result;
+}
+var resolveFetch4 = (customFetch) => {
+  let _fetch;
+  if (customFetch) {
+    _fetch = customFetch;
+  } else if (typeof fetch === "undefined") {
+    _fetch = (...args) => import("./chunk-YJ3CO45N.js").then(({
+      default: fetch2
+    }) => fetch2(...args));
+  } else {
+    _fetch = fetch;
+  }
+  return (...args) => _fetch(...args);
+};
+var looksLikeFetchResponse = (maybeResponse) => {
+  return typeof maybeResponse === "object" && maybeResponse !== null && "status" in maybeResponse && "ok" in maybeResponse && "json" in maybeResponse && typeof maybeResponse.json === "function";
+};
+var setItemAsync = (storage, key, data) => __async(void 0, null, function* () {
+  yield storage.setItem(key, JSON.stringify(data));
+});
+var getItemAsync = (storage, key) => __async(void 0, null, function* () {
+  const value = yield storage.getItem(key);
+  if (!value) {
+    return null;
+  }
+  try {
+    return JSON.parse(value);
+  } catch (_a) {
+    return value;
+  }
+});
+var removeItemAsync = (storage, key) => __async(void 0, null, function* () {
+  yield storage.removeItem(key);
+});
+function decodeBase64URL(value) {
+  const key = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  let base64 = "";
+  let chr1, chr2, chr3;
+  let enc1, enc2, enc3, enc4;
+  let i = 0;
+  value = value.replace("-", "+").replace("_", "/");
+  while (i < value.length) {
+    enc1 = key.indexOf(value.charAt(i++));
+    enc2 = key.indexOf(value.charAt(i++));
+    enc3 = key.indexOf(value.charAt(i++));
+    enc4 = key.indexOf(value.charAt(i++));
+    chr1 = enc1 << 2 | enc2 >> 4;
+    chr2 = (enc2 & 15) << 4 | enc3 >> 2;
+    chr3 = (enc3 & 3) << 6 | enc4;
+    base64 = base64 + String.fromCharCode(chr1);
+    if (enc3 != 64 && chr2 != 0) {
+      base64 = base64 + String.fromCharCode(chr2);
+    }
+    if (enc4 != 64 && chr3 != 0) {
+      base64 = base64 + String.fromCharCode(chr3);
+    }
+  }
+  return base64;
+}
+var Deferred = class _Deferred {
+  constructor() {
+    ;
+    this.promise = new _Deferred.promiseConstructor((res, rej) => {
+      ;
+      this.resolve = res;
+      this.reject = rej;
+    });
+  }
+};
+Deferred.promiseConstructor = Promise;
+function decodeJWTPayload(token) {
+  const base64UrlRegex = /^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}=?$|[a-z0-9_-]{2}(==)?$)$/i;
+  const parts = token.split(".");
+  if (parts.length !== 3) {
+    throw new Error("JWT is not valid: not a JWT structure");
+  }
+  if (!base64UrlRegex.test(parts[1])) {
+    throw new Error("JWT is not valid: payload is not in base64url format");
+  }
+  const base64Url = parts[1];
+  return JSON.parse(decodeBase64URL(base64Url));
+}
+function sleep(time) {
+  return __async(this, null, function* () {
+    return yield new Promise((accept) => {
+      setTimeout(() => accept(null), time);
+    });
+  });
+}
+function retryable(fn, isRetryable) {
+  const promise = new Promise((accept, reject) => {
+    ;
+    (() => __async(this, null, function* () {
+      for (let attempt = 0; attempt < Infinity; attempt++) {
+        try {
+          const result = yield fn(attempt);
+          if (!isRetryable(attempt, null, result)) {
+            accept(result);
+            return;
+          }
+        } catch (e) {
+          if (!isRetryable(attempt, e)) {
+            reject(e);
+            return;
+          }
+        }
+      }
+    }))();
+  });
+  return promise;
+}
+function dec2hex(dec) {
+  return ("0" + dec.toString(16)).substr(-2);
+}
+function generatePKCEVerifier() {
+  const verifierLength = 56;
+  const array = new Uint32Array(verifierLength);
+  if (typeof crypto === "undefined") {
+    const charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+    const charSetLen = charSet.length;
+    let verifier = "";
+    for (let i = 0; i < verifierLength; i++) {
+      verifier += charSet.charAt(Math.floor(Math.random() * charSetLen));
+    }
+    return verifier;
+  }
+  crypto.getRandomValues(array);
+  return Array.from(array, dec2hex).join("");
+}
+function sha256(randomString) {
+  return __async(this, null, function* () {
+    const encoder = new TextEncoder();
+    const encodedData = encoder.encode(randomString);
+    const hash = yield crypto.subtle.digest("SHA-256", encodedData);
+    const bytes = new Uint8Array(hash);
+    return Array.from(bytes).map((c) => String.fromCharCode(c)).join("");
+  });
+}
+function base64urlencode(str) {
+  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function generatePKCEChallenge(verifier) {
+  return __async(this, null, function* () {
+    const hasCryptoSupport = typeof crypto !== "undefined" && typeof crypto.subtle !== "undefined" && typeof TextEncoder !== "undefined";
+    if (!hasCryptoSupport) {
+      console.warn("WebCrypto API is not supported. Code challenge method will default to use plain instead of sha256.");
+      return verifier;
+    }
+    const hashed = yield sha256(verifier);
+    return base64urlencode(hashed);
+  });
+}
+function getCodeChallengeAndMethod(storage, storageKey, isPasswordRecovery = false) {
+  return __async(this, null, function* () {
+    const codeVerifier = generatePKCEVerifier();
+    let storedCodeVerifier = codeVerifier;
+    if (isPasswordRecovery) {
+      storedCodeVerifier += "/PASSWORD_RECOVERY";
+    }
+    yield setItemAsync(storage, `${storageKey}-code-verifier`, storedCodeVerifier);
+    const codeChallenge = yield generatePKCEChallenge(codeVerifier);
+    const codeChallengeMethod = codeVerifier === codeChallenge ? "plain" : "s256";
+    return [codeChallenge, codeChallengeMethod];
+  });
+}
+var API_VERSION_REGEX = /^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])$/i;
+function parseResponseAPIVersion(response) {
+  const apiVersion = response.headers.get(API_VERSION_HEADER_NAME);
+  if (!apiVersion) {
+    return null;
+  }
+  if (!apiVersion.match(API_VERSION_REGEX)) {
+    return null;
+  }
+  try {
+    const date = /* @__PURE__ */ new Date(`${apiVersion}T00:00:00.0Z`);
+    return date;
+  } catch (e) {
+    return null;
+  }
+}
+
+// node_modules/@supabase/auth-js/dist/module/lib/errors.js
+var AuthError = class extends Error {
+  constructor(message, status, code) {
+    super(message);
+    this.__isAuthError = true;
+    this.name = "AuthError";
+    this.status = status;
+    this.code = code;
+  }
+};
+function isAuthError(error) {
+  return typeof error === "object" && error !== null && "__isAuthError" in error;
+}
+var AuthApiError = class extends AuthError {
+  constructor(message, status, code) {
+    super(message, status, code);
+    this.name = "AuthApiError";
+    this.status = status;
+    this.code = code;
+  }
+};
+function isAuthApiError(error) {
+  return isAuthError(error) && error.name === "AuthApiError";
+}
+var AuthUnknownError = class extends AuthError {
+  constructor(message, originalError) {
+    super(message);
+    this.name = "AuthUnknownError";
+    this.originalError = originalError;
+  }
+};
+var CustomAuthError = class extends AuthError {
+  constructor(message, name, status, code) {
+    super(message, status, code);
+    this.name = name;
+    this.status = status;
+  }
+};
+var AuthSessionMissingError = class extends CustomAuthError {
+  constructor() {
+    super("Auth session missing!", "AuthSessionMissingError", 400, void 0);
+  }
+};
+function isAuthSessionMissingError(error) {
+  return isAuthError(error) && error.name === "AuthSessionMissingError";
+}
+var AuthInvalidTokenResponseError = class extends CustomAuthError {
+  constructor() {
+    super("Auth session or user missing", "AuthInvalidTokenResponseError", 500, void 0);
+  }
+};
+var AuthInvalidCredentialsError = class extends CustomAuthError {
+  constructor(message) {
+    super(message, "AuthInvalidCredentialsError", 400, void 0);
+  }
+};
+var AuthImplicitGrantRedirectError = class extends CustomAuthError {
+  constructor(message, details = null) {
+    super(message, "AuthImplicitGrantRedirectError", 500, void 0);
+    this.details = null;
+    this.details = details;
+  }
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      status: this.status,
+      details: this.details
+    };
+  }
+};
+var AuthPKCEGrantCodeExchangeError = class extends CustomAuthError {
+  constructor(message, details = null) {
+    super(message, "AuthPKCEGrantCodeExchangeError", 500, void 0);
+    this.details = null;
+    this.details = details;
+  }
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      status: this.status,
+      details: this.details
+    };
+  }
+};
+var AuthRetryableFetchError = class extends CustomAuthError {
+  constructor(message, status) {
+    super(message, "AuthRetryableFetchError", status, void 0);
+  }
+};
+function isAuthRetryableFetchError(error) {
+  return isAuthError(error) && error.name === "AuthRetryableFetchError";
+}
+var AuthWeakPasswordError = class extends CustomAuthError {
+  constructor(message, status, reasons) {
+    super(message, "AuthWeakPasswordError", status, "weak_password");
+    this.reasons = reasons;
+  }
+};
+
+// node_modules/@supabase/auth-js/dist/module/lib/fetch.js
+var __rest = function(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+var _getErrorMessage2 = (err) => err.msg || err.message || err.error_description || err.error || JSON.stringify(err);
+var NETWORK_ERROR_CODES = [502, 503, 504];
+function handleError3(error) {
+  return __async(this, null, function* () {
+    var _a;
+    if (!looksLikeFetchResponse(error)) {
+      throw new AuthRetryableFetchError(_getErrorMessage2(error), 0);
+    }
+    if (NETWORK_ERROR_CODES.includes(error.status)) {
+      throw new AuthRetryableFetchError(_getErrorMessage2(error), error.status);
+    }
+    let data;
+    try {
+      data = yield error.json();
+    } catch (e) {
+      throw new AuthUnknownError(_getErrorMessage2(e), e);
+    }
+    let errorCode = void 0;
+    const responseAPIVersion = parseResponseAPIVersion(error);
+    if (responseAPIVersion && responseAPIVersion.getTime() >= API_VERSIONS["2024-01-01"].timestamp && typeof data === "object" && data && typeof data.code === "string") {
+      errorCode = data.code;
+    } else if (typeof data === "object" && data && typeof data.error_code === "string") {
+      errorCode = data.error_code;
+    }
+    if (!errorCode) {
+      if (typeof data === "object" && data && typeof data.weak_password === "object" && data.weak_password && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.reasons.reduce((a, i) => a && typeof i === "string", true)) {
+        throw new AuthWeakPasswordError(_getErrorMessage2(data), error.status, data.weak_password.reasons);
+      }
+    } else if (errorCode === "weak_password") {
+      throw new AuthWeakPasswordError(_getErrorMessage2(data), error.status, ((_a = data.weak_password) === null || _a === void 0 ? void 0 : _a.reasons) || []);
+    } else if (errorCode === "session_not_found") {
+      throw new AuthSessionMissingError();
+    }
+    throw new AuthApiError(_getErrorMessage2(data), error.status || 500, errorCode);
+  });
+}
+var _getRequestParams2 = (method, options, parameters, body) => {
+  const params = {
+    method,
+    headers: (options === null || options === void 0 ? void 0 : options.headers) || {}
+  };
+  if (method === "GET") {
+    return params;
+  }
+  params.headers = Object.assign({
+    "Content-Type": "application/json;charset=UTF-8"
+  }, options === null || options === void 0 ? void 0 : options.headers);
+  params.body = JSON.stringify(body);
+  return Object.assign(Object.assign({}, params), parameters);
+};
+function _request(fetcher, method, url, options) {
+  return __async(this, null, function* () {
+    var _a;
+    const headers = Object.assign({}, options === null || options === void 0 ? void 0 : options.headers);
+    if (!headers[API_VERSION_HEADER_NAME]) {
+      headers[API_VERSION_HEADER_NAME] = API_VERSIONS["2024-01-01"].name;
+    }
+    if (options === null || options === void 0 ? void 0 : options.jwt) {
+      headers["Authorization"] = `Bearer ${options.jwt}`;
+    }
+    const qs = (_a = options === null || options === void 0 ? void 0 : options.query) !== null && _a !== void 0 ? _a : {};
+    if (options === null || options === void 0 ? void 0 : options.redirectTo) {
+      qs["redirect_to"] = options.redirectTo;
+    }
+    const queryString = Object.keys(qs).length ? "?" + new URLSearchParams(qs).toString() : "";
+    const data = yield _handleRequest2(fetcher, method, url + queryString, {
+      headers,
+      noResolveJson: options === null || options === void 0 ? void 0 : options.noResolveJson
+    }, {}, options === null || options === void 0 ? void 0 : options.body);
+    return (options === null || options === void 0 ? void 0 : options.xform) ? options === null || options === void 0 ? void 0 : options.xform(data) : {
+      data: Object.assign({}, data),
+      error: null
+    };
+  });
+}
+function _handleRequest2(fetcher, method, url, options, parameters, body) {
+  return __async(this, null, function* () {
+    const requestParams = _getRequestParams2(method, options, parameters, body);
+    let result;
+    try {
+      result = yield fetcher(url, Object.assign({}, requestParams));
+    } catch (e) {
+      console.error(e);
+      throw new AuthRetryableFetchError(_getErrorMessage2(e), 0);
+    }
+    if (!result.ok) {
+      yield handleError3(result);
+    }
+    if (options === null || options === void 0 ? void 0 : options.noResolveJson) {
+      return result;
+    }
+    try {
+      return yield result.json();
+    } catch (e) {
+      yield handleError3(e);
+    }
+  });
+}
+function _sessionResponse(data) {
+  var _a;
+  let session = null;
+  if (hasSession(data)) {
+    session = Object.assign({}, data);
+    if (!data.expires_at) {
+      session.expires_at = expiresAt(data.expires_in);
+    }
+  }
+  const user = (_a = data.user) !== null && _a !== void 0 ? _a : data;
+  return {
+    data: {
+      session,
+      user
+    },
+    error: null
+  };
+}
+function _sessionResponsePassword(data) {
+  const response = _sessionResponse(data);
+  if (!response.error && data.weak_password && typeof data.weak_password === "object" && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.message && typeof data.weak_password.message === "string" && data.weak_password.reasons.reduce((a, i) => a && typeof i === "string", true)) {
+    response.data.weak_password = data.weak_password;
+  }
+  return response;
+}
+function _userResponse(data) {
+  var _a;
+  const user = (_a = data.user) !== null && _a !== void 0 ? _a : data;
+  return {
+    data: {
+      user
+    },
+    error: null
+  };
+}
+function _ssoResponse(data) {
+  return {
+    data,
+    error: null
+  };
+}
+function _generateLinkResponse(data) {
+  const {
+    action_link,
+    email_otp,
+    hashed_token,
+    redirect_to,
+    verification_type
+  } = data, rest = __rest(data, ["action_link", "email_otp", "hashed_token", "redirect_to", "verification_type"]);
+  const properties = {
+    action_link,
+    email_otp,
+    hashed_token,
+    redirect_to,
+    verification_type
+  };
+  const user = Object.assign({}, rest);
+  return {
+    data: {
+      properties,
+      user
+    },
+    error: null
+  };
+}
+function _noResolveJsonResponse(data) {
+  return data;
+}
+function hasSession(data) {
+  return data.access_token && data.refresh_token && data.expires_in;
+}
+
+// node_modules/@supabase/auth-js/dist/module/GoTrueAdminApi.js
+var __rest2 = function(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+var GoTrueAdminApi = class {
+  constructor({
+    url = "",
+    headers = {},
+    fetch: fetch2
+  }) {
+    this.url = url;
+    this.headers = headers;
+    this.fetch = resolveFetch4(fetch2);
+    this.mfa = {
+      listFactors: this._listFactors.bind(this),
+      deleteFactor: this._deleteFactor.bind(this)
+    };
+  }
+  /**
+   * Removes a logged-in session.
+   * @param jwt A valid, logged-in JWT.
+   * @param scope The logout sope.
+   */
+  signOut(jwt, scope = "global") {
+    return __async(this, null, function* () {
+      try {
+        yield _request(this.fetch, "POST", `${this.url}/logout?scope=${scope}`, {
+          headers: this.headers,
+          jwt,
+          noResolveJson: true
+        });
+        return {
+          data: null,
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Sends an invite link to an email address.
+   * @param email The email address of the user.
+   * @param options Additional options to be included when inviting.
+   */
+  inviteUserByEmail(_0) {
+    return __async(this, arguments, function* (email, options = {}) {
+      try {
+        return yield _request(this.fetch, "POST", `${this.url}/invite`, {
+          body: {
+            email,
+            data: options.data
+          },
+          headers: this.headers,
+          redirectTo: options.redirectTo,
+          xform: _userResponse
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Generates email links and OTPs to be sent via a custom email provider.
+   * @param email The user's email.
+   * @param options.password User password. For signup only.
+   * @param options.data Optional user metadata. For signup only.
+   * @param options.redirectTo The redirect url which should be appended to the generated link
+   */
+  generateLink(params) {
+    return __async(this, null, function* () {
+      try {
+        const {
+          options
+        } = params, rest = __rest2(params, ["options"]);
+        const body = Object.assign(Object.assign({}, rest), options);
+        if ("newEmail" in rest) {
+          body.new_email = rest === null || rest === void 0 ? void 0 : rest.newEmail;
+          delete body["newEmail"];
+        }
+        return yield _request(this.fetch, "POST", `${this.url}/admin/generate_link`, {
+          body,
+          headers: this.headers,
+          xform: _generateLinkResponse,
+          redirectTo: options === null || options === void 0 ? void 0 : options.redirectTo
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              properties: null,
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  // User Admin API
+  /**
+   * Creates a new user.
+   * This function should only be called on a server. Never expose your `service_role` key in the browser.
+   */
+  createUser(attributes) {
+    return __async(this, null, function* () {
+      try {
+        return yield _request(this.fetch, "POST", `${this.url}/admin/users`, {
+          body: attributes,
+          headers: this.headers,
+          xform: _userResponse
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Get a list of users.
+   *
+   * This function should only be called on a server. Never expose your `service_role` key in the browser.
+   * @param params An object which supports `page` and `perPage` as numbers, to alter the paginated results.
+   */
+  listUsers(params) {
+    return __async(this, null, function* () {
+      var _a, _b, _c, _d, _e, _f, _g;
+      try {
+        const pagination = {
+          nextPage: null,
+          lastPage: 0,
+          total: 0
+        };
+        const response = yield _request(this.fetch, "GET", `${this.url}/admin/users`, {
+          headers: this.headers,
+          noResolveJson: true,
+          query: {
+            page: (_b = (_a = params === null || params === void 0 ? void 0 : params.page) === null || _a === void 0 ? void 0 : _a.toString()) !== null && _b !== void 0 ? _b : "",
+            per_page: (_d = (_c = params === null || params === void 0 ? void 0 : params.perPage) === null || _c === void 0 ? void 0 : _c.toString()) !== null && _d !== void 0 ? _d : ""
+          },
+          xform: _noResolveJsonResponse
+        });
+        if (response.error) throw response.error;
+        const users = yield response.json();
+        const total = (_e = response.headers.get("x-total-count")) !== null && _e !== void 0 ? _e : 0;
+        const links = (_g = (_f = response.headers.get("link")) === null || _f === void 0 ? void 0 : _f.split(",")) !== null && _g !== void 0 ? _g : [];
+        if (links.length > 0) {
+          links.forEach((link) => {
+            const page = parseInt(link.split(";")[0].split("=")[1].substring(0, 1));
+            const rel = JSON.parse(link.split(";")[1].split("=")[1]);
+            pagination[`${rel}Page`] = page;
+          });
+          pagination.total = parseInt(total);
+        }
+        return {
+          data: Object.assign(Object.assign({}, users), pagination),
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              users: []
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Get user by id.
+   *
+   * @param uid The user's unique identifier
+   *
+   * This function should only be called on a server. Never expose your `service_role` key in the browser.
+   */
+  getUserById(uid) {
+    return __async(this, null, function* () {
+      try {
+        return yield _request(this.fetch, "GET", `${this.url}/admin/users/${uid}`, {
+          headers: this.headers,
+          xform: _userResponse
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Updates the user data.
+   *
+   * @param attributes The data you want to update.
+   *
+   * This function should only be called on a server. Never expose your `service_role` key in the browser.
+   */
+  updateUserById(uid, attributes) {
+    return __async(this, null, function* () {
+      try {
+        return yield _request(this.fetch, "PUT", `${this.url}/admin/users/${uid}`, {
+          body: attributes,
+          headers: this.headers,
+          xform: _userResponse
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Delete a user. Requires a `service_role` key.
+   *
+   * @param id The user id you want to remove.
+   * @param shouldSoftDelete If true, then the user will be soft-deleted (setting `deleted_at` to the current timestamp and disabling their account while preserving their data) from the auth schema.
+   * Defaults to false for backward compatibility.
+   *
+   * This function should only be called on a server. Never expose your `service_role` key in the browser.
+   */
+  deleteUser(id, shouldSoftDelete = false) {
+    return __async(this, null, function* () {
+      try {
+        return yield _request(this.fetch, "DELETE", `${this.url}/admin/users/${id}`, {
+          headers: this.headers,
+          body: {
+            should_soft_delete: shouldSoftDelete
+          },
+          xform: _userResponse
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  _listFactors(params) {
+    return __async(this, null, function* () {
+      try {
+        const {
+          data,
+          error
+        } = yield _request(this.fetch, "GET", `${this.url}/admin/users/${params.userId}/factors`, {
+          headers: this.headers,
+          xform: (factors) => {
+            return {
+              data: {
+                factors
+              },
+              error: null
+            };
+          }
+        });
+        return {
+          data,
+          error
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  _deleteFactor(params) {
+    return __async(this, null, function* () {
+      try {
+        const data = yield _request(this.fetch, "DELETE", `${this.url}/admin/users/${params.userId}/factors/${params.id}`, {
+          headers: this.headers
+        });
+        return {
+          data,
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+};
+
+// node_modules/@supabase/auth-js/dist/module/lib/local-storage.js
+var localStorageAdapter = {
+  getItem: (key) => {
+    if (!supportsLocalStorage()) {
+      return null;
+    }
+    return globalThis.localStorage.getItem(key);
+  },
+  setItem: (key, value) => {
+    if (!supportsLocalStorage()) {
+      return;
+    }
+    globalThis.localStorage.setItem(key, value);
+  },
+  removeItem: (key) => {
+    if (!supportsLocalStorage()) {
+      return;
+    }
+    globalThis.localStorage.removeItem(key);
+  }
+};
+function memoryLocalStorageAdapter(store2 = {}) {
+  return {
+    getItem: (key) => {
+      return store2[key] || null;
+    },
+    setItem: (key, value) => {
+      store2[key] = value;
+    },
+    removeItem: (key) => {
+      delete store2[key];
+    }
+  };
+}
+
+// node_modules/@supabase/auth-js/dist/module/lib/polyfills.js
+function polyfillGlobalThis() {
+  if (typeof globalThis === "object") return;
+  try {
+    Object.defineProperty(Object.prototype, "__magic__", {
+      get: function() {
+        return this;
+      },
+      configurable: true
+    });
+    __magic__.globalThis = __magic__;
+    delete Object.prototype.__magic__;
+  } catch (e) {
+    if (typeof self !== "undefined") {
+      self.globalThis = self;
+    }
+  }
+}
+
+// node_modules/@supabase/auth-js/dist/module/lib/locks.js
+var internals = {
+  /**
+   * @experimental
+   */
+  debug: !!(globalThis && supportsLocalStorage() && globalThis.localStorage && globalThis.localStorage.getItem("supabase.gotrue-js.locks.debug") === "true")
+};
+var LockAcquireTimeoutError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.isAcquireTimeout = true;
+  }
+};
+var NavigatorLockAcquireTimeoutError = class extends LockAcquireTimeoutError {
+};
+function navigatorLock(name, acquireTimeout, fn) {
+  return __async(this, null, function* () {
+    if (internals.debug) {
+      console.log("@supabase/gotrue-js: navigatorLock: acquire lock", name, acquireTimeout);
+    }
+    const abortController = new globalThis.AbortController();
+    if (acquireTimeout > 0) {
+      setTimeout(() => {
+        abortController.abort();
+        if (internals.debug) {
+          console.log("@supabase/gotrue-js: navigatorLock acquire timed out", name);
+        }
+      }, acquireTimeout);
+    }
+    return yield globalThis.navigator.locks.request(name, acquireTimeout === 0 ? {
+      mode: "exclusive",
+      ifAvailable: true
+    } : {
+      mode: "exclusive",
+      signal: abortController.signal
+    }, (lock) => __async(this, null, function* () {
+      if (lock) {
+        if (internals.debug) {
+          console.log("@supabase/gotrue-js: navigatorLock: acquired", name, lock.name);
+        }
+        try {
+          return yield fn();
+        } finally {
+          if (internals.debug) {
+            console.log("@supabase/gotrue-js: navigatorLock: released", name, lock.name);
+          }
+        }
+      } else {
+        if (acquireTimeout === 0) {
+          if (internals.debug) {
+            console.log("@supabase/gotrue-js: navigatorLock: not immediately available", name);
+          }
+          throw new NavigatorLockAcquireTimeoutError(`Acquiring an exclusive Navigator LockManager lock "${name}" immediately failed`);
+        } else {
+          if (internals.debug) {
+            try {
+              const result = yield globalThis.navigator.locks.query();
+              console.log("@supabase/gotrue-js: Navigator LockManager state", JSON.stringify(result, null, "  "));
+            } catch (e) {
+              console.warn("@supabase/gotrue-js: Error when querying Navigator LockManager state", e);
+            }
+          }
+          console.warn("@supabase/gotrue-js: Navigator LockManager returned a null lock when using #request without ifAvailable set to true, it appears this browser is not following the LockManager spec https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request");
+          return yield fn();
+        }
+      }
+    }));
+  });
+}
+
+// node_modules/@supabase/auth-js/dist/module/GoTrueClient.js
+polyfillGlobalThis();
+var DEFAULT_OPTIONS = {
+  url: GOTRUE_URL,
+  storageKey: STORAGE_KEY,
+  autoRefreshToken: true,
+  persistSession: true,
+  detectSessionInUrl: true,
+  headers: DEFAULT_HEADERS4,
+  flowType: "implicit",
+  debug: false,
+  hasCustomAuthorizationHeader: false
+};
+var AUTO_REFRESH_TICK_DURATION = 30 * 1e3;
+var AUTO_REFRESH_TICK_THRESHOLD = 3;
+function lockNoOp(name, acquireTimeout, fn) {
+  return __async(this, null, function* () {
+    return yield fn();
+  });
+}
+var GoTrueClient = class _GoTrueClient {
+  /**
+   * Create a new client for use in the browser.
+   */
+  constructor(options) {
+    var _a, _b;
+    this.memoryStorage = null;
+    this.stateChangeEmitters = /* @__PURE__ */ new Map();
+    this.autoRefreshTicker = null;
+    this.visibilityChangedCallback = null;
+    this.refreshingDeferred = null;
+    this.initializePromise = null;
+    this.detectSessionInUrl = true;
+    this.hasCustomAuthorizationHeader = false;
+    this.suppressGetSessionWarning = false;
+    this.lockAcquired = false;
+    this.pendingInLock = [];
+    this.broadcastChannel = null;
+    this.logger = console.log;
+    this.instanceID = _GoTrueClient.nextInstanceID;
+    _GoTrueClient.nextInstanceID += 1;
+    if (this.instanceID > 0 && isBrowser()) {
+      console.warn("Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.");
+    }
+    const settings = Object.assign(Object.assign({}, DEFAULT_OPTIONS), options);
+    this.logDebugMessages = !!settings.debug;
+    if (typeof settings.debug === "function") {
+      this.logger = settings.debug;
+    }
+    this.persistSession = settings.persistSession;
+    this.storageKey = settings.storageKey;
+    this.autoRefreshToken = settings.autoRefreshToken;
+    this.admin = new GoTrueAdminApi({
+      url: settings.url,
+      headers: settings.headers,
+      fetch: settings.fetch
+    });
+    this.url = settings.url;
+    this.headers = settings.headers;
+    this.fetch = resolveFetch4(settings.fetch);
+    this.lock = settings.lock || lockNoOp;
+    this.detectSessionInUrl = settings.detectSessionInUrl;
+    this.flowType = settings.flowType;
+    this.hasCustomAuthorizationHeader = settings.hasCustomAuthorizationHeader;
+    if (settings.lock) {
+      this.lock = settings.lock;
+    } else if (isBrowser() && ((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.navigator) === null || _a === void 0 ? void 0 : _a.locks)) {
+      this.lock = navigatorLock;
+    } else {
+      this.lock = lockNoOp;
+    }
+    this.mfa = {
+      verify: this._verify.bind(this),
+      enroll: this._enroll.bind(this),
+      unenroll: this._unenroll.bind(this),
+      challenge: this._challenge.bind(this),
+      listFactors: this._listFactors.bind(this),
+      challengeAndVerify: this._challengeAndVerify.bind(this),
+      getAuthenticatorAssuranceLevel: this._getAuthenticatorAssuranceLevel.bind(this)
+    };
+    if (this.persistSession) {
+      if (settings.storage) {
+        this.storage = settings.storage;
+      } else {
+        if (supportsLocalStorage()) {
+          this.storage = localStorageAdapter;
+        } else {
+          this.memoryStorage = {};
+          this.storage = memoryLocalStorageAdapter(this.memoryStorage);
+        }
+      }
+    } else {
+      this.memoryStorage = {};
+      this.storage = memoryLocalStorageAdapter(this.memoryStorage);
+    }
+    if (isBrowser() && globalThis.BroadcastChannel && this.persistSession && this.storageKey) {
+      try {
+        this.broadcastChannel = new globalThis.BroadcastChannel(this.storageKey);
+      } catch (e) {
+        console.error("Failed to create a new BroadcastChannel, multi-tab state changes will not be available", e);
+      }
+      (_b = this.broadcastChannel) === null || _b === void 0 ? void 0 : _b.addEventListener("message", (event) => __async(this, null, function* () {
+        this._debug("received broadcast notification from other tab or client", event);
+        yield this._notifyAllSubscribers(event.data.event, event.data.session, false);
+      }));
+    }
+    this.initialize();
+  }
+  _debug(...args) {
+    if (this.logDebugMessages) {
+      this.logger(`GoTrueClient@${this.instanceID} (${version4}) ${(/* @__PURE__ */ new Date()).toISOString()}`, ...args);
+    }
+    return this;
+  }
+  /**
+   * Initializes the client session either from the url or from storage.
+   * This method is automatically called when instantiating the client, but should also be called
+   * manually when checking for an error from an auth redirect (oauth, magiclink, password recovery, etc).
+   */
+  initialize() {
+    return __async(this, null, function* () {
+      if (this.initializePromise) {
+        return yield this.initializePromise;
+      }
+      this.initializePromise = (() => __async(this, null, function* () {
+        return yield this._acquireLock(-1, () => __async(this, null, function* () {
+          return yield this._initialize();
+        }));
+      }))();
+      return yield this.initializePromise;
+    });
+  }
+  /**
+   * IMPORTANT:
+   * 1. Never throw in this method, as it is called from the constructor
+   * 2. Never return a session from this method as it would be cached over
+   *    the whole lifetime of the client
+   */
+  _initialize() {
+    return __async(this, null, function* () {
+      try {
+        const isPKCEFlow = isBrowser() ? yield this._isPKCEFlow() : false;
+        this._debug("#_initialize()", "begin", "is PKCE flow", isPKCEFlow);
+        if (isPKCEFlow || this.detectSessionInUrl && this._isImplicitGrantFlow()) {
+          const {
+            data,
+            error
+          } = yield this._getSessionFromURL(isPKCEFlow);
+          if (error) {
+            this._debug("#_initialize()", "error detecting session from URL", error);
+            if ((error === null || error === void 0 ? void 0 : error.message) === "Identity is already linked" || (error === null || error === void 0 ? void 0 : error.message) === "Identity is already linked to another user") {
+              return {
+                error
+              };
+            }
+            yield this._removeSession();
+            return {
+              error
+            };
+          }
+          const {
+            session,
+            redirectType
+          } = data;
+          this._debug("#_initialize()", "detected session in URL", session, "redirect type", redirectType);
+          yield this._saveSession(session);
+          setTimeout(() => __async(this, null, function* () {
+            if (redirectType === "recovery") {
+              yield this._notifyAllSubscribers("PASSWORD_RECOVERY", session);
+            } else {
+              yield this._notifyAllSubscribers("SIGNED_IN", session);
+            }
+          }), 0);
+          return {
+            error: null
+          };
+        }
+        yield this._recoverAndRefresh();
+        return {
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            error
+          };
+        }
+        return {
+          error: new AuthUnknownError("Unexpected error during initialization", error)
+        };
+      } finally {
+        yield this._handleVisibilityChange();
+        this._debug("#_initialize()", "end");
+      }
+    });
+  }
+  /**
+   * Creates a new anonymous user.
+   *
+   * @returns A session where the is_anonymous claim in the access token JWT set to true
+   */
+  signInAnonymously(credentials) {
+    return __async(this, null, function* () {
+      var _a, _b, _c;
+      try {
+        const res = yield _request(this.fetch, "POST", `${this.url}/signup`, {
+          headers: this.headers,
+          body: {
+            data: (_b = (_a = credentials === null || credentials === void 0 ? void 0 : credentials.options) === null || _a === void 0 ? void 0 : _a.data) !== null && _b !== void 0 ? _b : {},
+            gotrue_meta_security: {
+              captcha_token: (_c = credentials === null || credentials === void 0 ? void 0 : credentials.options) === null || _c === void 0 ? void 0 : _c.captchaToken
+            }
+          },
+          xform: _sessionResponse
+        });
+        const {
+          data,
+          error
+        } = res;
+        if (error || !data) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        const session = data.session;
+        const user = data.user;
+        if (data.session) {
+          yield this._saveSession(data.session);
+          yield this._notifyAllSubscribers("SIGNED_IN", session);
+        }
+        return {
+          data: {
+            user,
+            session
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Creates a new user.
+   *
+   * Be aware that if a user account exists in the system you may get back an
+   * error message that attempts to hide this information from the user.
+   * This method has support for PKCE via email signups. The PKCE flow cannot be used when autoconfirm is enabled.
+   *
+   * @returns A logged-in session if the server has "autoconfirm" ON
+   * @returns A user if the server has "autoconfirm" OFF
+   */
+  signUp(credentials) {
+    return __async(this, null, function* () {
+      var _a, _b, _c;
+      try {
+        let res;
+        if ("email" in credentials) {
+          const {
+            email,
+            password,
+            options
+          } = credentials;
+          let codeChallenge = null;
+          let codeChallengeMethod = null;
+          if (this.flowType === "pkce") {
+            ;
+            [codeChallenge, codeChallengeMethod] = yield getCodeChallengeAndMethod(this.storage, this.storageKey);
+          }
+          res = yield _request(this.fetch, "POST", `${this.url}/signup`, {
+            headers: this.headers,
+            redirectTo: options === null || options === void 0 ? void 0 : options.emailRedirectTo,
+            body: {
+              email,
+              password,
+              data: (_a = options === null || options === void 0 ? void 0 : options.data) !== null && _a !== void 0 ? _a : {},
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              },
+              code_challenge: codeChallenge,
+              code_challenge_method: codeChallengeMethod
+            },
+            xform: _sessionResponse
+          });
+        } else if ("phone" in credentials) {
+          const {
+            phone,
+            password,
+            options
+          } = credentials;
+          res = yield _request(this.fetch, "POST", `${this.url}/signup`, {
+            headers: this.headers,
+            body: {
+              phone,
+              password,
+              data: (_b = options === null || options === void 0 ? void 0 : options.data) !== null && _b !== void 0 ? _b : {},
+              channel: (_c = options === null || options === void 0 ? void 0 : options.channel) !== null && _c !== void 0 ? _c : "sms",
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              }
+            },
+            xform: _sessionResponse
+          });
+        } else {
+          throw new AuthInvalidCredentialsError("You must provide either an email or phone number and a password");
+        }
+        const {
+          data,
+          error
+        } = res;
+        if (error || !data) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        const session = data.session;
+        const user = data.user;
+        if (data.session) {
+          yield this._saveSession(data.session);
+          yield this._notifyAllSubscribers("SIGNED_IN", session);
+        }
+        return {
+          data: {
+            user,
+            session
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Log in an existing user with an email and password or phone and password.
+   *
+   * Be aware that you may get back an error message that will not distinguish
+   * between the cases where the account does not exist or that the
+   * email/phone and password combination is wrong or that the account can only
+   * be accessed via social login.
+   */
+  signInWithPassword(credentials) {
+    return __async(this, null, function* () {
+      try {
+        let res;
+        if ("email" in credentials) {
+          const {
+            email,
+            password,
+            options
+          } = credentials;
+          res = yield _request(this.fetch, "POST", `${this.url}/token?grant_type=password`, {
+            headers: this.headers,
+            body: {
+              email,
+              password,
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              }
+            },
+            xform: _sessionResponsePassword
+          });
+        } else if ("phone" in credentials) {
+          const {
+            phone,
+            password,
+            options
+          } = credentials;
+          res = yield _request(this.fetch, "POST", `${this.url}/token?grant_type=password`, {
+            headers: this.headers,
+            body: {
+              phone,
+              password,
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              }
+            },
+            xform: _sessionResponsePassword
+          });
+        } else {
+          throw new AuthInvalidCredentialsError("You must provide either an email or phone number and a password");
+        }
+        const {
+          data,
+          error
+        } = res;
+        if (error) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        } else if (!data || !data.session || !data.user) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error: new AuthInvalidTokenResponseError()
+          };
+        }
+        if (data.session) {
+          yield this._saveSession(data.session);
+          yield this._notifyAllSubscribers("SIGNED_IN", data.session);
+        }
+        return {
+          data: Object.assign({
+            user: data.user,
+            session: data.session
+          }, data.weak_password ? {
+            weakPassword: data.weak_password
+          } : null),
+          error
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Log in an existing user via a third-party provider.
+   * This method supports the PKCE flow.
+   */
+  signInWithOAuth(credentials) {
+    return __async(this, null, function* () {
+      var _a, _b, _c, _d;
+      return yield this._handleProviderSignIn(credentials.provider, {
+        redirectTo: (_a = credentials.options) === null || _a === void 0 ? void 0 : _a.redirectTo,
+        scopes: (_b = credentials.options) === null || _b === void 0 ? void 0 : _b.scopes,
+        queryParams: (_c = credentials.options) === null || _c === void 0 ? void 0 : _c.queryParams,
+        skipBrowserRedirect: (_d = credentials.options) === null || _d === void 0 ? void 0 : _d.skipBrowserRedirect
+      });
+    });
+  }
+  /**
+   * Log in an existing user by exchanging an Auth Code issued during the PKCE flow.
+   */
+  exchangeCodeForSession(authCode) {
+    return __async(this, null, function* () {
+      yield this.initializePromise;
+      return this._acquireLock(-1, () => __async(this, null, function* () {
+        return this._exchangeCodeForSession(authCode);
+      }));
+    });
+  }
+  _exchangeCodeForSession(authCode) {
+    return __async(this, null, function* () {
+      const storageItem = yield getItemAsync(this.storage, `${this.storageKey}-code-verifier`);
+      const [codeVerifier, redirectType] = (storageItem !== null && storageItem !== void 0 ? storageItem : "").split("/");
+      try {
+        const {
+          data,
+          error
+        } = yield _request(this.fetch, "POST", `${this.url}/token?grant_type=pkce`, {
+          headers: this.headers,
+          body: {
+            auth_code: authCode,
+            code_verifier: codeVerifier
+          },
+          xform: _sessionResponse
+        });
+        yield removeItemAsync(this.storage, `${this.storageKey}-code-verifier`);
+        if (error) {
+          throw error;
+        }
+        if (!data || !data.session || !data.user) {
+          return {
+            data: {
+              user: null,
+              session: null,
+              redirectType: null
+            },
+            error: new AuthInvalidTokenResponseError()
+          };
+        }
+        if (data.session) {
+          yield this._saveSession(data.session);
+          yield this._notifyAllSubscribers("SIGNED_IN", data.session);
+        }
+        return {
+          data: Object.assign(Object.assign({}, data), {
+            redirectType: redirectType !== null && redirectType !== void 0 ? redirectType : null
+          }),
+          error
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null,
+              redirectType: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Allows signing in with an OIDC ID token. The authentication provider used
+   * should be enabled and configured.
+   */
+  signInWithIdToken(credentials) {
+    return __async(this, null, function* () {
+      try {
+        const {
+          options,
+          provider,
+          token,
+          access_token,
+          nonce
+        } = credentials;
+        const res = yield _request(this.fetch, "POST", `${this.url}/token?grant_type=id_token`, {
+          headers: this.headers,
+          body: {
+            provider,
+            id_token: token,
+            access_token,
+            nonce,
+            gotrue_meta_security: {
+              captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+            }
+          },
+          xform: _sessionResponse
+        });
+        const {
+          data,
+          error
+        } = res;
+        if (error) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        } else if (!data || !data.session || !data.user) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error: new AuthInvalidTokenResponseError()
+          };
+        }
+        if (data.session) {
+          yield this._saveSession(data.session);
+          yield this._notifyAllSubscribers("SIGNED_IN", data.session);
+        }
+        return {
+          data,
+          error
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Log in a user using magiclink or a one-time password (OTP).
+   *
+   * If the `{{ .ConfirmationURL }}` variable is specified in the email template, a magiclink will be sent.
+   * If the `{{ .Token }}` variable is specified in the email template, an OTP will be sent.
+   * If you're using phone sign-ins, only an OTP will be sent. You won't be able to send a magiclink for phone sign-ins.
+   *
+   * Be aware that you may get back an error message that will not distinguish
+   * between the cases where the account does not exist or, that the account
+   * can only be accessed via social login.
+   *
+   * Do note that you will need to configure a Whatsapp sender on Twilio
+   * if you are using phone sign in with the 'whatsapp' channel. The whatsapp
+   * channel is not supported on other providers
+   * at this time.
+   * This method supports PKCE when an email is passed.
+   */
+  signInWithOtp(credentials) {
+    return __async(this, null, function* () {
+      var _a, _b, _c, _d, _e;
+      try {
+        if ("email" in credentials) {
+          const {
+            email,
+            options
+          } = credentials;
+          let codeChallenge = null;
+          let codeChallengeMethod = null;
+          if (this.flowType === "pkce") {
+            ;
+            [codeChallenge, codeChallengeMethod] = yield getCodeChallengeAndMethod(this.storage, this.storageKey);
+          }
+          const {
+            error
+          } = yield _request(this.fetch, "POST", `${this.url}/otp`, {
+            headers: this.headers,
+            body: {
+              email,
+              data: (_a = options === null || options === void 0 ? void 0 : options.data) !== null && _a !== void 0 ? _a : {},
+              create_user: (_b = options === null || options === void 0 ? void 0 : options.shouldCreateUser) !== null && _b !== void 0 ? _b : true,
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              },
+              code_challenge: codeChallenge,
+              code_challenge_method: codeChallengeMethod
+            },
+            redirectTo: options === null || options === void 0 ? void 0 : options.emailRedirectTo
+          });
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        if ("phone" in credentials) {
+          const {
+            phone,
+            options
+          } = credentials;
+          const {
+            data,
+            error
+          } = yield _request(this.fetch, "POST", `${this.url}/otp`, {
+            headers: this.headers,
+            body: {
+              phone,
+              data: (_c = options === null || options === void 0 ? void 0 : options.data) !== null && _c !== void 0 ? _c : {},
+              create_user: (_d = options === null || options === void 0 ? void 0 : options.shouldCreateUser) !== null && _d !== void 0 ? _d : true,
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              },
+              channel: (_e = options === null || options === void 0 ? void 0 : options.channel) !== null && _e !== void 0 ? _e : "sms"
+            }
+          });
+          return {
+            data: {
+              user: null,
+              session: null,
+              messageId: data === null || data === void 0 ? void 0 : data.message_id
+            },
+            error
+          };
+        }
+        throw new AuthInvalidCredentialsError("You must provide either an email or phone number.");
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Log in a user given a User supplied OTP or TokenHash received through mobile or email.
+   */
+  verifyOtp(params) {
+    return __async(this, null, function* () {
+      var _a, _b;
+      try {
+        let redirectTo = void 0;
+        let captchaToken = void 0;
+        if ("options" in params) {
+          redirectTo = (_a = params.options) === null || _a === void 0 ? void 0 : _a.redirectTo;
+          captchaToken = (_b = params.options) === null || _b === void 0 ? void 0 : _b.captchaToken;
+        }
+        const {
+          data,
+          error
+        } = yield _request(this.fetch, "POST", `${this.url}/verify`, {
+          headers: this.headers,
+          body: Object.assign(Object.assign({}, params), {
+            gotrue_meta_security: {
+              captcha_token: captchaToken
+            }
+          }),
+          redirectTo,
+          xform: _sessionResponse
+        });
+        if (error) {
+          throw error;
+        }
+        if (!data) {
+          throw new Error("An error occurred on token verification.");
+        }
+        const session = data.session;
+        const user = data.user;
+        if (session === null || session === void 0 ? void 0 : session.access_token) {
+          yield this._saveSession(session);
+          yield this._notifyAllSubscribers(params.type == "recovery" ? "PASSWORD_RECOVERY" : "SIGNED_IN", session);
+        }
+        return {
+          data: {
+            user,
+            session
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Attempts a single-sign on using an enterprise Identity Provider. A
+   * successful SSO attempt will redirect the current page to the identity
+   * provider authorization page. The redirect URL is implementation and SSO
+   * protocol specific.
+   *
+   * You can use it by providing a SSO domain. Typically you can extract this
+   * domain by asking users for their email address. If this domain is
+   * registered on the Auth instance the redirect will use that organization's
+   * currently active SSO Identity Provider for the login.
+   *
+   * If you have built an organization-specific login page, you can use the
+   * organization's SSO Identity Provider UUID directly instead.
+   */
+  signInWithSSO(params) {
+    return __async(this, null, function* () {
+      var _a, _b, _c;
+      try {
+        let codeChallenge = null;
+        let codeChallengeMethod = null;
+        if (this.flowType === "pkce") {
+          ;
+          [codeChallenge, codeChallengeMethod] = yield getCodeChallengeAndMethod(this.storage, this.storageKey);
+        }
+        return yield _request(this.fetch, "POST", `${this.url}/sso`, {
+          body: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, "providerId" in params ? {
+            provider_id: params.providerId
+          } : null), "domain" in params ? {
+            domain: params.domain
+          } : null), {
+            redirect_to: (_b = (_a = params.options) === null || _a === void 0 ? void 0 : _a.redirectTo) !== null && _b !== void 0 ? _b : void 0
+          }), ((_c = params === null || params === void 0 ? void 0 : params.options) === null || _c === void 0 ? void 0 : _c.captchaToken) ? {
+            gotrue_meta_security: {
+              captcha_token: params.options.captchaToken
+            }
+          } : null), {
+            skip_http_redirect: true,
+            code_challenge: codeChallenge,
+            code_challenge_method: codeChallengeMethod
+          }),
+          headers: this.headers,
+          xform: _ssoResponse
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Sends a reauthentication OTP to the user's email or phone number.
+   * Requires the user to be signed-in.
+   */
+  reauthenticate() {
+    return __async(this, null, function* () {
+      yield this.initializePromise;
+      return yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._reauthenticate();
+      }));
+    });
+  }
+  _reauthenticate() {
+    return __async(this, null, function* () {
+      try {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          const {
+            data: {
+              session
+            },
+            error: sessionError
+          } = result;
+          if (sessionError) throw sessionError;
+          if (!session) throw new AuthSessionMissingError();
+          const {
+            error
+          } = yield _request(this.fetch, "GET", `${this.url}/reauthenticate`, {
+            headers: this.headers,
+            jwt: session.access_token
+          });
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Resends an existing signup confirmation email, email change email, SMS OTP or phone change OTP.
+   */
+  resend(credentials) {
+    return __async(this, null, function* () {
+      try {
+        const endpoint = `${this.url}/resend`;
+        if ("email" in credentials) {
+          const {
+            email,
+            type,
+            options
+          } = credentials;
+          const {
+            error
+          } = yield _request(this.fetch, "POST", endpoint, {
+            headers: this.headers,
+            body: {
+              email,
+              type,
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              }
+            },
+            redirectTo: options === null || options === void 0 ? void 0 : options.emailRedirectTo
+          });
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        } else if ("phone" in credentials) {
+          const {
+            phone,
+            type,
+            options
+          } = credentials;
+          const {
+            data,
+            error
+          } = yield _request(this.fetch, "POST", endpoint, {
+            headers: this.headers,
+            body: {
+              phone,
+              type,
+              gotrue_meta_security: {
+                captcha_token: options === null || options === void 0 ? void 0 : options.captchaToken
+              }
+            }
+          });
+          return {
+            data: {
+              user: null,
+              session: null,
+              messageId: data === null || data === void 0 ? void 0 : data.message_id
+            },
+            error
+          };
+        }
+        throw new AuthInvalidCredentialsError("You must provide either an email or phone number and a type");
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Returns the session, refreshing it if necessary.
+   *
+   * The session returned can be null if the session is not detected which can happen in the event a user is not signed-in or has logged out.
+   *
+   * **IMPORTANT:** This method loads values directly from the storage attached
+   * to the client. If that storage is based on request cookies for example,
+   * the values in it may not be authentic and therefore it's strongly advised
+   * against using this method and its results in such circumstances. A warning
+   * will be emitted if this is detected. Use {@link #getUser()} instead.
+   */
+  getSession() {
+    return __async(this, null, function* () {
+      yield this.initializePromise;
+      const result = yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return this._useSession((result2) => __async(this, null, function* () {
+          return result2;
+        }));
+      }));
+      return result;
+    });
+  }
+  /**
+   * Acquires a global lock based on the storage key.
+   */
+  _acquireLock(acquireTimeout, fn) {
+    return __async(this, null, function* () {
+      this._debug("#_acquireLock", "begin", acquireTimeout);
+      try {
+        if (this.lockAcquired) {
+          const last4 = this.pendingInLock.length ? this.pendingInLock[this.pendingInLock.length - 1] : Promise.resolve();
+          const result = (() => __async(this, null, function* () {
+            yield last4;
+            return yield fn();
+          }))();
+          this.pendingInLock.push((() => __async(this, null, function* () {
+            try {
+              yield result;
+            } catch (e) {
+            }
+          }))());
+          return result;
+        }
+        return yield this.lock(`lock:${this.storageKey}`, acquireTimeout, () => __async(this, null, function* () {
+          this._debug("#_acquireLock", "lock acquired for storage key", this.storageKey);
+          try {
+            this.lockAcquired = true;
+            const result = fn();
+            this.pendingInLock.push((() => __async(this, null, function* () {
+              try {
+                yield result;
+              } catch (e) {
+              }
+            }))());
+            yield result;
+            while (this.pendingInLock.length) {
+              const waitOn = [...this.pendingInLock];
+              yield Promise.all(waitOn);
+              this.pendingInLock.splice(0, waitOn.length);
+            }
+            return yield result;
+          } finally {
+            this._debug("#_acquireLock", "lock released for storage key", this.storageKey);
+            this.lockAcquired = false;
+          }
+        }));
+      } finally {
+        this._debug("#_acquireLock", "end");
+      }
+    });
+  }
+  /**
+   * Use instead of {@link #getSession} inside the library. It is
+   * semantically usually what you want, as getting a session involves some
+   * processing afterwards that requires only one client operating on the
+   * session at once across multiple tabs or processes.
+   */
+  _useSession(fn) {
+    return __async(this, null, function* () {
+      this._debug("#_useSession", "begin");
+      try {
+        const result = yield this.__loadSession();
+        return yield fn(result);
+      } finally {
+        this._debug("#_useSession", "end");
+      }
+    });
+  }
+  /**
+   * NEVER USE DIRECTLY!
+   *
+   * Always use {@link #_useSession}.
+   */
+  __loadSession() {
+    return __async(this, null, function* () {
+      this._debug("#__loadSession()", "begin");
+      if (!this.lockAcquired) {
+        this._debug("#__loadSession()", "used outside of an acquired lock!", new Error().stack);
+      }
+      try {
+        let currentSession = null;
+        const maybeSession = yield getItemAsync(this.storage, this.storageKey);
+        this._debug("#getSession()", "session from storage", maybeSession);
+        if (maybeSession !== null) {
+          if (this._isValidSession(maybeSession)) {
+            currentSession = maybeSession;
+          } else {
+            this._debug("#getSession()", "session from storage is not valid");
+            yield this._removeSession();
+          }
+        }
+        if (!currentSession) {
+          return {
+            data: {
+              session: null
+            },
+            error: null
+          };
+        }
+        const hasExpired = currentSession.expires_at ? currentSession.expires_at <= Date.now() / 1e3 : false;
+        this._debug("#__loadSession()", `session has${hasExpired ? "" : " not"} expired`, "expires_at", currentSession.expires_at);
+        if (!hasExpired) {
+          if (this.storage.isServer) {
+            let suppressWarning = this.suppressGetSessionWarning;
+            const proxySession = new Proxy(currentSession, {
+              get: (target, prop, receiver) => {
+                if (!suppressWarning && prop === "user") {
+                  console.warn("Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and many not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server.");
+                  suppressWarning = true;
+                  this.suppressGetSessionWarning = true;
+                }
+                return Reflect.get(target, prop, receiver);
+              }
+            });
+            currentSession = proxySession;
+          }
+          return {
+            data: {
+              session: currentSession
+            },
+            error: null
+          };
+        }
+        const {
+          session,
+          error
+        } = yield this._callRefreshToken(currentSession.refresh_token);
+        if (error) {
+          return {
+            data: {
+              session: null
+            },
+            error
+          };
+        }
+        return {
+          data: {
+            session
+          },
+          error: null
+        };
+      } finally {
+        this._debug("#__loadSession()", "end");
+      }
+    });
+  }
+  /**
+   * Gets the current user details if there is an existing session. This method
+   * performs a network request to the Supabase Auth server, so the returned
+   * value is authentic and can be used to base authorization rules on.
+   *
+   * @param jwt Takes in an optional access token JWT. If no JWT is provided, the JWT from the current session is used.
+   */
+  getUser(jwt) {
+    return __async(this, null, function* () {
+      if (jwt) {
+        return yield this._getUser(jwt);
+      }
+      yield this.initializePromise;
+      const result = yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._getUser();
+      }));
+      return result;
+    });
+  }
+  _getUser(jwt) {
+    return __async(this, null, function* () {
+      try {
+        if (jwt) {
+          return yield _request(this.fetch, "GET", `${this.url}/user`, {
+            headers: this.headers,
+            jwt,
+            xform: _userResponse
+          });
+        }
+        return yield this._useSession((result) => __async(this, null, function* () {
+          var _a, _b, _c;
+          const {
+            data,
+            error
+          } = result;
+          if (error) {
+            throw error;
+          }
+          if (!((_a = data.session) === null || _a === void 0 ? void 0 : _a.access_token) && !this.hasCustomAuthorizationHeader) {
+            return {
+              data: {
+                user: null
+              },
+              error: new AuthSessionMissingError()
+            };
+          }
+          return yield _request(this.fetch, "GET", `${this.url}/user`, {
+            headers: this.headers,
+            jwt: (_c = (_b = data.session) === null || _b === void 0 ? void 0 : _b.access_token) !== null && _c !== void 0 ? _c : void 0,
+            xform: _userResponse
+          });
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          if (isAuthSessionMissingError(error)) {
+            yield this._removeSession();
+            yield removeItemAsync(this.storage, `${this.storageKey}-code-verifier`);
+            yield this._notifyAllSubscribers("SIGNED_OUT", null);
+          }
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Updates user data for a logged in user.
+   */
+  updateUser(_0) {
+    return __async(this, arguments, function* (attributes, options = {}) {
+      yield this.initializePromise;
+      return yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._updateUser(attributes, options);
+      }));
+    });
+  }
+  _updateUser(_0) {
+    return __async(this, arguments, function* (attributes, options = {}) {
+      try {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          const {
+            data: sessionData,
+            error: sessionError
+          } = result;
+          if (sessionError) {
+            throw sessionError;
+          }
+          if (!sessionData.session) {
+            throw new AuthSessionMissingError();
+          }
+          const session = sessionData.session;
+          let codeChallenge = null;
+          let codeChallengeMethod = null;
+          if (this.flowType === "pkce" && attributes.email != null) {
+            ;
+            [codeChallenge, codeChallengeMethod] = yield getCodeChallengeAndMethod(this.storage, this.storageKey);
+          }
+          const {
+            data,
+            error: userError
+          } = yield _request(this.fetch, "PUT", `${this.url}/user`, {
+            headers: this.headers,
+            redirectTo: options === null || options === void 0 ? void 0 : options.emailRedirectTo,
+            body: Object.assign(Object.assign({}, attributes), {
+              code_challenge: codeChallenge,
+              code_challenge_method: codeChallengeMethod
+            }),
+            jwt: session.access_token,
+            xform: _userResponse
+          });
+          if (userError) throw userError;
+          session.user = data.user;
+          yield this._saveSession(session);
+          yield this._notifyAllSubscribers("USER_UPDATED", session);
+          return {
+            data: {
+              user: session.user
+            },
+            error: null
+          };
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Decodes a JWT (without performing any validation).
+   */
+  _decodeJWT(jwt) {
+    return decodeJWTPayload(jwt);
+  }
+  /**
+   * Sets the session data from the current session. If the current session is expired, setSession will take care of refreshing it to obtain a new session.
+   * If the refresh token or access token in the current session is invalid, an error will be thrown.
+   * @param currentSession The current session that minimally contains an access token and refresh token.
+   */
+  setSession(currentSession) {
+    return __async(this, null, function* () {
+      yield this.initializePromise;
+      return yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._setSession(currentSession);
+      }));
+    });
+  }
+  _setSession(currentSession) {
+    return __async(this, null, function* () {
+      try {
+        if (!currentSession.access_token || !currentSession.refresh_token) {
+          throw new AuthSessionMissingError();
+        }
+        const timeNow = Date.now() / 1e3;
+        let expiresAt2 = timeNow;
+        let hasExpired = true;
+        let session = null;
+        const payload = decodeJWTPayload(currentSession.access_token);
+        if (payload.exp) {
+          expiresAt2 = payload.exp;
+          hasExpired = expiresAt2 <= timeNow;
+        }
+        if (hasExpired) {
+          const {
+            session: refreshedSession,
+            error
+          } = yield this._callRefreshToken(currentSession.refresh_token);
+          if (error) {
+            return {
+              data: {
+                user: null,
+                session: null
+              },
+              error
+            };
+          }
+          if (!refreshedSession) {
+            return {
+              data: {
+                user: null,
+                session: null
+              },
+              error: null
+            };
+          }
+          session = refreshedSession;
+        } else {
+          const {
+            data,
+            error
+          } = yield this._getUser(currentSession.access_token);
+          if (error) {
+            throw error;
+          }
+          session = {
+            access_token: currentSession.access_token,
+            refresh_token: currentSession.refresh_token,
+            user: data.user,
+            token_type: "bearer",
+            expires_in: expiresAt2 - timeNow,
+            expires_at: expiresAt2
+          };
+          yield this._saveSession(session);
+          yield this._notifyAllSubscribers("SIGNED_IN", session);
+        }
+        return {
+          data: {
+            user: session.user,
+            session
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              session: null,
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Returns a new session, regardless of expiry status.
+   * Takes in an optional current session. If not passed in, then refreshSession() will attempt to retrieve it from getSession().
+   * If the current session's refresh token is invalid, an error will be thrown.
+   * @param currentSession The current session. If passed in, it must contain a refresh token.
+   */
+  refreshSession(currentSession) {
+    return __async(this, null, function* () {
+      yield this.initializePromise;
+      return yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._refreshSession(currentSession);
+      }));
+    });
+  }
+  _refreshSession(currentSession) {
+    return __async(this, null, function* () {
+      try {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          var _a;
+          if (!currentSession) {
+            const {
+              data,
+              error: error2
+            } = result;
+            if (error2) {
+              throw error2;
+            }
+            currentSession = (_a = data.session) !== null && _a !== void 0 ? _a : void 0;
+          }
+          if (!(currentSession === null || currentSession === void 0 ? void 0 : currentSession.refresh_token)) {
+            throw new AuthSessionMissingError();
+          }
+          const {
+            session,
+            error
+          } = yield this._callRefreshToken(currentSession.refresh_token);
+          if (error) {
+            return {
+              data: {
+                user: null,
+                session: null
+              },
+              error
+            };
+          }
+          if (!session) {
+            return {
+              data: {
+                user: null,
+                session: null
+              },
+              error: null
+            };
+          }
+          return {
+            data: {
+              user: session.user,
+              session
+            },
+            error: null
+          };
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              user: null,
+              session: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Gets the session data from a URL string
+   */
+  _getSessionFromURL(isPKCEFlow) {
+    return __async(this, null, function* () {
+      try {
+        if (!isBrowser()) throw new AuthImplicitGrantRedirectError("No browser detected.");
+        if (this.flowType === "implicit" && !this._isImplicitGrantFlow()) {
+          throw new AuthImplicitGrantRedirectError("Not a valid implicit grant flow url.");
+        } else if (this.flowType == "pkce" && !isPKCEFlow) {
+          throw new AuthPKCEGrantCodeExchangeError("Not a valid PKCE flow url.");
+        }
+        const params = parseParametersFromURL(window.location.href);
+        if (isPKCEFlow) {
+          if (!params.code) throw new AuthPKCEGrantCodeExchangeError("No code detected.");
+          const {
+            data: data2,
+            error: error2
+          } = yield this._exchangeCodeForSession(params.code);
+          if (error2) throw error2;
+          const url = new URL(window.location.href);
+          url.searchParams.delete("code");
+          window.history.replaceState(window.history.state, "", url.toString());
+          return {
+            data: {
+              session: data2.session,
+              redirectType: null
+            },
+            error: null
+          };
+        }
+        if (params.error || params.error_description || params.error_code) {
+          throw new AuthImplicitGrantRedirectError(params.error_description || "Error in URL with unspecified error_description", {
+            error: params.error || "unspecified_error",
+            code: params.error_code || "unspecified_code"
+          });
+        }
+        const {
+          provider_token,
+          provider_refresh_token,
+          access_token,
+          refresh_token,
+          expires_in,
+          expires_at,
+          token_type
+        } = params;
+        if (!access_token || !expires_in || !refresh_token || !token_type) {
+          throw new AuthImplicitGrantRedirectError("No session defined in URL");
+        }
+        const timeNow = Math.round(Date.now() / 1e3);
+        const expiresIn = parseInt(expires_in);
+        let expiresAt2 = timeNow + expiresIn;
+        if (expires_at) {
+          expiresAt2 = parseInt(expires_at);
+        }
+        const actuallyExpiresIn = expiresAt2 - timeNow;
+        if (actuallyExpiresIn * 1e3 <= AUTO_REFRESH_TICK_DURATION) {
+          console.warn(`@supabase/gotrue-js: Session as retrieved from URL expires in ${actuallyExpiresIn}s, should have been closer to ${expiresIn}s`);
+        }
+        const issuedAt = expiresAt2 - expiresIn;
+        if (timeNow - issuedAt >= 120) {
+          console.warn("@supabase/gotrue-js: Session as retrieved from URL was issued over 120s ago, URL could be stale", issuedAt, expiresAt2, timeNow);
+        } else if (timeNow - issuedAt < 0) {
+          console.warn("@supabase/gotrue-js: Session as retrieved from URL was issued in the future? Check the device clock for skew", issuedAt, expiresAt2, timeNow);
+        }
+        const {
+          data,
+          error
+        } = yield this._getUser(access_token);
+        if (error) throw error;
+        const session = {
+          provider_token,
+          provider_refresh_token,
+          access_token,
+          expires_in: expiresIn,
+          expires_at: expiresAt2,
+          refresh_token,
+          token_type,
+          user: data.user
+        };
+        window.location.hash = "";
+        this._debug("#_getSessionFromURL()", "clearing window.location.hash");
+        return {
+          data: {
+            session,
+            redirectType: params.type
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              session: null,
+              redirectType: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Checks if the current URL contains parameters given by an implicit oauth grant flow (https://www.rfc-editor.org/rfc/rfc6749.html#section-4.2)
+   */
+  _isImplicitGrantFlow() {
+    const params = parseParametersFromURL(window.location.href);
+    return !!(isBrowser() && (params.access_token || params.error_description));
+  }
+  /**
+   * Checks if the current URL and backing storage contain parameters given by a PKCE flow
+   */
+  _isPKCEFlow() {
+    return __async(this, null, function* () {
+      const params = parseParametersFromURL(window.location.href);
+      const currentStorageContent = yield getItemAsync(this.storage, `${this.storageKey}-code-verifier`);
+      return !!(params.code && currentStorageContent);
+    });
+  }
+  /**
+   * Inside a browser context, `signOut()` will remove the logged in user from the browser session and log them out - removing all items from localstorage and then trigger a `"SIGNED_OUT"` event.
+   *
+   * For server-side management, you can revoke all refresh tokens for a user by passing a user's JWT through to `auth.api.signOut(JWT: string)`.
+   * There is no way to revoke a user's access token jwt until it expires. It is recommended to set a shorter expiry on the jwt for this reason.
+   *
+   * If using `others` scope, no `SIGNED_OUT` event is fired!
+   */
+  signOut() {
+    return __async(this, arguments, function* (options = {
+      scope: "global"
+    }) {
+      yield this.initializePromise;
+      return yield this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._signOut(options);
+      }));
+    });
+  }
+  _signOut() {
+    return __async(this, arguments, function* ({
+      scope
+    } = {
+      scope: "global"
+    }) {
+      return yield this._useSession((result) => __async(this, null, function* () {
+        var _a;
+        const {
+          data,
+          error: sessionError
+        } = result;
+        if (sessionError) {
+          return {
+            error: sessionError
+          };
+        }
+        const accessToken = (_a = data.session) === null || _a === void 0 ? void 0 : _a.access_token;
+        if (accessToken) {
+          const {
+            error
+          } = yield this.admin.signOut(accessToken, scope);
+          if (error) {
+            if (!(isAuthApiError(error) && (error.status === 404 || error.status === 401 || error.status === 403))) {
+              return {
+                error
+              };
+            }
+          }
+        }
+        if (scope !== "others") {
+          yield this._removeSession();
+          yield removeItemAsync(this.storage, `${this.storageKey}-code-verifier`);
+          yield this._notifyAllSubscribers("SIGNED_OUT", null);
+        }
+        return {
+          error: null
+        };
+      }));
+    });
+  }
+  /**
+   * Receive a notification every time an auth event happens.
+   * @param callback A callback function to be invoked when an auth event happens.
+   */
+  onAuthStateChange(callback) {
+    const id = uuid();
+    const subscription = {
+      id,
+      callback,
+      unsubscribe: () => {
+        this._debug("#unsubscribe()", "state change callback with id removed", id);
+        this.stateChangeEmitters.delete(id);
+      }
+    };
+    this._debug("#onAuthStateChange()", "registered callback with id", id);
+    this.stateChangeEmitters.set(id, subscription);
+    (() => __async(this, null, function* () {
+      yield this.initializePromise;
+      yield this._acquireLock(-1, () => __async(this, null, function* () {
+        this._emitInitialSession(id);
+      }));
+    }))();
+    return {
+      data: {
+        subscription
+      }
+    };
+  }
+  _emitInitialSession(id) {
+    return __async(this, null, function* () {
+      return yield this._useSession((result) => __async(this, null, function* () {
+        var _a, _b;
+        try {
+          const {
+            data: {
+              session
+            },
+            error
+          } = result;
+          if (error) throw error;
+          yield (_a = this.stateChangeEmitters.get(id)) === null || _a === void 0 ? void 0 : _a.callback("INITIAL_SESSION", session);
+          this._debug("INITIAL_SESSION", "callback id", id, "session", session);
+        } catch (err) {
+          yield (_b = this.stateChangeEmitters.get(id)) === null || _b === void 0 ? void 0 : _b.callback("INITIAL_SESSION", null);
+          this._debug("INITIAL_SESSION", "callback id", id, "error", err);
+          console.error(err);
+        }
+      }));
+    });
+  }
+  /**
+   * Sends a password reset request to an email address. This method supports the PKCE flow.
+   *
+   * @param email The email address of the user.
+   * @param options.redirectTo The URL to send the user to after they click the password reset link.
+   * @param options.captchaToken Verification token received when the user completes the captcha on the site.
+   */
+  resetPasswordForEmail(_0) {
+    return __async(this, arguments, function* (email, options = {}) {
+      let codeChallenge = null;
+      let codeChallengeMethod = null;
+      if (this.flowType === "pkce") {
+        ;
+        [codeChallenge, codeChallengeMethod] = yield getCodeChallengeAndMethod(
+          this.storage,
+          this.storageKey,
+          true
+          // isPasswordRecovery
+        );
+      }
+      try {
+        return yield _request(this.fetch, "POST", `${this.url}/recover`, {
+          body: {
+            email,
+            code_challenge: codeChallenge,
+            code_challenge_method: codeChallengeMethod,
+            gotrue_meta_security: {
+              captcha_token: options.captchaToken
+            }
+          },
+          headers: this.headers,
+          redirectTo: options.redirectTo
+        });
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Gets all the identities linked to a user.
+   */
+  getUserIdentities() {
+    return __async(this, null, function* () {
+      var _a;
+      try {
+        const {
+          data,
+          error
+        } = yield this.getUser();
+        if (error) throw error;
+        return {
+          data: {
+            identities: (_a = data.user.identities) !== null && _a !== void 0 ? _a : []
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Links an oauth identity to an existing user.
+   * This method supports the PKCE flow.
+   */
+  linkIdentity(credentials) {
+    return __async(this, null, function* () {
+      var _a;
+      try {
+        const {
+          data,
+          error
+        } = yield this._useSession((result) => __async(this, null, function* () {
+          var _a2, _b, _c, _d, _e;
+          const {
+            data: data2,
+            error: error2
+          } = result;
+          if (error2) throw error2;
+          const url = yield this._getUrlForProvider(`${this.url}/user/identities/authorize`, credentials.provider, {
+            redirectTo: (_a2 = credentials.options) === null || _a2 === void 0 ? void 0 : _a2.redirectTo,
+            scopes: (_b = credentials.options) === null || _b === void 0 ? void 0 : _b.scopes,
+            queryParams: (_c = credentials.options) === null || _c === void 0 ? void 0 : _c.queryParams,
+            skipBrowserRedirect: true
+          });
+          return yield _request(this.fetch, "GET", url, {
+            headers: this.headers,
+            jwt: (_e = (_d = data2.session) === null || _d === void 0 ? void 0 : _d.access_token) !== null && _e !== void 0 ? _e : void 0
+          });
+        }));
+        if (error) throw error;
+        if (isBrowser() && !((_a = credentials.options) === null || _a === void 0 ? void 0 : _a.skipBrowserRedirect)) {
+          window.location.assign(data === null || data === void 0 ? void 0 : data.url);
+        }
+        return {
+          data: {
+            provider: credentials.provider,
+            url: data === null || data === void 0 ? void 0 : data.url
+          },
+          error: null
+        };
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: {
+              provider: credentials.provider,
+              url: null
+            },
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Unlinks an identity from a user by deleting it. The user will no longer be able to sign in with that identity once it's unlinked.
+   */
+  unlinkIdentity(identity2) {
+    return __async(this, null, function* () {
+      try {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          var _a, _b;
+          const {
+            data,
+            error
+          } = result;
+          if (error) {
+            throw error;
+          }
+          return yield _request(this.fetch, "DELETE", `${this.url}/user/identities/${identity2.identity_id}`, {
+            headers: this.headers,
+            jwt: (_b = (_a = data.session) === null || _a === void 0 ? void 0 : _a.access_token) !== null && _b !== void 0 ? _b : void 0
+          });
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * Generates a new JWT.
+   * @param refreshToken A valid refresh token that was returned on login.
+   */
+  _refreshAccessToken(refreshToken) {
+    return __async(this, null, function* () {
+      const debugName = `#_refreshAccessToken(${refreshToken.substring(0, 5)}...)`;
+      this._debug(debugName, "begin");
+      try {
+        const startedAt = Date.now();
+        return yield retryable((attempt) => __async(this, null, function* () {
+          if (attempt > 0) {
+            yield sleep(200 * Math.pow(2, attempt - 1));
+          }
+          this._debug(debugName, "refreshing attempt", attempt);
+          return yield _request(this.fetch, "POST", `${this.url}/token?grant_type=refresh_token`, {
+            body: {
+              refresh_token: refreshToken
+            },
+            headers: this.headers,
+            xform: _sessionResponse
+          });
+        }), (attempt, error) => {
+          const nextBackOffInterval = 200 * Math.pow(2, attempt);
+          return error && isAuthRetryableFetchError(error) && // retryable only if the request can be sent before the backoff overflows the tick duration
+          Date.now() + nextBackOffInterval - startedAt < AUTO_REFRESH_TICK_DURATION;
+        });
+      } catch (error) {
+        this._debug(debugName, "error", error);
+        if (isAuthError(error)) {
+          return {
+            data: {
+              session: null,
+              user: null
+            },
+            error
+          };
+        }
+        throw error;
+      } finally {
+        this._debug(debugName, "end");
+      }
+    });
+  }
+  _isValidSession(maybeSession) {
+    const isValidSession = typeof maybeSession === "object" && maybeSession !== null && "access_token" in maybeSession && "refresh_token" in maybeSession && "expires_at" in maybeSession;
+    return isValidSession;
+  }
+  _handleProviderSignIn(provider, options) {
+    return __async(this, null, function* () {
+      const url = yield this._getUrlForProvider(`${this.url}/authorize`, provider, {
+        redirectTo: options.redirectTo,
+        scopes: options.scopes,
+        queryParams: options.queryParams
+      });
+      this._debug("#_handleProviderSignIn()", "provider", provider, "options", options, "url", url);
+      if (isBrowser() && !options.skipBrowserRedirect) {
+        window.location.assign(url);
+      }
+      return {
+        data: {
+          provider,
+          url
+        },
+        error: null
+      };
+    });
+  }
+  /**
+   * Recovers the session from LocalStorage and refreshes
+   * Note: this method is async to accommodate for AsyncStorage e.g. in React native.
+   */
+  _recoverAndRefresh() {
+    return __async(this, null, function* () {
+      var _a;
+      const debugName = "#_recoverAndRefresh()";
+      this._debug(debugName, "begin");
+      try {
+        const currentSession = yield getItemAsync(this.storage, this.storageKey);
+        this._debug(debugName, "session from storage", currentSession);
+        if (!this._isValidSession(currentSession)) {
+          this._debug(debugName, "session is not valid");
+          if (currentSession !== null) {
+            yield this._removeSession();
+          }
+          return;
+        }
+        const timeNow = Math.round(Date.now() / 1e3);
+        const expiresWithMargin = ((_a = currentSession.expires_at) !== null && _a !== void 0 ? _a : Infinity) < timeNow + EXPIRY_MARGIN;
+        this._debug(debugName, `session has${expiresWithMargin ? "" : " not"} expired with margin of ${EXPIRY_MARGIN}s`);
+        if (expiresWithMargin) {
+          if (this.autoRefreshToken && currentSession.refresh_token) {
+            const {
+              error
+            } = yield this._callRefreshToken(currentSession.refresh_token);
+            if (error) {
+              console.error(error);
+              if (!isAuthRetryableFetchError(error)) {
+                this._debug(debugName, "refresh failed with a non-retryable error, removing the session", error);
+                yield this._removeSession();
+              }
+            }
+          }
+        } else {
+          yield this._notifyAllSubscribers("SIGNED_IN", currentSession);
+        }
+      } catch (err) {
+        this._debug(debugName, "error", err);
+        console.error(err);
+        return;
+      } finally {
+        this._debug(debugName, "end");
+      }
+    });
+  }
+  _callRefreshToken(refreshToken) {
+    return __async(this, null, function* () {
+      var _a, _b;
+      if (!refreshToken) {
+        throw new AuthSessionMissingError();
+      }
+      if (this.refreshingDeferred) {
+        return this.refreshingDeferred.promise;
+      }
+      const debugName = `#_callRefreshToken(${refreshToken.substring(0, 5)}...)`;
+      this._debug(debugName, "begin");
+      try {
+        this.refreshingDeferred = new Deferred();
+        const {
+          data,
+          error
+        } = yield this._refreshAccessToken(refreshToken);
+        if (error) throw error;
+        if (!data.session) throw new AuthSessionMissingError();
+        yield this._saveSession(data.session);
+        yield this._notifyAllSubscribers("TOKEN_REFRESHED", data.session);
+        const result = {
+          session: data.session,
+          error: null
+        };
+        this.refreshingDeferred.resolve(result);
+        return result;
+      } catch (error) {
+        this._debug(debugName, "error", error);
+        if (isAuthError(error)) {
+          const result = {
+            session: null,
+            error
+          };
+          if (!isAuthRetryableFetchError(error)) {
+            yield this._removeSession();
+            yield this._notifyAllSubscribers("SIGNED_OUT", null);
+          }
+          (_a = this.refreshingDeferred) === null || _a === void 0 ? void 0 : _a.resolve(result);
+          return result;
+        }
+        (_b = this.refreshingDeferred) === null || _b === void 0 ? void 0 : _b.reject(error);
+        throw error;
+      } finally {
+        this.refreshingDeferred = null;
+        this._debug(debugName, "end");
+      }
+    });
+  }
+  _notifyAllSubscribers(event, session, broadcast = true) {
+    return __async(this, null, function* () {
+      const debugName = `#_notifyAllSubscribers(${event})`;
+      this._debug(debugName, "begin", session, `broadcast = ${broadcast}`);
+      try {
+        if (this.broadcastChannel && broadcast) {
+          this.broadcastChannel.postMessage({
+            event,
+            session
+          });
+        }
+        const errors = [];
+        const promises = Array.from(this.stateChangeEmitters.values()).map((x) => __async(this, null, function* () {
+          try {
+            yield x.callback(event, session);
+          } catch (e) {
+            errors.push(e);
+          }
+        }));
+        yield Promise.all(promises);
+        if (errors.length > 0) {
+          for (let i = 0; i < errors.length; i += 1) {
+            console.error(errors[i]);
+          }
+          throw errors[0];
+        }
+      } finally {
+        this._debug(debugName, "end");
+      }
+    });
+  }
+  /**
+   * set currentSession and currentUser
+   * process to _startAutoRefreshToken if possible
+   */
+  _saveSession(session) {
+    return __async(this, null, function* () {
+      this._debug("#_saveSession()", session);
+      this.suppressGetSessionWarning = true;
+      yield setItemAsync(this.storage, this.storageKey, session);
+    });
+  }
+  _removeSession() {
+    return __async(this, null, function* () {
+      this._debug("#_removeSession()");
+      yield removeItemAsync(this.storage, this.storageKey);
+    });
+  }
+  /**
+   * Removes any registered visibilitychange callback.
+   *
+   * {@see #startAutoRefresh}
+   * {@see #stopAutoRefresh}
+   */
+  _removeVisibilityChangedCallback() {
+    this._debug("#_removeVisibilityChangedCallback()");
+    const callback = this.visibilityChangedCallback;
+    this.visibilityChangedCallback = null;
+    try {
+      if (callback && isBrowser() && (window === null || window === void 0 ? void 0 : window.removeEventListener)) {
+        window.removeEventListener("visibilitychange", callback);
+      }
+    } catch (e) {
+      console.error("removing visibilitychange callback failed", e);
+    }
+  }
+  /**
+   * This is the private implementation of {@link #startAutoRefresh}. Use this
+   * within the library.
+   */
+  _startAutoRefresh() {
+    return __async(this, null, function* () {
+      yield this._stopAutoRefresh();
+      this._debug("#_startAutoRefresh()");
+      const ticker = setInterval(() => this._autoRefreshTokenTick(), AUTO_REFRESH_TICK_DURATION);
+      this.autoRefreshTicker = ticker;
+      if (ticker && typeof ticker === "object" && typeof ticker.unref === "function") {
+        ticker.unref();
+      } else if (typeof Deno !== "undefined" && typeof Deno.unrefTimer === "function") {
+        Deno.unrefTimer(ticker);
+      }
+      setTimeout(() => __async(this, null, function* () {
+        yield this.initializePromise;
+        yield this._autoRefreshTokenTick();
+      }), 0);
+    });
+  }
+  /**
+   * This is the private implementation of {@link #stopAutoRefresh}. Use this
+   * within the library.
+   */
+  _stopAutoRefresh() {
+    return __async(this, null, function* () {
+      this._debug("#_stopAutoRefresh()");
+      const ticker = this.autoRefreshTicker;
+      this.autoRefreshTicker = null;
+      if (ticker) {
+        clearInterval(ticker);
+      }
+    });
+  }
+  /**
+   * Starts an auto-refresh process in the background. The session is checked
+   * every few seconds. Close to the time of expiration a process is started to
+   * refresh the session. If refreshing fails it will be retried for as long as
+   * necessary.
+   *
+   * If you set the {@link GoTrueClientOptions#autoRefreshToken} you don't need
+   * to call this function, it will be called for you.
+   *
+   * On browsers the refresh process works only when the tab/window is in the
+   * foreground to conserve resources as well as prevent race conditions and
+   * flooding auth with requests. If you call this method any managed
+   * visibility change callback will be removed and you must manage visibility
+   * changes on your own.
+   *
+   * On non-browser platforms the refresh process works *continuously* in the
+   * background, which may not be desirable. You should hook into your
+   * platform's foreground indication mechanism and call these methods
+   * appropriately to conserve resources.
+   *
+   * {@see #stopAutoRefresh}
+   */
+  startAutoRefresh() {
+    return __async(this, null, function* () {
+      this._removeVisibilityChangedCallback();
+      yield this._startAutoRefresh();
+    });
+  }
+  /**
+   * Stops an active auto refresh process running in the background (if any).
+   *
+   * If you call this method any managed visibility change callback will be
+   * removed and you must manage visibility changes on your own.
+   *
+   * See {@link #startAutoRefresh} for more details.
+   */
+  stopAutoRefresh() {
+    return __async(this, null, function* () {
+      this._removeVisibilityChangedCallback();
+      yield this._stopAutoRefresh();
+    });
+  }
+  /**
+   * Runs the auto refresh token tick.
+   */
+  _autoRefreshTokenTick() {
+    return __async(this, null, function* () {
+      this._debug("#_autoRefreshTokenTick()", "begin");
+      try {
+        yield this._acquireLock(0, () => __async(this, null, function* () {
+          try {
+            const now = Date.now();
+            try {
+              return yield this._useSession((result) => __async(this, null, function* () {
+                const {
+                  data: {
+                    session
+                  }
+                } = result;
+                if (!session || !session.refresh_token || !session.expires_at) {
+                  this._debug("#_autoRefreshTokenTick()", "no session");
+                  return;
+                }
+                const expiresInTicks = Math.floor((session.expires_at * 1e3 - now) / AUTO_REFRESH_TICK_DURATION);
+                this._debug("#_autoRefreshTokenTick()", `access token expires in ${expiresInTicks} ticks, a tick lasts ${AUTO_REFRESH_TICK_DURATION}ms, refresh threshold is ${AUTO_REFRESH_TICK_THRESHOLD} ticks`);
+                if (expiresInTicks <= AUTO_REFRESH_TICK_THRESHOLD) {
+                  yield this._callRefreshToken(session.refresh_token);
+                }
+              }));
+            } catch (e) {
+              console.error("Auto refresh tick failed with error. This is likely a transient error.", e);
+            }
+          } finally {
+            this._debug("#_autoRefreshTokenTick()", "end");
+          }
+        }));
+      } catch (e) {
+        if (e.isAcquireTimeout || e instanceof LockAcquireTimeoutError) {
+          this._debug("auto refresh token tick lock not available");
+        } else {
+          throw e;
+        }
+      }
+    });
+  }
+  /**
+   * Registers callbacks on the browser / platform, which in-turn run
+   * algorithms when the browser window/tab are in foreground. On non-browser
+   * platforms it assumes always foreground.
+   */
+  _handleVisibilityChange() {
+    return __async(this, null, function* () {
+      this._debug("#_handleVisibilityChange()");
+      if (!isBrowser() || !(window === null || window === void 0 ? void 0 : window.addEventListener)) {
+        if (this.autoRefreshToken) {
+          this.startAutoRefresh();
+        }
+        return false;
+      }
+      try {
+        this.visibilityChangedCallback = () => __async(this, null, function* () {
+          return yield this._onVisibilityChanged(false);
+        });
+        window === null || window === void 0 ? void 0 : window.addEventListener("visibilitychange", this.visibilityChangedCallback);
+        yield this._onVisibilityChanged(true);
+      } catch (error) {
+        console.error("_handleVisibilityChange", error);
+      }
+    });
+  }
+  /**
+   * Callback registered with `window.addEventListener('visibilitychange')`.
+   */
+  _onVisibilityChanged(calledFromInitialize) {
+    return __async(this, null, function* () {
+      const methodName = `#_onVisibilityChanged(${calledFromInitialize})`;
+      this._debug(methodName, "visibilityState", document.visibilityState);
+      if (document.visibilityState === "visible") {
+        if (this.autoRefreshToken) {
+          this._startAutoRefresh();
+        }
+        if (!calledFromInitialize) {
+          yield this.initializePromise;
+          yield this._acquireLock(-1, () => __async(this, null, function* () {
+            if (document.visibilityState !== "visible") {
+              this._debug(methodName, "acquired the lock to recover the session, but the browser visibilityState is no longer visible, aborting");
+              return;
+            }
+            yield this._recoverAndRefresh();
+          }));
+        }
+      } else if (document.visibilityState === "hidden") {
+        if (this.autoRefreshToken) {
+          this._stopAutoRefresh();
+        }
+      }
+    });
+  }
+  /**
+   * Generates the relevant login URL for a third-party provider.
+   * @param options.redirectTo A URL or mobile address to send the user to after they are confirmed.
+   * @param options.scopes A space-separated list of scopes granted to the OAuth application.
+   * @param options.queryParams An object of key-value pairs containing query parameters granted to the OAuth application.
+   */
+  _getUrlForProvider(url, provider, options) {
+    return __async(this, null, function* () {
+      const urlParams = [`provider=${encodeURIComponent(provider)}`];
+      if (options === null || options === void 0 ? void 0 : options.redirectTo) {
+        urlParams.push(`redirect_to=${encodeURIComponent(options.redirectTo)}`);
+      }
+      if (options === null || options === void 0 ? void 0 : options.scopes) {
+        urlParams.push(`scopes=${encodeURIComponent(options.scopes)}`);
+      }
+      if (this.flowType === "pkce") {
+        const [codeChallenge, codeChallengeMethod] = yield getCodeChallengeAndMethod(this.storage, this.storageKey);
+        const flowParams = new URLSearchParams({
+          code_challenge: `${encodeURIComponent(codeChallenge)}`,
+          code_challenge_method: `${encodeURIComponent(codeChallengeMethod)}`
+        });
+        urlParams.push(flowParams.toString());
+      }
+      if (options === null || options === void 0 ? void 0 : options.queryParams) {
+        const query = new URLSearchParams(options.queryParams);
+        urlParams.push(query.toString());
+      }
+      if (options === null || options === void 0 ? void 0 : options.skipBrowserRedirect) {
+        urlParams.push(`skip_http_redirect=${options.skipBrowserRedirect}`);
+      }
+      return `${url}?${urlParams.join("&")}`;
+    });
+  }
+  _unenroll(params) {
+    return __async(this, null, function* () {
+      try {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          var _a;
+          const {
+            data: sessionData,
+            error: sessionError
+          } = result;
+          if (sessionError) {
+            return {
+              data: null,
+              error: sessionError
+            };
+          }
+          return yield _request(this.fetch, "DELETE", `${this.url}/factors/${params.factorId}`, {
+            headers: this.headers,
+            jwt: (_a = sessionData === null || sessionData === void 0 ? void 0 : sessionData.session) === null || _a === void 0 ? void 0 : _a.access_token
+          });
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * {@see GoTrueMFAApi#enroll}
+   */
+  _enroll(params) {
+    return __async(this, null, function* () {
+      try {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          var _a, _b;
+          const {
+            data: sessionData,
+            error: sessionError
+          } = result;
+          if (sessionError) {
+            return {
+              data: null,
+              error: sessionError
+            };
+          }
+          const body = Object.assign({
+            friendly_name: params.friendlyName,
+            factor_type: params.factorType
+          }, params.factorType === "phone" ? {
+            phone: params.phone
+          } : {
+            issuer: params.issuer
+          });
+          const {
+            data,
+            error
+          } = yield _request(this.fetch, "POST", `${this.url}/factors`, {
+            body,
+            headers: this.headers,
+            jwt: (_a = sessionData === null || sessionData === void 0 ? void 0 : sessionData.session) === null || _a === void 0 ? void 0 : _a.access_token
+          });
+          if (error) {
+            return {
+              data: null,
+              error
+            };
+          }
+          if (params.factorType === "phone") {
+            delete data.totp;
+          }
+          if (params.factorType === "totp" && ((_b = data === null || data === void 0 ? void 0 : data.totp) === null || _b === void 0 ? void 0 : _b.qr_code)) {
+            data.totp.qr_code = `data:image/svg+xml;utf-8,${data.totp.qr_code}`;
+          }
+          return {
+            data,
+            error: null
+          };
+        }));
+      } catch (error) {
+        if (isAuthError(error)) {
+          return {
+            data: null,
+            error
+          };
+        }
+        throw error;
+      }
+    });
+  }
+  /**
+   * {@see GoTrueMFAApi#verify}
+   */
+  _verify(params) {
+    return __async(this, null, function* () {
+      return this._acquireLock(-1, () => __async(this, null, function* () {
+        try {
+          return yield this._useSession((result) => __async(this, null, function* () {
+            var _a;
+            const {
+              data: sessionData,
+              error: sessionError
+            } = result;
+            if (sessionError) {
+              return {
+                data: null,
+                error: sessionError
+              };
+            }
+            const {
+              data,
+              error
+            } = yield _request(this.fetch, "POST", `${this.url}/factors/${params.factorId}/verify`, {
+              body: {
+                code: params.code,
+                challenge_id: params.challengeId
+              },
+              headers: this.headers,
+              jwt: (_a = sessionData === null || sessionData === void 0 ? void 0 : sessionData.session) === null || _a === void 0 ? void 0 : _a.access_token
+            });
+            if (error) {
+              return {
+                data: null,
+                error
+              };
+            }
+            yield this._saveSession(Object.assign({
+              expires_at: Math.round(Date.now() / 1e3) + data.expires_in
+            }, data));
+            yield this._notifyAllSubscribers("MFA_CHALLENGE_VERIFIED", data);
+            return {
+              data,
+              error
+            };
+          }));
+        } catch (error) {
+          if (isAuthError(error)) {
+            return {
+              data: null,
+              error
+            };
+          }
+          throw error;
+        }
+      }));
+    });
+  }
+  /**
+   * {@see GoTrueMFAApi#challenge}
+   */
+  _challenge(params) {
+    return __async(this, null, function* () {
+      return this._acquireLock(-1, () => __async(this, null, function* () {
+        try {
+          return yield this._useSession((result) => __async(this, null, function* () {
+            var _a;
+            const {
+              data: sessionData,
+              error: sessionError
+            } = result;
+            if (sessionError) {
+              return {
+                data: null,
+                error: sessionError
+              };
+            }
+            return yield _request(this.fetch, "POST", `${this.url}/factors/${params.factorId}/challenge`, {
+              body: {
+                channel: params.channel
+              },
+              headers: this.headers,
+              jwt: (_a = sessionData === null || sessionData === void 0 ? void 0 : sessionData.session) === null || _a === void 0 ? void 0 : _a.access_token
+            });
+          }));
+        } catch (error) {
+          if (isAuthError(error)) {
+            return {
+              data: null,
+              error
+            };
+          }
+          throw error;
+        }
+      }));
+    });
+  }
+  /**
+   * {@see GoTrueMFAApi#challengeAndVerify}
+   */
+  _challengeAndVerify(params) {
+    return __async(this, null, function* () {
+      const {
+        data: challengeData,
+        error: challengeError
+      } = yield this._challenge({
+        factorId: params.factorId
+      });
+      if (challengeError) {
+        return {
+          data: null,
+          error: challengeError
+        };
+      }
+      return yield this._verify({
+        factorId: params.factorId,
+        challengeId: challengeData.id,
+        code: params.code
+      });
+    });
+  }
+  /**
+   * {@see GoTrueMFAApi#listFactors}
+   */
+  _listFactors() {
+    return __async(this, null, function* () {
+      const {
+        data: {
+          user
+        },
+        error: userError
+      } = yield this.getUser();
+      if (userError) {
+        return {
+          data: null,
+          error: userError
+        };
+      }
+      const factors = (user === null || user === void 0 ? void 0 : user.factors) || [];
+      const totp = factors.filter((factor) => factor.factor_type === "totp" && factor.status === "verified");
+      const phone = factors.filter((factor) => factor.factor_type === "phone" && factor.status === "verified");
+      return {
+        data: {
+          all: factors,
+          totp,
+          phone
+        },
+        error: null
+      };
+    });
+  }
+  /**
+   * {@see GoTrueMFAApi#getAuthenticatorAssuranceLevel}
+   */
+  _getAuthenticatorAssuranceLevel() {
+    return __async(this, null, function* () {
+      return this._acquireLock(-1, () => __async(this, null, function* () {
+        return yield this._useSession((result) => __async(this, null, function* () {
+          var _a, _b;
+          const {
+            data: {
+              session
+            },
+            error: sessionError
+          } = result;
+          if (sessionError) {
+            return {
+              data: null,
+              error: sessionError
+            };
+          }
+          if (!session) {
+            return {
+              data: {
+                currentLevel: null,
+                nextLevel: null,
+                currentAuthenticationMethods: []
+              },
+              error: null
+            };
+          }
+          const payload = this._decodeJWT(session.access_token);
+          let currentLevel = null;
+          if (payload.aal) {
+            currentLevel = payload.aal;
+          }
+          let nextLevel = currentLevel;
+          const verifiedFactors = (_b = (_a = session.user.factors) === null || _a === void 0 ? void 0 : _a.filter((factor) => factor.status === "verified")) !== null && _b !== void 0 ? _b : [];
+          if (verifiedFactors.length > 0) {
+            nextLevel = "aal2";
+          }
+          const currentAuthenticationMethods = payload.amr || [];
+          return {
+            data: {
+              currentLevel,
+              nextLevel,
+              currentAuthenticationMethods
+            },
+            error: null
+          };
+        }));
+      }));
+    });
+  }
+};
+GoTrueClient.nextInstanceID = 0;
+
+// node_modules/@supabase/auth-js/dist/module/AuthClient.js
+var AuthClient = GoTrueClient;
+var AuthClient_default = AuthClient;
+
+// node_modules/@supabase/supabase-js/dist/module/lib/SupabaseAuthClient.js
+var SupabaseAuthClient = class extends AuthClient_default {
+  constructor(options) {
+    super(options);
+  }
+};
+
+// node_modules/@supabase/supabase-js/dist/module/SupabaseClient.js
+var __awaiter9 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var SupabaseClient = class {
+  /**
+   * Create a new client for use in the browser.
+   * @param supabaseUrl The unique Supabase URL which is supplied when you create a new project in your project dashboard.
+   * @param supabaseKey The unique Supabase Key which is supplied when you create a new project in your project dashboard.
+   * @param options.db.schema You can switch in between schemas. The schema needs to be on the list of exposed schemas inside Supabase.
+   * @param options.auth.autoRefreshToken Set to "true" if you want to automatically refresh the token before expiring.
+   * @param options.auth.persistSession Set to "true" if you want to automatically save the user session into local storage.
+   * @param options.auth.detectSessionInUrl Set to "true" if you want to automatically detects OAuth grants in the URL and signs in the user.
+   * @param options.realtime Options passed along to realtime-js constructor.
+   * @param options.global.fetch A custom fetch implementation.
+   * @param options.global.headers Any additional headers to send with each network request.
+   */
+  constructor(supabaseUrl, supabaseKey, options) {
+    var _a, _b, _c;
+    this.supabaseUrl = supabaseUrl;
+    this.supabaseKey = supabaseKey;
+    if (!supabaseUrl) throw new Error("supabaseUrl is required.");
+    if (!supabaseKey) throw new Error("supabaseKey is required.");
+    const _supabaseUrl = stripTrailingSlash2(supabaseUrl);
+    this.realtimeUrl = `${_supabaseUrl}/realtime/v1`.replace(/^http/i, "ws");
+    this.authUrl = `${_supabaseUrl}/auth/v1`;
+    this.storageUrl = `${_supabaseUrl}/storage/v1`;
+    this.functionsUrl = `${_supabaseUrl}/functions/v1`;
+    const defaultStorageKey = `sb-${new URL(this.authUrl).hostname.split(".")[0]}-auth-token`;
+    const DEFAULTS = {
+      db: DEFAULT_DB_OPTIONS,
+      realtime: DEFAULT_REALTIME_OPTIONS,
+      auth: Object.assign(Object.assign({}, DEFAULT_AUTH_OPTIONS), {
+        storageKey: defaultStorageKey
+      }),
+      global: DEFAULT_GLOBAL_OPTIONS
+    };
+    const settings = applySettingDefaults(options !== null && options !== void 0 ? options : {}, DEFAULTS);
+    this.storageKey = (_a = settings.auth.storageKey) !== null && _a !== void 0 ? _a : "";
+    this.headers = (_b = settings.global.headers) !== null && _b !== void 0 ? _b : {};
+    if (!settings.accessToken) {
+      this.auth = this._initSupabaseAuthClient((_c = settings.auth) !== null && _c !== void 0 ? _c : {}, this.headers, settings.global.fetch);
+    } else {
+      this.accessToken = settings.accessToken;
+      this.auth = new Proxy({}, {
+        get: (_, prop) => {
+          throw new Error(`@supabase/supabase-js: Supabase Client is configured with the accessToken option, accessing supabase.auth.${String(prop)} is not possible`);
+        }
+      });
+    }
+    this.fetch = fetchWithAuth(supabaseKey, this._getAccessToken.bind(this), settings.global.fetch);
+    this.realtime = this._initRealtimeClient(Object.assign({
+      headers: this.headers
+    }, settings.realtime));
+    this.rest = new PostgrestClient(`${_supabaseUrl}/rest/v1`, {
+      headers: this.headers,
+      schema: settings.db.schema,
+      fetch: this.fetch
+    });
+    if (!settings.accessToken) {
+      this._listenForAuthEvents();
+    }
+  }
+  /**
+   * Supabase Functions allows you to deploy and invoke edge functions.
+   */
+  get functions() {
+    return new FunctionsClient(this.functionsUrl, {
+      headers: this.headers,
+      customFetch: this.fetch
+    });
+  }
+  /**
+   * Supabase Storage allows you to manage user-generated content, such as photos or videos.
+   */
+  get storage() {
+    return new StorageClient(this.storageUrl, this.headers, this.fetch);
+  }
+  /**
+   * Perform a query on a table or a view.
+   *
+   * @param relation - The table or view name to query
+   */
+  from(relation) {
+    return this.rest.from(relation);
+  }
+  // NOTE: signatures must be kept in sync with PostgrestClient.schema
+  /**
+   * Select a schema to query or perform an function (rpc) call.
+   *
+   * The schema needs to be on the list of exposed schemas inside Supabase.
+   *
+   * @param schema - The schema to query
+   */
+  schema(schema) {
+    return this.rest.schema(schema);
+  }
+  // NOTE: signatures must be kept in sync with PostgrestClient.rpc
+  /**
+   * Perform a function call.
+   *
+   * @param fn - The function name to call
+   * @param args - The arguments to pass to the function call
+   * @param options - Named parameters
+   * @param options.head - When set to `true`, `data` will not be returned.
+   * Useful if you only need the count.
+   * @param options.get - When set to `true`, the function will be called with
+   * read-only access mode.
+   * @param options.count - Count algorithm to use to count rows returned by the
+   * function. Only applicable for [set-returning
+   * functions](https://www.postgresql.org/docs/current/functions-srf.html).
+   *
+   * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
+   * hood.
+   *
+   * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
+   * statistics under the hood.
+   *
+   * `"estimated"`: Uses exact count for low numbers and planned count for high
+   * numbers.
+   */
+  rpc(fn, args = {}, options = {}) {
+    return this.rest.rpc(fn, args, options);
+  }
+  /**
+   * Creates a Realtime channel with Broadcast, Presence, and Postgres Changes.
+   *
+   * @param {string} name - The name of the Realtime channel.
+   * @param {Object} opts - The options to pass to the Realtime channel.
+   *
+   */
+  channel(name, opts = {
+    config: {}
+  }) {
+    return this.realtime.channel(name, opts);
+  }
+  /**
+   * Returns all Realtime channels.
+   */
+  getChannels() {
+    return this.realtime.getChannels();
+  }
+  /**
+   * Unsubscribes and removes Realtime channel from Realtime client.
+   *
+   * @param {RealtimeChannel} channel - The name of the Realtime channel.
+   *
+   */
+  removeChannel(channel) {
+    return this.realtime.removeChannel(channel);
+  }
+  /**
+   * Unsubscribes and removes all Realtime channels from Realtime client.
+   */
+  removeAllChannels() {
+    return this.realtime.removeAllChannels();
+  }
+  _getAccessToken() {
+    var _a, _b;
+    return __awaiter9(this, void 0, void 0, function* () {
+      if (this.accessToken) {
+        return yield this.accessToken();
+      }
+      const {
+        data
+      } = yield this.auth.getSession();
+      return (_b = (_a = data.session) === null || _a === void 0 ? void 0 : _a.access_token) !== null && _b !== void 0 ? _b : null;
+    });
+  }
+  _initSupabaseAuthClient({
+    autoRefreshToken,
+    persistSession,
+    detectSessionInUrl,
+    storage,
+    storageKey,
+    flowType,
+    lock,
+    debug
+  }, headers, fetch2) {
+    var _a;
+    const authHeaders = {
+      Authorization: `Bearer ${this.supabaseKey}`,
+      apikey: `${this.supabaseKey}`
+    };
+    return new SupabaseAuthClient({
+      url: this.authUrl,
+      headers: Object.assign(Object.assign({}, authHeaders), headers),
+      storageKey,
+      autoRefreshToken,
+      persistSession,
+      detectSessionInUrl,
+      storage,
+      flowType,
+      lock,
+      debug,
+      fetch: fetch2,
+      // auth checks if there is a custom authorizaiton header using this flag
+      // so it knows whether to return an error when getUser is called with no session
+      hasCustomAuthorizationHeader: (_a = "Authorization" in this.headers) !== null && _a !== void 0 ? _a : false
+    });
+  }
+  _initRealtimeClient(options) {
+    return new RealtimeClient(this.realtimeUrl, Object.assign(Object.assign({}, options), {
+      params: Object.assign({
+        apikey: this.supabaseKey
+      }, options === null || options === void 0 ? void 0 : options.params)
+    }));
+  }
+  _listenForAuthEvents() {
+    let data = this.auth.onAuthStateChange((event, session) => {
+      this._handleTokenChanged(event, "CLIENT", session === null || session === void 0 ? void 0 : session.access_token);
+    });
+    return data;
+  }
+  _handleTokenChanged(event, source, token) {
+    if ((event === "TOKEN_REFRESHED" || event === "SIGNED_IN") && this.changedAccessToken !== token) {
+      this.realtime.setAuth(token !== null && token !== void 0 ? token : null);
+      this.changedAccessToken = token;
+    } else if (event === "SIGNED_OUT") {
+      this.realtime.setAuth(this.supabaseKey);
+      if (source == "STORAGE") this.auth.signOut();
+      this.changedAccessToken = void 0;
+    }
+  }
+};
+
+// node_modules/@supabase/supabase-js/dist/module/index.js
+var createClient = (supabaseUrl, supabaseKey, options) => {
+  return new SupabaseClient(supabaseUrl, supabaseKey, options);
+};
+
+// src/environments/environment.ts
+var environment = {
+  message: "dev",
+  profile: "dev",
+  apiUrl: "https://hajopqgitegpsxbwrpsm.supabase.co",
+  apiKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhham9wcWdpdGVncHN4YndycHNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDIyNjUsImV4cCI6MjA0NDA3ODI2NX0.D7rrQHlHgDwRhKdZqwf5kFc0zn6XiXWWun2TweBiOSA"
+};
+
+// src/app/data/rest/supabase/client.service.ts
+var ClientService = class _ClientService {
+  messageService;
+  supabase;
+  constructor(messageService) {
+    this.messageService = messageService;
+    const apiKey = environment["apiKey"];
+    const apiURL = environment["apiUrl"];
+    this.supabase = createClient(apiURL, apiKey);
+  }
+  static \u0275fac = function ClientService_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _ClientService)(\u0275\u0275inject(MessageService));
+  };
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _ClientService, factory: _ClientService.\u0275fac, providedIn: "root" });
+};
+
+// src/app/data/rest/supabase/heroes/heroes-data.service.ts
+var HeroesService = class _HeroesService {
+  messageService;
+  clientService;
+  supabase;
+  constructor(messageService, clientService) {
+    this.messageService = messageService;
+    this.clientService = clientService;
+    this.supabase = clientService.supabase;
+  }
+  createHero(heroSave) {
+    const promise = this.supabase.from("heroes").insert(heroSave).rollback().select(`
+        id
+      `).returns();
+    return from(promise).pipe(tap((response) => {
+      return this.messageService.add({
+        source: "TopheroService",
+        message: "All Top Heroes fetched",
+        severity: "INFO"
+      });
+    }), switchMap((response) => {
+      const { data, error, status } = response;
+      if (error) {
+        throw new Error(error.message);
+      }
+      if (!data) {
+        throw new Error("Error: server cannot create a hero resource");
+      }
+      if (status === 201) {
+        console.log("Hero created!");
+      }
+      const heroSavedID = data[0].id;
+      return this.getHeroById(heroSavedID);
+    }));
+  }
+  updateHero(hero) {
+    return of(hero);
+  }
+  deleteHero(id) {
+    return this.getHeroById(id);
+  }
+  getHeroes() {
+    const promise = this.supabase.from("heroes").select(`
+        id, 
+        name, 
+        year, 
+        is_top_hero,
+        comic_publishers (
+          id, 
+          name
+        ), 
+        hero_statistics(
+          id,
+          popularity,
+          ranking
+        )
+      `).returns();
+    return from(promise).pipe(tap(() => {
+      return this.messageService.add({
+        source: "TopheroService",
+        message: "All Top Heroes fetched",
+        severity: "INFO"
+      });
+    }), map((response) => {
+      const { data, error, status } = response;
+      let heroesMapper = [];
+      if (data && data?.length > 0) {
+        heroesMapper = data?.map((h) => HeroAdapter.mapHeroResponseToHero(h));
+      }
+      return heroesMapper.map((hero) => {
+        const _a = hero, { comicPublishers } = _a, rest = __objRest(_a, ["comicPublishers"]);
+        return __spreadProps(__spreadValues({}, rest), {
+          // Copiar las demás propiedades
+          comicPublishers,
+          // Cambiar `publishers` a `publisher`
+          isSelected: false
+          // Añadir la propiedad `isSelected`
+        });
+      });
+    }), catchError((err) => {
+      const error = new Error(err);
+      return throwError(() => err);
+    }));
+  }
+  getHeroById(id) {
+    const promise = this.supabase.from("heroes").select(`
+        id, 
+        name, 
+        year, 
+        is_top_hero,
+        comic_publishers (
+          id, 
+          name
+        ), 
+        hero_statistics(
+          id,
+          popularity,
+          ranking
+        )
+      `).eq("id", id).returns();
+    return from(promise).pipe(map((response) => {
+      const { data, error, status } = response;
+      if (error || status != 200)
+        throw new Error("error supabase client");
+      const hero = data[0];
+      if (hero == void 0 || hero === null)
+        throw new Error("Hero not exists");
+      return HeroAdapter.mapHeroResponseToHero(hero);
+    }), catchError((err) => {
+      console.error(err);
+      throw err;
+    }));
+  }
+  getLastHeroIdRegistered() {
+    const promise = this.supabase.from("heroes").select("id", { count: "exact" }).order("id", { ascending: false }).limit(1).single();
+    return from(promise).pipe(map((response) => {
+      const { data, error } = response;
+      if (error)
+        throw error;
+      const id = data.id;
+      if (id === void 0)
+        throw new Error("not found id");
+      return id;
+    }));
+  }
+  migrateAllHeroes() {
+    const heroes = [
+      {
+        id: 1,
+        name: "Dr. Nice",
+        year: 2010,
+        comicPublishers: { id: 3, name: "Image Comics" },
+        isTophero: true,
+        heroStatistics: {
+          id: 1,
+          popularity: 9999,
+          ranking: 0
+        }
+      },
+      {
+        id: 2,
+        name: "Bombasto",
+        year: 2010,
+        comicPublishers: { id: 1, name: "Marvel Comics" },
+        isTophero: true,
+        heroStatistics: {
+          id: 2,
+          popularity: 9950,
+          ranking: 3
+        }
+      },
+      {
+        id: 3,
+        name: "Celeritas",
+        year: 2010,
+        comicPublishers: { id: 1, name: "Marvel Comics" },
+        isTophero: true,
+        heroStatistics: {
+          id: 3,
+          popularity: 9998,
+          ranking: 2
+        }
+      },
+      {
+        id: 4,
+        name: "Magneta",
+        year: 2010,
+        comicPublishers: { id: 3, name: "Image Comics" },
+        isTophero: true,
+        heroStatistics: {
+          id: 4,
+          popularity: 8e3,
+          ranking: 4
+        }
+      },
+      {
+        id: 5,
+        name: "RubberMan",
+        year: 2e3,
+        comicPublishers: { id: 3, name: "Image Comics" },
+        isTophero: false,
+        heroStatistics: {
+          id: 5,
+          popularity: 8999,
+          ranking: 4
+        }
+      },
+      {
+        id: 6,
+        name: "Dynama",
+        year: 2024,
+        comicPublishers: { id: 1, name: "Marvel Comics" },
+        isTophero: false,
+        heroStatistics: {
+          id: 6,
+          popularity: 7e3,
+          ranking: 0
+        }
+      },
+      {
+        id: 7,
+        name: "Dr. IQ",
+        year: 2024,
+        comicPublishers: { id: 1, name: "Marvel Comics" },
+        isTophero: false,
+        heroStatistics: {
+          id: 7,
+          popularity: 6e3,
+          ranking: 0
+        }
+      },
+      {
+        id: 8,
+        name: "Magma",
+        year: 2024,
+        comicPublishers: { id: 2, name: "DC Comics" },
+        isTophero: false,
+        heroStatistics: {
+          id: 8,
+          popularity: 5e3,
+          ranking: 0
+        }
+      },
+      {
+        id: 9,
+        name: "Tornado",
+        year: 2024,
+        comicPublishers: { id: 2, name: "DC Comics" },
+        isTophero: false,
+        heroStatistics: {
+          id: 9,
+          popularity: 4e3,
+          ranking: 0
+        }
+      },
+      {
+        id: 10,
+        name: "Magneto",
+        year: 2024,
+        comicPublishers: { id: 1, name: "Marvel Comics" },
+        isTophero: false,
+        heroStatistics: {
+          id: 10,
+          popularity: 3e3,
+          ranking: 0
+        }
+      }
+    ];
+    const heroesResquest = heroes.map((h) => {
+      return HeroAdapter.mapHeroToHeroRequest(h);
+    });
+    this.createHero(heroesResquest);
+  }
+  static \u0275fac = function HeroesService_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _HeroesService)(\u0275\u0275inject(MessageService), \u0275\u0275inject(ClientService));
+  };
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _HeroesService, factory: _HeroesService.\u0275fac, providedIn: "root" });
+};
+
 // src/app/hero/components/hero/hero.component.ts
 var _c02 = (a0) => ({ "deleted-effect": a0 });
 function HeroComponent_div_4_li_2_Template(rf, ctx) {
@@ -43603,7 +51940,7 @@ function HeroComponent_ng_template_5_Template(rf, ctx) {
   }
 }
 var HeroComponent = class _HeroComponent {
-  heroService;
+  supabase;
   spinnerService;
   actionsService;
   heroesObservable$;
@@ -43614,8 +51951,8 @@ var HeroComponent = class _HeroComponent {
   totalRegisters = 0;
   heroesSubcription;
   isDeleted = false;
-  constructor(heroService, spinnerService, actionsService) {
-    this.heroService = heroService;
+  constructor(supabase, spinnerService, actionsService) {
+    this.supabase = supabase;
     this.spinnerService = spinnerService;
     this.actionsService = actionsService;
   }
@@ -43623,7 +51960,7 @@ var HeroComponent = class _HeroComponent {
     this.actionsService.setOptions(HeroActions.List);
     this.isLoadingSpinner = true;
     this.spinnerMessage = "Loading H\xE9roes...";
-    this.heroesSubcription = this.heroService.getHeroes(true).subscribe((heroes) => {
+    this.heroesSubcription = this.supabase.getHeroes().subscribe((heroes) => {
       this.totalRegisters = heroes.length;
       this.heroes = heroes;
       setTimeout(() => {
@@ -43643,7 +51980,7 @@ var HeroComponent = class _HeroComponent {
   getHeroes() {
   }
   static \u0275fac = function HeroComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
+    return new (__ngFactoryType__ || _HeroComponent)(\u0275\u0275directiveInject(HeroesService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
   static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroComponent, selectors: [["app-hero"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 7, vars: 2, consts: [["noHeroes", ""], [1, "hero-component-container"], ["class", "my-heroes-container", 4, "ngIf", "ngIfElse"], [1, "my-heroes-container"], [1, "heroes"], [4, "ngFor", "ngForOf"], [2, "padding", "10px", "font-size", "14px", "color", "black"], [3, "isLoading", "message"], [3, "ngClass", "routerLink"], [1, "badge"], [1, "my-heroes-container", "notFoundHero"], [2, "padding", "20px 0", "padding-left", "45px", "font-size", "14px", "color", "#353535", "font-weight", "bold"]], template: function HeroComponent_Template(rf, ctx) {
     if (rf & 1) {
@@ -43669,7 +52006,7 @@ var HeroComponent = class _HeroComponent {
     SearchBarComponent,
     CommonModule,
     NgClass
-  ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding-bottom: 20px;\n  margin-top: 20px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 20px 0;\n  text-align: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 100px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 100%;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:nth-child(10)   a[_ngcontent-%COMP%] {\n    background-color: #2c3a41;\n    color: #fff;\n  }\n  .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n  .deleted-effect[_ngcontent-%COMP%] {\n    animation: delete 2s infinite ease-in-out;\n  }\n  @keyframes delete {\n    from {\n      transform: translateX(0);\n      opacity: 1;\n    }\n    to {\n      transform: translateX(-20px);\n      opacity: 0;\n    }\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
+  ], styles: ["\n\n.hero-component-container[_ngcontent-%COMP%] {\n  box-sizing: content-box;\n  padding-bottom: 20px;\n  margin-top: 20px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  min-height: 200px;\n  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n}\n.hero-component-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  margin: 20px 0;\n  text-align: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%] {\n  display: flex;\n  justify-content: start;\n  flex-direction: column;\n  border-radius: 5px;\n  padding: 0 25px;\n  position: relative;\n  min-height: 100px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   h2[_ngcontent-%COMP%] {\n  font-weight: 300;\n  margin: 0;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   button[_ngcontent-%COMP%] {\n  border: none;\n  font-size: 14px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%] {\n  margin: 0;\n  list-style-type: none;\n  padding: 0;\n  width: 100%;\n  border-radius: 5px;\n  box-sizing: border-box;\n  margin-top: 10px;\n  height: auto;\n  min-height: 200px;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  position: relative;\n  cursor: pointer;\n  height: auto;\n  align-items: center;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:hover {\n  left: 0.1em;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  color: #333;\n  text-decoration: none;\n  background-color: #eee;\n  margin: 0.5em;\n  padding: 0.3em 0;\n  height: 1.6em;\n  border-radius: 4px;\n  display: block;\n  width: 99%;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n  background-color: #104781;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:hover {\n  color: #2c3a41;\n  background-color: #e6e6e6;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   a[_ngcontent-%COMP%]:active {\n  background-color: #525252;\n  color: #fafafa;\n}\n.hero-component-container[_ngcontent-%COMP%]   .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   .badge[_ngcontent-%COMP%] {\n  display: inline-block;\n  font-size: small;\n  color: white;\n  padding: 0.8em 0.7em 0 0.7em;\n  background-color: #405061;\n  line-height: 1em;\n  position: relative;\n  left: -1px;\n  top: -4px;\n  height: 1.8em;\n  min-width: 16px;\n  text-align: right;\n  margin-right: 0.8em;\n  border-radius: 4px 0 0 4px;\n}\n@media (min-width: 600px) {\n  .my-heroes-container[_ngcontent-%COMP%] {\n    flex-direction: column;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n    color: #333;\n    text-decoration: none;\n    background-color: #eee;\n    margin: 0.5em;\n    padding: 0.3em 0;\n    height: 1.6em;\n    border-radius: 4px;\n    display: block;\n    width: 100%;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   .heroes[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]:nth-child(11)   a[_ngcontent-%COMP%] {\n    background-color: #2c3a41;\n    color: #fff;\n  }\n  .my-heroes-container.notFoundHero[_ngcontent-%COMP%] {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .my-heroes-container[_ngcontent-%COMP%]   p[_ngcontent-%COMP%] {\n    color: #a3a3a3;\n    font-size: 18px;\n  }\n  .deleted-effect[_ngcontent-%COMP%] {\n    animation: delete 2s infinite ease-in-out;\n  }\n  @keyframes delete {\n    from {\n      transform: translateX(0);\n      opacity: 1;\n    }\n    to {\n      transform: translateX(-20px);\n      opacity: 0;\n    }\n  }\n}\n/*# sourceMappingURL=hero.component.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(HeroComponent, { className: "HeroComponent" });
@@ -43819,7 +52156,7 @@ function HeroDetailComponent_ng_template_1_Template(rf, ctx) {
 }
 var HeroDetailComponent = class _HeroDetailComponent {
   location;
-  heroService;
+  supabase;
   publisherService;
   route;
   spinnerService;
@@ -43862,9 +52199,9 @@ var HeroDetailComponent = class _HeroDetailComponent {
     2001,
     2e3
   ];
-  constructor(location2, heroService, publisherService, route, spinnerService, actionsService) {
+  constructor(location2, supabase, publisherService, route, spinnerService, actionsService) {
     this.location = location2;
-    this.heroService = heroService;
+    this.supabase = supabase;
     this.publisherService = publisherService;
     this.route = route;
     this.spinnerService = spinnerService;
@@ -43872,7 +52209,9 @@ var HeroDetailComponent = class _HeroDetailComponent {
   }
   ngOnInit() {
     this.actionsService.setOptions("");
-    this.publishers$ = this.publisherService.getPublishers();
+    this.publishers$ = this.publisherService.getPublishers().pipe(tap((publishers) => {
+      console.log(publishers);
+    }));
     this.isLoadingSpinner = true;
     this.spinnerMessage = "Loading Hero Details...";
     this.heroForm = new FormGroup({
@@ -43883,7 +52222,7 @@ var HeroDetailComponent = class _HeroDetailComponent {
     });
     this.subcription$ = this.route.paramMap.pipe(switchMap((params) => {
       const id = Number(params.get("id"));
-      return this.heroService.getHero(id).pipe(catchError((error) => {
+      return this.supabase.getHeroById(id).pipe(catchError((error) => {
         console.error("Error:", error);
         this.notFound = true;
         return of(null);
@@ -43902,7 +52241,7 @@ var HeroDetailComponent = class _HeroDetailComponent {
           id: hero.id,
           name: hero.name,
           year: hero.year,
-          publisher: hero.publisher?.id
+          publisher: hero.comicPublishers?.id
         });
       }
     });
@@ -43917,9 +52256,9 @@ var HeroDetailComponent = class _HeroDetailComponent {
     this.isLoadingSpinner = true;
     let hero = this.createHero();
     let publisherId = this.heroForm.get("publisher")?.value;
-    this.getPublisher(publisherId).pipe(switchMap((publisher) => {
-      hero.publisher = publisher;
-      return this.heroService.update(hero);
+    this.getPublisher(publisherId).pipe(switchMap((comicPublishers) => {
+      hero.comicPublishers = comicPublishers;
+      return this.supabase.updateHero(hero);
     }), tap((hero2) => {
       this.notificationMessage = "Hero updated!";
       this.notificationType = "success";
@@ -43933,12 +52272,19 @@ var HeroDetailComponent = class _HeroDetailComponent {
     return this.publisherService.getPublisherById(publisherId);
   }
   createHero() {
-    return {
+    let hero = {
       id: this.heroForm.get("id")?.value,
       name: this.heroForm.get("name")?.value,
       year: this.heroForm.get("year")?.value,
-      publisher: null
+      comicPublishers: null,
+      isTophero: false,
+      heroStatistics: {
+        id: 5,
+        popularity: 0,
+        ranking: 0
+      }
     };
+    return hero;
   }
   goBack() {
     this.location.back();
@@ -43948,7 +52294,7 @@ var HeroDetailComponent = class _HeroDetailComponent {
     return this.heroForm.get("publisher");
   }
   static \u0275fac = function HeroDetailComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _HeroDetailComponent)(\u0275\u0275directiveInject(Location), \u0275\u0275directiveInject(HeroService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(ActivatedRoute), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
+    return new (__ngFactoryType__ || _HeroDetailComponent)(\u0275\u0275directiveInject(Location), \u0275\u0275directiveInject(HeroesService), \u0275\u0275directiveInject(PublisherService), \u0275\u0275directiveInject(ActivatedRoute), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
   static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeroDetailComponent, selectors: [["app-hero-detail"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 3, vars: 2, consts: [["notFoundTemplate", ""], ["class", "detail-heroe-container", 4, "ngIf", "ngIfElse"], [1, "detail-heroe-container"], [1, "xmark-container", 3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 384 512", 1, "xmark"], ["d", "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"], [1, "title"], [2, "display", "block", "width", "100%"], [3, "message", "type"], [1, "hero-detail"], [3, "ngSubmit", "formGroup"], [1, "form-control"], ["for", "hero-name"], [1, "input-container", "name-field"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"], ["id", "hero-name", "placeholder", "Hero name", "formControlName", "name"], [1, "form-control", "year"], ["for", "year"], ["class", "input-container select", "style", "display: flex; align-items: center", 4, "ngIf"], ["for", "editorial", 2, "display", "block"], [1, "input-container"], ["d", "M96 0C43 0 0 43 0 96L0 416c0 53 43 96 96 96l288 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64c17.7 0 32-14.3 32-32l0-320c0-17.7-14.3-32-32-32L384 0 96 0zm0 384l256 0 0 64L96 448c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16zm16 48l192 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-192 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"], ["formControlName", "publisher", 2, "height", "100%", "padding", "0"], [3, "value", 4, "ngFor", "ngForOf"], [1, "container-form-button"], ["type", "button", 1, "submit-btn", 3, "click"], ["type", "button", 1, "back-btn", 3, "click"], [3, "isLoading", "message"], [1, "input-container", "select", 2, "display", "flex", "align-items", "center"], ["d", "M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"], ["formControlName", "year", 2, "border", "none", "border-left", "1px solid #d4d4d4", "background-color", "transparent"], [3, "value"], [1, "detail-heroe-container", 2, "position", "relative"], [1, "hero-not-found"]], template: function HeroDetailComponent_Template(rf, ctx) {
     if (rf & 1) {
@@ -44092,68 +52438,6 @@ var ConfirmModalComponent = class _ConfirmModalComponent {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ConfirmModalComponent, { className: "ConfirmModalComponent" });
 })();
 
-// src/app/hero/service/tophero.service.ts
-var TopheroService = class _TopheroService {
-  http;
-  messageService;
-  url = "api/topheroes";
-  constructor(http, messageService) {
-    this.http = http;
-    this.messageService = messageService;
-  }
-  getTopHeroes() {
-    return this.http.get(this.url).pipe(tap(() => {
-      return this.messageService.add({
-        source: "TopheroService",
-        message: "All Top Heroes fetched",
-        severity: "INFO"
-      });
-    }), map((topheroes) => {
-      const sortTopHeroes = (a, b) => {
-        return a.statistics.ranking - b.statistics.ranking;
-      };
-      const initializedHeroes = topheroes.map((hero) => __spreadProps(__spreadValues({}, hero), {
-        isSelected: false
-        // Añadir la propiedad `isSelected`
-      }));
-      return initializedHeroes.sort(sortTopHeroes);
-    }), map((top) => {
-      return top;
-    }));
-  }
-  save(topheroes) {
-    return this.http.post("api/topheroes", topheroes).pipe(tap(() => {
-      this.messageService.add({
-        source: "TopheroService",
-        message: `register top of heroes`,
-        severity: "INFO"
-      });
-    }));
-  }
-  deleteHeroById(id) {
-    return this.http.delete(`api/topheroes/${id}`).pipe(tap(() => {
-      this.messageService.add({
-        source: "TopheroService",
-        message: `Hero with id ${id} was deleted!`,
-        severity: "INFO"
-      });
-    }));
-  }
-  deleteHeroesByIds(ids) {
-    return this.http.post("api/topheroes", { ids }).pipe(tap(() => {
-      this.messageService.add({
-        source: "TopheroService",
-        message: `Heroes with ids: {${ids}} was deleted!`,
-        severity: "INFO"
-      });
-    }));
-  }
-  static \u0275fac = function TopheroService_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _TopheroService)(\u0275\u0275inject(HttpClient), \u0275\u0275inject(MessageService));
-  };
-  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _TopheroService, factory: _TopheroService.\u0275fac, providedIn: "root" });
-};
-
 // src/app/hero/components/dashboard-hero-details/dashboard-hero-details.component.ts
 var _c03 = () => ["fade-out", "clo"];
 var _c12 = () => [];
@@ -44204,13 +52488,13 @@ function DashboardHeroDetailsComponent_div_0_Template(rf, ctx) {
     const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275property("ngClass", ctx_r1.isDeleted ? \u0275\u0275pureFunction0(11, _c03) : \u0275\u0275pureFunction0(12, _c12));
     \u0275\u0275advance(5);
-    \u0275\u0275textInterpolate1("#", ctx_r1.hero.statistics == null ? null : ctx_r1.hero.statistics.ranking, " ");
+    \u0275\u0275textInterpolate1("#", ctx_r1.hero.heroStatistics.ranking, " ");
     \u0275\u0275advance(4);
     \u0275\u0275textInterpolate(ctx_r1.hero.name);
     \u0275\u0275advance(4);
     \u0275\u0275textInterpolate(ctx_r1.hero.year);
     \u0275\u0275advance(4);
-    \u0275\u0275textInterpolate1("", ctx_r1.hero.publisher == null ? null : ctx_r1.hero.publisher.name, " ");
+    \u0275\u0275textInterpolate1("", ctx_r1.hero.comicPublishers == null ? null : ctx_r1.hero.comicPublishers.name, " ");
     \u0275\u0275advance(2);
     \u0275\u0275propertyInterpolate1("routerLink", "/detail/", ctx_r1.hero.id, "");
     \u0275\u0275property("appTooltip", "Edit Hero");
@@ -44233,7 +52517,7 @@ function DashboardHeroDetailsComponent_app_confirm_modal_1_Template(rf, ctx) {
   }
 }
 var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
-  topheroService;
+  supabaseService;
   renderHeroDetail;
   selectedHero;
   hero = void 0;
@@ -44243,9 +52527,10 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
   messageSpinner = "Loading hero details";
   showModal = false;
   isDeleted = false;
-  onHeroDeleted = new EventEmitter(false);
-  constructor(topheroService) {
-    this.topheroService = topheroService;
+  onDeleteHero = new EventEmitter(false);
+  onEditHero = new EventEmitter(false);
+  constructor(supabaseService) {
+    this.supabaseService = supabaseService;
   }
   ngOnInit() {
   }
@@ -44273,9 +52558,9 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
       return;
     }
     if (this.hero && this.hero != void 0) {
-      this.topheroService.deleteHeroById(this.hero?.id).subscribe((isDeleted) => {
-        if (isDeleted) {
-          this.onHeroDeleted.emit(true);
+      this.supabaseService.deleteHero(this.hero?.id).subscribe((isHeroDeleted) => {
+        if (isHeroDeleted) {
+          this.onDeleteHero.emit(true);
           this.isDeleted = true;
         }
         setTimeout(() => {
@@ -44286,9 +52571,9 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
     }
   }
   static \u0275fac = function DashboardHeroDetailsComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(TopheroService));
+    return new (__ngFactoryType__ || _DashboardHeroDetailsComponent)(\u0275\u0275directiveInject(HeroesService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { onHeroDeleted: "onHeroDeleted" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 2, vars: 2, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 3, "ngClass", 4, "ngIf"], [3, "confirm", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative", 3, "ngClass"], [2, "font-weight", "bolder"], [1, "action"], [3, "appTooltip", "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [3, "click", "appTooltip"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardHeroDetailsComponent, selectors: [["app-dashboard-hero-details"]], inputs: { renderHeroDetail: "renderHeroDetail", selectedHero: "selectedHero" }, outputs: { onDeleteHero: "onDeleteHero", onEditHero: "onEditHero" }, standalone: true, features: [\u0275\u0275NgOnChangesFeature, \u0275\u0275StandaloneFeature], decls: 2, vars: 2, consts: [["class", "dashboard-hero-detail", "style", "display: flex; justify-content: space-evenly; position: relative", 3, "ngClass", 4, "ngIf"], [3, "confirm", 4, "ngIf"], [1, "dashboard-hero-detail", 2, "display", "flex", "justify-content", "space-evenly", "position", "relative", 3, "ngClass"], [2, "font-weight", "bolder"], [1, "action"], [3, "appTooltip", "routerLink"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512"], ["d", "M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"], [3, "click", "appTooltip"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "isLoading", "message"], [3, "confirm"]], template: function DashboardHeroDetailsComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275template(0, DashboardHeroDetailsComponent_div_0_Template, 26, 13, "div", 0)(1, DashboardHeroDetailsComponent_app_confirm_modal_1_Template, 1, 0, "app-confirm-modal", 1);
     }
@@ -44310,6 +52595,53 @@ var DashboardHeroDetailsComponent = class _DashboardHeroDetailsComponent {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(DashboardHeroDetailsComponent, { className: "DashboardHeroDetailsComponent" });
 })();
+
+// src/app/hero/service/tophero.service.ts
+var TopHeroService = class _TopHeroService {
+  http;
+  messageService;
+  supabase;
+  // private url: string = 'api/topheroes';
+  constructor(http, messageService, supabase) {
+    this.http = http;
+    this.messageService = messageService;
+    this.supabase = supabase;
+  }
+  getTopHeroes() {
+    return this.supabase.getHeroes();
+  }
+  save(topheroes) {
+    return this.http.post("api/topheroes", topheroes).pipe(tap(() => {
+      this.messageService.add({
+        source: "TopheroService",
+        message: `register top of heroes`,
+        severity: "INFO"
+      });
+    }));
+  }
+  deleteHeroById(id) {
+    return this.http.delete(`api/topheroes/${id}`).pipe(tap(() => {
+      this.messageService.add({
+        source: "TopheroService",
+        message: `Hero with id ${id} was deleted!`,
+        severity: "INFO"
+      });
+    }));
+  }
+  deleteHeroesByIds(ids) {
+    return this.http.post("api/topheroes", { ids }).pipe(tap(() => {
+      this.messageService.add({
+        source: "TopheroService",
+        message: `Heroes with ids: {${ids}} was deleted!`,
+        severity: "INFO"
+      });
+    }));
+  }
+  static \u0275fac = function TopHeroService_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _TopHeroService)(\u0275\u0275inject(HttpClient), \u0275\u0275inject(MessageService), \u0275\u0275inject(HeroesService));
+  };
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _TopHeroService, factory: _TopHeroService.\u0275fac, providedIn: "root" });
+};
 
 // src/app/hero/components/dashboard/dashboard.component.ts
 var _c04 = () => ["trash-action"];
@@ -44348,12 +52680,12 @@ function DashboardComponent_div_17_button_2_Template(rf, ctx) {
     const hero_r3 = ctx.$implicit;
     const ctx_r3 = \u0275\u0275nextContext(2);
     \u0275\u0275classProp("selected", hero_r3 === ctx_r3.selectedHero);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(9, _c3, hero_r3 === ctx_r3.selectedHero && ctx_r3.isDeleted))("appTooltip", "Top #" + (hero_r3.statistics == null ? null : hero_r3.statistics.ranking));
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(9, _c3, hero_r3 === ctx_r3.selectedHero && ctx_r3.isDeleted))("appTooltip", "Top #" + hero_r3.heroStatistics.ranking);
     \u0275\u0275advance();
     \u0275\u0275propertyInterpolate1("name", "selectedHero", hero_r3.id, "");
     \u0275\u0275twoWayProperty("ngModel", hero_r3.isSelected);
     \u0275\u0275advance(2);
-    \u0275\u0275textInterpolate(hero_r3.statistics == null ? null : hero_r3.statistics.ranking);
+    \u0275\u0275textInterpolate(hero_r3.heroStatistics.ranking);
     \u0275\u0275advance(2);
     \u0275\u0275textInterpolate(hero_r3.name);
   }
@@ -44362,7 +52694,7 @@ function DashboardComponent_div_17_app_dashboard_hero_details_3_Template(rf, ctx
   if (rf & 1) {
     const _r5 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "app-dashboard-hero-details", 23);
-    \u0275\u0275listener("onHeroDeleted", function DashboardComponent_div_17_app_dashboard_hero_details_3_Template_app_dashboard_hero_details_onHeroDeleted_0_listener($event) {
+    \u0275\u0275listener("onDeleteHero", function DashboardComponent_div_17_app_dashboard_hero_details_3_Template_app_dashboard_hero_details_onDeleteHero_0_listener($event) {
       \u0275\u0275restoreView(_r5);
       const ctx_r3 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r3.updateViewTopHeroes($event));
@@ -44416,12 +52748,13 @@ function DashboardComponent_ng_template_19_Template(rf, ctx) {
   }
 }
 var DashboardComponent = class _DashboardComponent {
+  apiHeroesService;
   topheroService;
   spinnerService;
   actionsService;
   topheroes = [];
   topheroesBackup;
-  heroSubscription;
+  topHeroSubscription;
   spinnerMessage = "Loading top heroes...";
   isLoadingSpinner = false;
   selectedHero;
@@ -44431,7 +52764,9 @@ var DashboardComponent = class _DashboardComponent {
   isSelectedTopHero = false;
   showModal = false;
   topHeroes$;
-  constructor(topheroService, spinnerService, actionsService) {
+  // service: IHeroService;
+  constructor(apiHeroesService, topheroService, spinnerService, actionsService) {
+    this.apiHeroesService = apiHeroesService;
     this.topheroService = topheroService;
     this.spinnerService = spinnerService;
     this.actionsService = actionsService;
@@ -44439,8 +52774,13 @@ var DashboardComponent = class _DashboardComponent {
   ngOnInit() {
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
     this.isLoadingSpinner = true;
-    this.topHeroes$ = this.topheroService.getTopHeroes();
-    this.heroSubscription = this.topHeroes$.subscribe((heroes) => {
+    this.topHeroSubscription = this.apiHeroesService.getHeroes().pipe(map((heroes) => {
+      return heroes.filter((h) => h.isTophero);
+    }), map((topheroes) => {
+      return topheroes.sort((a, b) => {
+        return a.heroStatistics.ranking - b.heroStatistics.ranking;
+      });
+    })).subscribe((heroes) => {
       if (heroes && heroes.length > 0) {
         const defaultHeroSelected = heroes[0];
         this.selectedHero = defaultHeroSelected;
@@ -44454,8 +52794,8 @@ var DashboardComponent = class _DashboardComponent {
     }, 1e4);
   }
   ngOnDestroy() {
-    if (this.heroSubscription) {
-      this.heroSubscription.unsubscribe();
+    if (this.topHeroSubscription) {
+      this.topHeroSubscription.unsubscribe();
     }
   }
   currentSelected(hero) {
@@ -44467,13 +52807,13 @@ var DashboardComponent = class _DashboardComponent {
   closeSpinner() {
     this.isLoadingSpinner = false;
   }
-  updateViewTopHeroes(onHeroDeleted) {
+  updateViewTopHeroes(onDeleteHero) {
     this.isDeleted = true;
-    let index = this.topheroes?.findIndex((h) => h.id === this.selectedHero?.id);
+    let index2 = this.topheroes?.findIndex((h) => h.id === this.selectedHero?.id);
     setTimeout(() => {
       this.displaySpinner();
-      if (index !== -1 && index != void 0) {
-        this.topheroes.splice(index, 1);
+      if (index2 !== -1 && index2 != void 0) {
+        this.topheroes.splice(index2, 1);
       }
       setTimeout(() => {
         this.isDeleted = false;
@@ -44543,9 +52883,9 @@ var DashboardComponent = class _DashboardComponent {
             console.log("something wrong");
             return;
           }
-          const index = this.getHeroIndex(topHeroesToDelete[0].id);
-          if (index != void 0 && index >= 0) {
-            this.topheroes?.splice(index, 1);
+          const index2 = this.getHeroIndex(topHeroesToDelete[0].id);
+          if (index2 != void 0 && index2 >= 0) {
+            this.topheroes?.splice(index2, 1);
           }
         });
         return;
@@ -44574,9 +52914,10 @@ var DashboardComponent = class _DashboardComponent {
           id: 12,
           name: "Dr. Nice",
           year: 2010,
-          publisher: { id: 3, name: "Image Comics" },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 3, name: "Image Comics" },
+          isTophero: true,
+          heroStatistics: {
+            id: 1,
             popularity: 9999,
             ranking: 1
           }
@@ -44585,9 +52926,10 @@ var DashboardComponent = class _DashboardComponent {
           id: 13,
           name: "Bombasto",
           year: 2010,
-          publisher: { id: 1, name: "Marvel Comics" },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 1, name: "Marvel Comics" },
+          isTophero: true,
+          heroStatistics: {
+            id: 2,
             popularity: 9950,
             ranking: 3
           }
@@ -44596,9 +52938,10 @@ var DashboardComponent = class _DashboardComponent {
           id: 14,
           name: "Celeritas",
           year: 2010,
-          publisher: { id: 1, name: "Marvel Comics" },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 1, name: "Marvel Comics" },
+          isTophero: true,
+          heroStatistics: {
+            id: 3,
             popularity: 9998,
             ranking: 2
           }
@@ -44607,9 +52950,10 @@ var DashboardComponent = class _DashboardComponent {
           id: 15,
           name: "Magneta",
           year: 2010,
-          publisher: { id: 3, name: "Image Comics" },
-          tophero: true,
-          statistics: {
+          comicPublishers: { id: 3, name: "Image Comics" },
+          isTophero: true,
+          heroStatistics: {
+            id: 4,
             popularity: 8e3,
             ranking: 4
           }
@@ -44621,9 +52965,9 @@ var DashboardComponent = class _DashboardComponent {
     }
   }
   static \u0275fac = function DashboardComponent_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(TopheroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
+    return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(HeroesService), \u0275\u0275directiveInject(TopHeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 21, vars: 12, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action", 2, "display", "flex", "justify-content", "space-between"], [2, "float", "left", "margin-left", "55px"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel"], ["for", "", 2, "font-weight", "bold", "font-size", "14px", "padding-left", "5px"], [2, "display", "flex", "flex-direction", "row"], [1, "action-sync-container"], [3, "click", "disabled", "ngClass"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], ["class", "container_heroes-menu_details", "style", "position: relative", 4, "ngIf", "ngIfElse"], [3, "message", "confirm", 4, "ngIf"], [1, "container_heroes-menu_details", 2, "position", "relative"], [1, "heroes-menu"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "selectedHero", "onHeroDeleted", 4, "ngIf"], [3, "isLoading", "message"], [3, "click", "ngClass", "appTooltip"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel", "name"], [3, "onHeroDeleted", "selectedHero"], [3, "confirm", "message"], [1, "", 2, "height", "auto", "min-height", "100px", "position", "relative", "text-align", "center"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 21, vars: 12, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action", 2, "display", "flex", "justify-content", "space-between"], [2, "float", "left", "margin-left", "55px"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel"], ["for", "", 2, "font-weight", "bold", "font-size", "14px", "padding-left", "5px"], [2, "display", "flex", "flex-direction", "row"], [1, "action-sync-container"], [3, "click", "disabled", "ngClass"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], ["class", "container_heroes-menu_details", "style", "position: relative", 4, "ngIf", "ngIfElse"], [3, "message", "confirm", 4, "ngIf"], [1, "container_heroes-menu_details", 2, "position", "relative"], [1, "heroes-menu"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "selectedHero", "onDeleteHero", 4, "ngIf"], [3, "isLoading", "message"], [3, "click", "ngClass", "appTooltip"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel", "name"], [3, "onDeleteHero", "selectedHero"], [3, "confirm", "message"], [1, "", 2, "height", "auto", "min-height", "100px", "position", "relative", "text-align", "center"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
     if (rf & 1) {
       const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275elementStart(0, "div", 1)(1, "h2");
@@ -44737,1559 +53081,6 @@ var routes = [
   { path: "heroes/new", component: HeroFormComponent },
   { path: "**", component: NotFoundComponent }
 ];
-
-// node_modules/angular-in-memory-web-api/fesm2022/angular-in-memory-web-api.mjs
-function delayResponse(response$, delayMs) {
-  return new Observable((observer) => {
-    let completePending = false;
-    let nextPending = false;
-    const subscription = response$.subscribe((value) => {
-      nextPending = true;
-      setTimeout(() => {
-        observer.next(value);
-        if (completePending) {
-          observer.complete();
-        }
-      }, delayMs);
-    }, (error) => setTimeout(() => observer.error(error), delayMs), () => {
-      completePending = true;
-      if (!nextPending) {
-        observer.complete();
-      }
-    });
-    return () => {
-      return subscription.unsubscribe();
-    };
-  });
-}
-var STATUS = {
-  CONTINUE: 100,
-  SWITCHING_PROTOCOLS: 101,
-  OK: 200,
-  CREATED: 201,
-  ACCEPTED: 202,
-  NON_AUTHORITATIVE_INFORMATION: 203,
-  NO_CONTENT: 204,
-  RESET_CONTENT: 205,
-  PARTIAL_CONTENT: 206,
-  MULTIPLE_CHOICES: 300,
-  MOVED_PERMANTENTLY: 301,
-  FOUND: 302,
-  SEE_OTHER: 303,
-  NOT_MODIFIED: 304,
-  USE_PROXY: 305,
-  TEMPORARY_REDIRECT: 307,
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  PAYMENT_REQUIRED: 402,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  METHOD_NOT_ALLOWED: 405,
-  NOT_ACCEPTABLE: 406,
-  PROXY_AUTHENTICATION_REQUIRED: 407,
-  REQUEST_TIMEOUT: 408,
-  CONFLICT: 409,
-  GONE: 410,
-  LENGTH_REQUIRED: 411,
-  PRECONDITION_FAILED: 412,
-  PAYLOAD_TO_LARGE: 413,
-  URI_TOO_LONG: 414,
-  UNSUPPORTED_MEDIA_TYPE: 415,
-  RANGE_NOT_SATISFIABLE: 416,
-  EXPECTATION_FAILED: 417,
-  IM_A_TEAPOT: 418,
-  UPGRADE_REQUIRED: 426,
-  INTERNAL_SERVER_ERROR: 500,
-  NOT_IMPLEMENTED: 501,
-  BAD_GATEWAY: 502,
-  SERVICE_UNAVAILABLE: 503,
-  GATEWAY_TIMEOUT: 504,
-  HTTP_VERSION_NOT_SUPPORTED: 505,
-  PROCESSING: 102,
-  MULTI_STATUS: 207,
-  IM_USED: 226,
-  PERMANENT_REDIRECT: 308,
-  UNPROCESSABLE_ENTRY: 422,
-  LOCKED: 423,
-  FAILED_DEPENDENCY: 424,
-  PRECONDITION_REQUIRED: 428,
-  TOO_MANY_REQUESTS: 429,
-  REQUEST_HEADER_FIELDS_TOO_LARGE: 431,
-  UNAVAILABLE_FOR_LEGAL_REASONS: 451,
-  VARIANT_ALSO_NEGOTIATES: 506,
-  INSUFFICIENT_STORAGE: 507,
-  NETWORK_AUTHENTICATION_REQUIRED: 511
-};
-var STATUS_CODE_INFO = {
-  "100": {
-    "code": 100,
-    "text": "Continue",
-    "description": '"The initial part of a request has been received and has not yet been rejected by the server."',
-    "spec_title": "RFC7231#6.2.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.2.1"
-  },
-  "101": {
-    "code": 101,
-    "text": "Switching Protocols",
-    "description": `"The server understands and is willing to comply with the client's request, via the Upgrade header field, for a change in the application protocol being used on this connection."`,
-    "spec_title": "RFC7231#6.2.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.2.2"
-  },
-  "200": {
-    "code": 200,
-    "text": "OK",
-    "description": '"The request has succeeded."',
-    "spec_title": "RFC7231#6.3.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.1"
-  },
-  "201": {
-    "code": 201,
-    "text": "Created",
-    "description": '"The request has been fulfilled and has resulted in one or more new resources being created."',
-    "spec_title": "RFC7231#6.3.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.2"
-  },
-  "202": {
-    "code": 202,
-    "text": "Accepted",
-    "description": '"The request has been accepted for processing, but the processing has not been completed."',
-    "spec_title": "RFC7231#6.3.3",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.3"
-  },
-  "203": {
-    "code": 203,
-    "text": "Non-Authoritative Information",
-    "description": `"The request was successful but the enclosed payload has been modified from that of the origin server's 200 (OK) response by a transforming proxy."`,
-    "spec_title": "RFC7231#6.3.4",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.4"
-  },
-  "204": {
-    "code": 204,
-    "text": "No Content",
-    "description": '"The server has successfully fulfilled the request and that there is no additional content to send in the response payload body."',
-    "spec_title": "RFC7231#6.3.5",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.5"
-  },
-  "205": {
-    "code": 205,
-    "text": "Reset Content",
-    "description": '"The server has fulfilled the request and desires that the user agent reset the "document view", which caused the request to be sent, to its original state as received from the origin server."',
-    "spec_title": "RFC7231#6.3.6",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.6"
-  },
-  "206": {
-    "code": 206,
-    "text": "Partial Content",
-    "description": `"The server is successfully fulfilling a range request for the target resource by transferring one or more parts of the selected representation that correspond to the satisfiable ranges found in the requests's Range header field."`,
-    "spec_title": "RFC7233#4.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7233#section-4.1"
-  },
-  "300": {
-    "code": 300,
-    "text": "Multiple Choices",
-    "description": '"The target resource has more than one representation, each with its own more specific identifier, and information about the alternatives is being provided so that the user (or user agent) can select a preferred representation by redirecting its request to one or more of those identifiers."',
-    "spec_title": "RFC7231#6.4.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.4.1"
-  },
-  "301": {
-    "code": 301,
-    "text": "Moved Permanently",
-    "description": '"The target resource has been assigned a new permanent URI and any future references to this resource ought to use one of the enclosed URIs."',
-    "spec_title": "RFC7231#6.4.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.4.2"
-  },
-  "302": {
-    "code": 302,
-    "text": "Found",
-    "description": '"The target resource resides temporarily under a different URI."',
-    "spec_title": "RFC7231#6.4.3",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.4.3"
-  },
-  "303": {
-    "code": 303,
-    "text": "See Other",
-    "description": '"The server is redirecting the user agent to a different resource, as indicated by a URI in the Location header field, that is intended to provide an indirect response to the original request."',
-    "spec_title": "RFC7231#6.4.4",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.4.4"
-  },
-  "304": {
-    "code": 304,
-    "text": "Not Modified",
-    "description": '"A conditional GET request has been received and would have resulted in a 200 (OK) response if it were not for the fact that the condition has evaluated to false."',
-    "spec_title": "RFC7232#4.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7232#section-4.1"
-  },
-  "305": {
-    "code": 305,
-    "text": "Use Proxy",
-    "description": "*deprecated*",
-    "spec_title": "RFC7231#6.4.5",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.4.5"
-  },
-  "307": {
-    "code": 307,
-    "text": "Temporary Redirect",
-    "description": '"The target resource resides temporarily under a different URI and the user agent MUST NOT change the request method if it performs an automatic redirection to that URI."',
-    "spec_title": "RFC7231#6.4.7",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.4.7"
-  },
-  "400": {
-    "code": 400,
-    "text": "Bad Request",
-    "description": '"The server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process."',
-    "spec_title": "RFC7231#6.5.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-  },
-  "401": {
-    "code": 401,
-    "text": "Unauthorized",
-    "description": '"The request has not been applied because it lacks valid authentication credentials for the target resource."',
-    "spec_title": "RFC7235#6.3.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7235#section-3.1"
-  },
-  "402": {
-    "code": 402,
-    "text": "Payment Required",
-    "description": "*reserved*",
-    "spec_title": "RFC7231#6.5.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.2"
-  },
-  "403": {
-    "code": 403,
-    "text": "Forbidden",
-    "description": '"The server understood the request but refuses to authorize it."',
-    "spec_title": "RFC7231#6.5.3",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.3"
-  },
-  "404": {
-    "code": 404,
-    "text": "Not Found",
-    "description": '"The origin server did not find a current representation for the target resource or is not willing to disclose that one exists."',
-    "spec_title": "RFC7231#6.5.4",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.4"
-  },
-  "405": {
-    "code": 405,
-    "text": "Method Not Allowed",
-    "description": '"The method specified in the request-line is known by the origin server but not supported by the target resource."',
-    "spec_title": "RFC7231#6.5.5",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.5"
-  },
-  "406": {
-    "code": 406,
-    "text": "Not Acceptable",
-    "description": '"The target resource does not have a current representation that would be acceptable to the user agent, according to the proactive negotiation header fields received in the request, and the server is unwilling to supply a default representation."',
-    "spec_title": "RFC7231#6.5.6",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.6"
-  },
-  "407": {
-    "code": 407,
-    "text": "Proxy Authentication Required",
-    "description": '"The client needs to authenticate itself in order to use a proxy."',
-    "spec_title": "RFC7231#6.3.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.3.2"
-  },
-  "408": {
-    "code": 408,
-    "text": "Request Timeout",
-    "description": '"The server did not receive a complete request message within the time that it was prepared to wait."',
-    "spec_title": "RFC7231#6.5.7",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.7"
-  },
-  "409": {
-    "code": 409,
-    "text": "Conflict",
-    "description": '"The request could not be completed due to a conflict with the current state of the resource."',
-    "spec_title": "RFC7231#6.5.8",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.8"
-  },
-  "410": {
-    "code": 410,
-    "text": "Gone",
-    "description": '"Access to the target resource is no longer available at the origin server and that this condition is likely to be permanent."',
-    "spec_title": "RFC7231#6.5.9",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.9"
-  },
-  "411": {
-    "code": 411,
-    "text": "Length Required",
-    "description": '"The server refuses to accept the request without a defined Content-Length."',
-    "spec_title": "RFC7231#6.5.10",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.10"
-  },
-  "412": {
-    "code": 412,
-    "text": "Precondition Failed",
-    "description": '"One or more preconditions given in the request header fields evaluated to false when tested on the server."',
-    "spec_title": "RFC7232#4.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7232#section-4.2"
-  },
-  "413": {
-    "code": 413,
-    "text": "Payload Too Large",
-    "description": '"The server is refusing to process a request because the request payload is larger than the server is willing or able to process."',
-    "spec_title": "RFC7231#6.5.11",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.11"
-  },
-  "414": {
-    "code": 414,
-    "text": "URI Too Long",
-    "description": '"The server is refusing to service the request because the request-target is longer than the server is willing to interpret."',
-    "spec_title": "RFC7231#6.5.12",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.12"
-  },
-  "415": {
-    "code": 415,
-    "text": "Unsupported Media Type",
-    "description": '"The origin server is refusing to service the request because the payload is in a format not supported by the target resource for this method."',
-    "spec_title": "RFC7231#6.5.13",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.13"
-  },
-  "416": {
-    "code": 416,
-    "text": "Range Not Satisfiable",
-    "description": `"None of the ranges in the request's Range header field overlap the current extent of the selected resource or that the set of ranges requested has been rejected due to invalid ranges or an excessive request of small or overlapping ranges."`,
-    "spec_title": "RFC7233#4.4",
-    "spec_href": "https://tools.ietf.org/html/rfc7233#section-4.4"
-  },
-  "417": {
-    "code": 417,
-    "text": "Expectation Failed",
-    "description": `"The expectation given in the request's Expect header field could not be met by at least one of the inbound servers."`,
-    "spec_title": "RFC7231#6.5.14",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.14"
-  },
-  "418": {
-    "code": 418,
-    "text": "I'm a teapot",
-    "description": '"1988 April Fools Joke. Returned by tea pots requested to brew coffee."',
-    "spec_title": "RFC 2324",
-    "spec_href": "https://tools.ietf.org/html/rfc2324"
-  },
-  "426": {
-    "code": 426,
-    "text": "Upgrade Required",
-    "description": '"The server refuses to perform the request using the current protocol but might be willing to do so after the client upgrades to a different protocol."',
-    "spec_title": "RFC7231#6.5.15",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.5.15"
-  },
-  "500": {
-    "code": 500,
-    "text": "Internal Server Error",
-    "description": '"The server encountered an unexpected condition that prevented it from fulfilling the request."',
-    "spec_title": "RFC7231#6.6.1",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.6.1"
-  },
-  "501": {
-    "code": 501,
-    "text": "Not Implemented",
-    "description": '"The server does not support the functionality required to fulfill the request."',
-    "spec_title": "RFC7231#6.6.2",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.6.2"
-  },
-  "502": {
-    "code": 502,
-    "text": "Bad Gateway",
-    "description": '"The server, while acting as a gateway or proxy, received an invalid response from an inbound server it accessed while attempting to fulfill the request."',
-    "spec_title": "RFC7231#6.6.3",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.6.3"
-  },
-  "503": {
-    "code": 503,
-    "text": "Service Unavailable",
-    "description": '"The server is currently unable to handle the request due to a temporary overload or scheduled maintenance, which will likely be alleviated after some delay."',
-    "spec_title": "RFC7231#6.6.4",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.6.4"
-  },
-  "504": {
-    "code": 504,
-    "text": "Gateway Time-out",
-    "description": '"The server, while acting as a gateway or proxy, did not receive a timely response from an upstream server it needed to access in order to complete the request."',
-    "spec_title": "RFC7231#6.6.5",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.6.5"
-  },
-  "505": {
-    "code": 505,
-    "text": "HTTP Version Not Supported",
-    "description": '"The server does not support, or refuses to support, the protocol version that was used in the request message."',
-    "spec_title": "RFC7231#6.6.6",
-    "spec_href": "https://tools.ietf.org/html/rfc7231#section-6.6.6"
-  },
-  "102": {
-    "code": 102,
-    "text": "Processing",
-    "description": '"An interim response to inform the client that the server has accepted the complete request, but has not yet completed it."',
-    "spec_title": "RFC5218#10.1",
-    "spec_href": "https://tools.ietf.org/html/rfc2518#section-10.1"
-  },
-  "207": {
-    "code": 207,
-    "text": "Multi-Status",
-    "description": '"Status for multiple independent operations."',
-    "spec_title": "RFC5218#10.2",
-    "spec_href": "https://tools.ietf.org/html/rfc2518#section-10.2"
-  },
-  "226": {
-    "code": 226,
-    "text": "IM Used",
-    "description": '"The server has fulfilled a GET request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance."',
-    "spec_title": "RFC3229#10.4.1",
-    "spec_href": "https://tools.ietf.org/html/rfc3229#section-10.4.1"
-  },
-  "308": {
-    "code": 308,
-    "text": "Permanent Redirect",
-    "description": '"The target resource has been assigned a new permanent URI and any future references to this resource SHOULD use one of the returned URIs. [...] This status code is similar to 301 Moved Permanently (Section 7.3.2 of rfc7231), except that it does not allow rewriting the request method from POST to GET."',
-    "spec_title": "RFC7238",
-    "spec_href": "https://tools.ietf.org/html/rfc7238"
-  },
-  "422": {
-    "code": 422,
-    "text": "Unprocessable Entity",
-    "description": '"The server understands the content type of the request entity (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained instructions."',
-    "spec_title": "RFC5218#10.3",
-    "spec_href": "https://tools.ietf.org/html/rfc2518#section-10.3"
-  },
-  "423": {
-    "code": 423,
-    "text": "Locked",
-    "description": '"The source or destination resource of a method is locked."',
-    "spec_title": "RFC5218#10.4",
-    "spec_href": "https://tools.ietf.org/html/rfc2518#section-10.4"
-  },
-  "424": {
-    "code": 424,
-    "text": "Failed Dependency",
-    "description": '"The method could not be performed on the resource because the requested action depended on another action and that action failed."',
-    "spec_title": "RFC5218#10.5",
-    "spec_href": "https://tools.ietf.org/html/rfc2518#section-10.5"
-  },
-  "428": {
-    "code": 428,
-    "text": "Precondition Required",
-    "description": '"The origin server requires the request to be conditional."',
-    "spec_title": "RFC6585#3",
-    "spec_href": "https://tools.ietf.org/html/rfc6585#section-3"
-  },
-  "429": {
-    "code": 429,
-    "text": "Too Many Requests",
-    "description": '"The user has sent too many requests in a given amount of time ("rate limiting")."',
-    "spec_title": "RFC6585#4",
-    "spec_href": "https://tools.ietf.org/html/rfc6585#section-4"
-  },
-  "431": {
-    "code": 431,
-    "text": "Request Header Fields Too Large",
-    "description": '"The server is unwilling to process the request because its header fields are too large."',
-    "spec_title": "RFC6585#5",
-    "spec_href": "https://tools.ietf.org/html/rfc6585#section-5"
-  },
-  "451": {
-    "code": 451,
-    "text": "Unavailable For Legal Reasons",
-    "description": '"The server is denying access to the resource in response to a legal demand."',
-    "spec_title": "draft-ietf-httpbis-legally-restricted-status",
-    "spec_href": "https://tools.ietf.org/html/draft-ietf-httpbis-legally-restricted-status"
-  },
-  "506": {
-    "code": 506,
-    "text": "Variant Also Negotiates",
-    "description": '"The server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process."',
-    "spec_title": "RFC2295#8.1",
-    "spec_href": "https://tools.ietf.org/html/rfc2295#section-8.1"
-  },
-  "507": {
-    "code": 507,
-    "text": "Insufficient Storage",
-    "description": 'The method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request."',
-    "spec_title": "RFC5218#10.6",
-    "spec_href": "https://tools.ietf.org/html/rfc2518#section-10.6"
-  },
-  "511": {
-    "code": 511,
-    "text": "Network Authentication Required",
-    "description": '"The client needs to authenticate to gain network access."',
-    "spec_title": "RFC6585#6",
-    "spec_href": "https://tools.ietf.org/html/rfc6585#section-6"
-  }
-};
-function getStatusText(code) {
-  return STATUS_CODE_INFO[code + ""].text || "Unknown Status";
-}
-function isSuccess(status) {
-  return status >= 200 && status < 300;
-}
-var InMemoryDbService = class {
-};
-var InMemoryBackendConfigArgs = class {
-};
-var _InMemoryBackendConfig = class _InMemoryBackendConfig {
-  constructor(config2 = {}) {
-    Object.assign(this, {
-      // default config:
-      caseSensitiveSearch: false,
-      dataEncapsulation: false,
-      // do NOT wrap content within an object with a `data` property
-      delay: 500,
-      // simulate latency by delaying response
-      delete404: false,
-      // don't complain if can't find entity to delete
-      passThruUnknownUrl: false,
-      // 404 if can't process URL
-      post204: true,
-      // don't return the item after a POST
-      post409: false,
-      // don't update existing item with that ID
-      put204: true,
-      // don't return the item after a PUT
-      put404: false,
-      // create new item if PUT item with that ID not found
-      apiBase: void 0,
-      // assumed to be the first path segment
-      host: void 0,
-      // default value is actually set in InMemoryBackendService ctor
-      rootPath: void 0
-      // default value is actually set in InMemoryBackendService ctor
-    }, config2);
-  }
-};
-_InMemoryBackendConfig.\u0275fac = function InMemoryBackendConfig_Factory(__ngFactoryType__) {
-  return new (__ngFactoryType__ || _InMemoryBackendConfig)(\u0275\u0275inject(InMemoryBackendConfigArgs));
-};
-_InMemoryBackendConfig.\u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({
-  token: _InMemoryBackendConfig,
-  factory: _InMemoryBackendConfig.\u0275fac
-});
-var InMemoryBackendConfig = _InMemoryBackendConfig;
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(InMemoryBackendConfig, [{
-    type: Injectable
-  }], () => [{
-    type: InMemoryBackendConfigArgs
-  }], null);
-})();
-function parseUri(str) {
-  const URL_REGEX = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
-  const m = URL_REGEX.exec(str);
-  const uri = {
-    source: "",
-    protocol: "",
-    authority: "",
-    userInfo: "",
-    user: "",
-    password: "",
-    host: "",
-    port: "",
-    relative: "",
-    path: "",
-    directory: "",
-    file: "",
-    query: "",
-    anchor: ""
-  };
-  const keys = Object.keys(uri);
-  let i = keys.length;
-  while (i--) {
-    uri[keys[i]] = m && m[i] || "";
-  }
-  return uri;
-}
-function removeTrailingSlash(path) {
-  return path.replace(/\/$/, "");
-}
-var BackendService = class {
-  constructor(inMemDbService, config2 = {}) {
-    this.inMemDbService = inMemDbService;
-    this.config = new InMemoryBackendConfig();
-    this.db = {};
-    this.requestInfoUtils = this.getRequestInfoUtils();
-    const loc = this.getLocation("/");
-    this.config.host = loc.host;
-    this.config.rootPath = loc.path;
-    Object.assign(this.config, config2);
-  }
-  get dbReady() {
-    if (!this.dbReadySubject) {
-      this.dbReadySubject = new BehaviorSubject(false);
-      this.resetDb();
-    }
-    return this.dbReadySubject.asObservable().pipe(first((r) => r));
-  }
-  /**
-   * Process Request and return an Observable of Http Response object
-   * in the manner of a RESTy web api.
-   *
-   * Expect URI pattern in the form :base/:collectionName/:id?
-   * Examples:
-   *   // for store with a 'customers' collection
-   *   GET api/customers          // all customers
-   *   GET api/customers/42       // the character with id=42
-   *   GET api/customers?name=^j  // 'j' is a regex; returns customers whose name starts with 'j' or
-   * 'J' GET api/customers.json/42  // ignores the ".json"
-   *
-   * Also accepts direct commands to the service in which the last segment of the apiBase is the
-   * word "commands" Examples: POST commands/resetDb, GET/POST commands/config - get or (re)set the
-   * config
-   *
-   *   HTTP overrides:
-   *     If the injected inMemDbService defines an HTTP method (lowercase)
-   *     The request is forwarded to that method as in
-   *     `inMemDbService.get(requestInfo)`
-   *     which must return either an Observable of the response type
-   *     for this http library or null|undefined (which means "keep processing").
-   */
-  handleRequest(req) {
-    return this.dbReady.pipe(concatMap(() => this.handleRequest_(req)));
-  }
-  handleRequest_(req) {
-    const url = req.urlWithParams ? req.urlWithParams : req.url;
-    const parser = this.bind("parseRequestUrl");
-    const parsed = parser && parser(url, this.requestInfoUtils) || this.parseRequestUrl(url);
-    const collectionName = parsed.collectionName;
-    const collection = this.db[collectionName];
-    const reqInfo = {
-      req,
-      apiBase: parsed.apiBase,
-      collection,
-      collectionName,
-      headers: this.createHeaders({
-        "Content-Type": "application/json"
-      }),
-      id: this.parseId(collection, collectionName, parsed.id),
-      method: this.getRequestMethod(req),
-      query: parsed.query,
-      resourceUrl: parsed.resourceUrl,
-      url,
-      utils: this.requestInfoUtils
-    };
-    let resOptions;
-    if (/commands\/?$/i.test(reqInfo.apiBase)) {
-      return this.commands(reqInfo);
-    }
-    const methodInterceptor = this.bind(reqInfo.method);
-    if (methodInterceptor) {
-      const interceptorResponse = methodInterceptor(reqInfo);
-      if (interceptorResponse) {
-        return interceptorResponse;
-      }
-    }
-    if (this.db[collectionName]) {
-      return this.createResponse$(() => this.collectionHandler(reqInfo));
-    }
-    if (this.config.passThruUnknownUrl) {
-      return this.getPassThruBackend().handle(req);
-    }
-    resOptions = this.createErrorResponseOptions(url, STATUS.NOT_FOUND, `Collection '${collectionName}' not found`);
-    return this.createResponse$(() => resOptions);
-  }
-  /**
-   * Add configured delay to response observable unless delay === 0
-   */
-  addDelay(response) {
-    const d = this.config.delay;
-    return d === 0 ? response : delayResponse(response, d || 500);
-  }
-  /**
-   * Apply query/search parameters as a filter over the collection
-   * This impl only supports RegExp queries on string properties of the collection
-   * ANDs the conditions together
-   */
-  applyQuery(collection, query) {
-    const conditions = [];
-    const caseSensitive = this.config.caseSensitiveSearch ? void 0 : "i";
-    query.forEach((value, name) => {
-      value.forEach((v) => conditions.push({
-        name,
-        rx: new RegExp(decodeURI(v), caseSensitive)
-      }));
-    });
-    const len = conditions.length;
-    if (!len) {
-      return collection;
-    }
-    return collection.filter((row) => {
-      let ok = true;
-      let i = len;
-      while (ok && i) {
-        i -= 1;
-        const cond = conditions[i];
-        ok = cond.rx.test(row[cond.name]);
-      }
-      return ok;
-    });
-  }
-  /**
-   * Get a method from the `InMemoryDbService` (if it exists), bound to that service
-   */
-  bind(methodName) {
-    const fn = this.inMemDbService[methodName];
-    return fn ? fn.bind(this.inMemDbService) : void 0;
-  }
-  bodify(data) {
-    return this.config.dataEncapsulation ? {
-      data
-    } : data;
-  }
-  clone(data) {
-    return JSON.parse(JSON.stringify(data));
-  }
-  collectionHandler(reqInfo) {
-    let resOptions;
-    switch (reqInfo.method) {
-      case "get":
-        resOptions = this.get(reqInfo);
-        break;
-      case "post":
-        resOptions = this.post(reqInfo);
-        break;
-      case "put":
-        resOptions = this.put(reqInfo);
-        break;
-      case "delete":
-        resOptions = this.delete(reqInfo);
-        break;
-      default:
-        resOptions = this.createErrorResponseOptions(reqInfo.url, STATUS.METHOD_NOT_ALLOWED, "Method not allowed");
-        break;
-    }
-    const interceptor = this.bind("responseInterceptor");
-    return interceptor ? interceptor(resOptions, reqInfo) : resOptions;
-  }
-  /**
-   * Commands reconfigure the in-memory web api service or extract information from it.
-   * Commands ignore the latency delay and respond ASAP.
-   *
-   * When the last segment of the `apiBase` path is "commands",
-   * the `collectionName` is the command.
-   *
-   * Example URLs:
-   *   commands/resetdb (POST) // Reset the "database" to its original state
-   *   commands/config (GET)   // Return this service's config object
-   *   commands/config (POST)  // Update the config (e.g. the delay)
-   *
-   * Usage:
-   *   http.post('commands/resetdb', undefined);
-   *   http.get('commands/config');
-   *   http.post('commands/config', '{"delay":1000}');
-   */
-  commands(reqInfo) {
-    const command = reqInfo.collectionName.toLowerCase();
-    const method = reqInfo.method;
-    let resOptions = {
-      url: reqInfo.url
-    };
-    switch (command) {
-      case "resetdb":
-        resOptions.status = STATUS.NO_CONTENT;
-        return this.resetDb(reqInfo).pipe(concatMap(() => this.createResponse$(
-          () => resOptions,
-          false
-          /* no latency delay */
-        )));
-      case "config":
-        if (method === "get") {
-          resOptions.status = STATUS.OK;
-          resOptions.body = this.clone(this.config);
-        } else {
-          const body = this.getJsonBody(reqInfo.req);
-          Object.assign(this.config, body);
-          this.passThruBackend = void 0;
-          resOptions.status = STATUS.NO_CONTENT;
-        }
-        break;
-      default:
-        resOptions = this.createErrorResponseOptions(reqInfo.url, STATUS.INTERNAL_SERVER_ERROR, `Unknown command "${command}"`);
-    }
-    return this.createResponse$(
-      () => resOptions,
-      false
-      /* no latency delay */
-    );
-  }
-  createErrorResponseOptions(url, status, message) {
-    return {
-      body: {
-        error: `${message}`
-      },
-      url,
-      headers: this.createHeaders({
-        "Content-Type": "application/json"
-      }),
-      status
-    };
-  }
-  /**
-   * Create a cold response Observable from a factory for ResponseOptions
-   * @param resOptionsFactory - creates ResponseOptions when observable is subscribed
-   * @param withDelay - if true (default), add simulated latency delay from configuration
-   */
-  createResponse$(resOptionsFactory, withDelay = true) {
-    const resOptions$ = this.createResponseOptions$(resOptionsFactory);
-    let resp$ = this.createResponse$fromResponseOptions$(resOptions$);
-    return withDelay ? this.addDelay(resp$) : resp$;
-  }
-  /**
-   * Create a cold Observable of ResponseOptions.
-   * @param resOptionsFactory - creates ResponseOptions when observable is subscribed
-   */
-  createResponseOptions$(resOptionsFactory) {
-    return new Observable((responseObserver) => {
-      let resOptions;
-      try {
-        resOptions = resOptionsFactory();
-      } catch (error) {
-        const err = error.message || error;
-        resOptions = this.createErrorResponseOptions("", STATUS.INTERNAL_SERVER_ERROR, `${err}`);
-      }
-      const status = resOptions.status;
-      try {
-        resOptions.statusText = status != null ? getStatusText(status) : void 0;
-      } catch (e) {
-      }
-      if (status != null && isSuccess(status)) {
-        responseObserver.next(resOptions);
-        responseObserver.complete();
-      } else {
-        responseObserver.error(resOptions);
-      }
-      return () => {
-      };
-    });
-  }
-  delete({
-    collection,
-    collectionName,
-    headers,
-    id,
-    url
-  }) {
-    if (id == null) {
-      return this.createErrorResponseOptions(url, STATUS.NOT_FOUND, `Missing "${collectionName}" id`);
-    }
-    const exists = this.removeById(collection, id);
-    return {
-      headers,
-      status: exists || !this.config.delete404 ? STATUS.NO_CONTENT : STATUS.NOT_FOUND
-    };
-  }
-  /**
-   * Find first instance of item in collection by `item.id`
-   * @param collection
-   * @param id
-   */
-  findById(collection, id) {
-    return collection.find((item) => item.id === id);
-  }
-  /**
-   * Generate the next available id for item in this collection
-   * Use method from `inMemDbService` if it exists and returns a value,
-   * else delegates to `genIdDefault`.
-   * @param collection - collection of items with `id` key property
-   */
-  genId(collection, collectionName) {
-    const genId = this.bind("genId");
-    if (genId) {
-      const id = genId(collection, collectionName);
-      if (id != null) {
-        return id;
-      }
-    }
-    return this.genIdDefault(collection, collectionName);
-  }
-  /**
-   * Default generator of the next available id for item in this collection
-   * This default implementation works only for numeric ids.
-   * @param collection - collection of items with `id` key property
-   * @param collectionName - name of the collection
-   */
-  genIdDefault(collection, collectionName) {
-    if (!this.isCollectionIdNumeric(collection, collectionName)) {
-      throw new Error(`Collection '${collectionName}' id type is non-numeric or unknown. Can only generate numeric ids.`);
-    }
-    let maxId = 0;
-    collection.reduce((prev, item) => {
-      maxId = Math.max(maxId, typeof item.id === "number" ? item.id : maxId);
-    }, void 0);
-    return maxId + 1;
-  }
-  get({
-    collection,
-    collectionName,
-    headers,
-    id,
-    query,
-    url
-  }) {
-    let data = collection;
-    if (id != null && id !== "") {
-      data = this.findById(collection, id);
-    } else if (query) {
-      data = this.applyQuery(collection, query);
-    }
-    if (!data) {
-      return this.createErrorResponseOptions(url, STATUS.NOT_FOUND, `'${collectionName}' with id='${id}' not found`);
-    }
-    return {
-      body: this.bodify(this.clone(data)),
-      headers,
-      status: STATUS.OK
-    };
-  }
-  /**
-   * Get location info from a url, even on server where `document` is not defined
-   */
-  getLocation(url) {
-    if (!url.startsWith("http")) {
-      const doc = typeof document === "undefined" ? void 0 : document;
-      const base = doc ? doc.location.protocol + "//" + doc.location.host : "http://fake";
-      url = url.startsWith("/") ? base + url : base + "/" + url;
-    }
-    return parseUri(url);
-  }
-  /**
-   * get or create the function that passes unhandled requests
-   * through to the "real" backend.
-   */
-  getPassThruBackend() {
-    return this.passThruBackend ? this.passThruBackend : this.passThruBackend = this.createPassThruBackend();
-  }
-  /**
-   * Get utility methods from this service instance.
-   * Useful within an HTTP method override
-   */
-  getRequestInfoUtils() {
-    return {
-      createResponse$: this.createResponse$.bind(this),
-      findById: this.findById.bind(this),
-      isCollectionIdNumeric: this.isCollectionIdNumeric.bind(this),
-      getConfig: () => this.config,
-      getDb: () => this.db,
-      getJsonBody: this.getJsonBody.bind(this),
-      getLocation: this.getLocation.bind(this),
-      getPassThruBackend: this.getPassThruBackend.bind(this),
-      parseRequestUrl: this.parseRequestUrl.bind(this)
-    };
-  }
-  indexOf(collection, id) {
-    return collection.findIndex((item) => item.id === id);
-  }
-  /** Parse the id as a number. Return original value if not a number. */
-  parseId(collection, collectionName, id) {
-    if (!this.isCollectionIdNumeric(collection, collectionName)) {
-      return id;
-    }
-    const idNum = parseFloat(id);
-    return isNaN(idNum) ? id : idNum;
-  }
-  /**
-   * return true if can determine that the collection's `item.id` is a number
-   * This implementation can't tell if the collection is empty so it assumes NO
-   * */
-  isCollectionIdNumeric(collection, collectionName) {
-    return !!(collection && collection[0]) && typeof collection[0].id === "number";
-  }
-  /**
-   * Parses the request URL into a `ParsedRequestUrl` object.
-   * Parsing depends upon certain values of `config`: `apiBase`, `host`, and `urlRoot`.
-   *
-   * Configuring the `apiBase` yields the most interesting changes to `parseRequestUrl` behavior:
-   *   When apiBase=undefined and url='http://localhost/api/collection/42'
-   *     {base: 'api/', collectionName: 'collection', id: '42', ...}
-   *   When apiBase='some/api/root/' and url='http://localhost/some/api/root/collection'
-   *     {base: 'some/api/root/', collectionName: 'collection', id: undefined, ...}
-   *   When apiBase='/' and url='http://localhost/collection'
-   *     {base: '/', collectionName: 'collection', id: undefined, ...}
-   *
-   * The actual api base segment values are ignored. Only the number of segments matters.
-   * The following api base strings are considered identical: 'a/b' ~ 'some/api/' ~ `two/segments'
-   *
-   * To replace this default method, assign your alternative to your
-   * InMemDbService['parseRequestUrl']
-   */
-  parseRequestUrl(url) {
-    try {
-      const loc = this.getLocation(url);
-      let drop = (this.config.rootPath || "").length;
-      let urlRoot = "";
-      if (loc.host !== this.config.host) {
-        drop = 1;
-        urlRoot = loc.protocol + "//" + loc.host + "/";
-      }
-      const path = loc.path.substring(drop);
-      const pathSegments = path.split("/");
-      let segmentIndex = 0;
-      let apiBase;
-      if (this.config.apiBase == null) {
-        apiBase = pathSegments[segmentIndex++];
-      } else {
-        apiBase = removeTrailingSlash(this.config.apiBase.trim());
-        if (apiBase) {
-          segmentIndex = apiBase.split("/").length;
-        } else {
-          segmentIndex = 0;
-        }
-      }
-      apiBase += "/";
-      let collectionName = pathSegments[segmentIndex++];
-      collectionName = collectionName && collectionName.split(".")[0];
-      const id = pathSegments[segmentIndex++];
-      const query = this.createQueryMap(loc.query);
-      const resourceUrl = urlRoot + apiBase + collectionName + "/";
-      return {
-        apiBase,
-        collectionName,
-        id,
-        query,
-        resourceUrl
-      };
-    } catch (err) {
-      const msg = `unable to parse url '${url}'; original error: ${err.message}`;
-      throw new Error(msg);
-    }
-  }
-  // Create entity
-  // Can update an existing entity too if post409 is false.
-  post({
-    collection,
-    collectionName,
-    headers,
-    id,
-    req,
-    resourceUrl,
-    url
-  }) {
-    const item = this.clone(this.getJsonBody(req));
-    if (item.id == null) {
-      try {
-        item.id = id || this.genId(collection, collectionName);
-      } catch (err) {
-        const emsg = err.message || "";
-        if (/id type is non-numeric/.test(emsg)) {
-          return this.createErrorResponseOptions(url, STATUS.UNPROCESSABLE_ENTRY, emsg);
-        } else {
-          return this.createErrorResponseOptions(url, STATUS.INTERNAL_SERVER_ERROR, `Failed to generate new id for '${collectionName}'`);
-        }
-      }
-    }
-    if (id && id !== item.id) {
-      return this.createErrorResponseOptions(url, STATUS.BAD_REQUEST, `Request id does not match item.id`);
-    } else {
-      id = item.id;
-    }
-    const existingIx = this.indexOf(collection, id);
-    const body = this.bodify(item);
-    if (existingIx === -1) {
-      collection.push(item);
-      headers.set("Location", resourceUrl + "/" + id);
-      return {
-        headers,
-        body,
-        status: STATUS.CREATED
-      };
-    } else if (this.config.post409) {
-      return this.createErrorResponseOptions(url, STATUS.CONFLICT, `'${collectionName}' item with id='${id} exists and may not be updated with POST; use PUT instead.`);
-    } else {
-      collection[existingIx] = item;
-      return this.config.post204 ? {
-        headers,
-        status: STATUS.NO_CONTENT
-      } : {
-        headers,
-        body,
-        status: STATUS.OK
-      };
-    }
-  }
-  // Update existing entity
-  // Can create an entity too if put404 is false.
-  put({
-    collection,
-    collectionName,
-    headers,
-    id,
-    req,
-    url
-  }) {
-    const item = this.clone(this.getJsonBody(req));
-    if (item.id == null) {
-      return this.createErrorResponseOptions(url, STATUS.NOT_FOUND, `Missing '${collectionName}' id`);
-    }
-    if (id && id !== item.id) {
-      return this.createErrorResponseOptions(url, STATUS.BAD_REQUEST, `Request for '${collectionName}' id does not match item.id`);
-    } else {
-      id = item.id;
-    }
-    const existingIx = this.indexOf(collection, id);
-    const body = this.bodify(item);
-    if (existingIx > -1) {
-      collection[existingIx] = item;
-      return this.config.put204 ? {
-        headers,
-        status: STATUS.NO_CONTENT
-      } : {
-        headers,
-        body,
-        status: STATUS.OK
-      };
-    } else if (this.config.put404) {
-      return this.createErrorResponseOptions(url, STATUS.NOT_FOUND, `'${collectionName}' item with id='${id} not found and may not be created with PUT; use POST instead.`);
-    } else {
-      collection.push(item);
-      return {
-        headers,
-        body,
-        status: STATUS.CREATED
-      };
-    }
-  }
-  removeById(collection, id) {
-    const ix = this.indexOf(collection, id);
-    if (ix > -1) {
-      collection.splice(ix, 1);
-      return true;
-    }
-    return false;
-  }
-  /**
-   * Tell your in-mem "database" to reset.
-   * returns Observable of the database because resetting it could be async
-   */
-  resetDb(reqInfo) {
-    this.dbReadySubject && this.dbReadySubject.next(false);
-    const db = this.inMemDbService.createDb(reqInfo);
-    const db$ = db instanceof Observable ? db : typeof db.then === "function" ? from(db) : of(db);
-    db$.pipe(first()).subscribe((d) => {
-      this.db = d;
-      this.dbReadySubject && this.dbReadySubject.next(true);
-    });
-    return this.dbReady;
-  }
-};
-var _HttpClientBackendService = class _HttpClientBackendService extends BackendService {
-  constructor(inMemDbService, config2, xhrFactory) {
-    super(inMemDbService, config2);
-    this.xhrFactory = xhrFactory;
-  }
-  handle(req) {
-    try {
-      return this.handleRequest(req);
-    } catch (error) {
-      const err = error.message || error;
-      const resOptions = this.createErrorResponseOptions(req.url, STATUS.INTERNAL_SERVER_ERROR, `${err}`);
-      return this.createResponse$(() => resOptions);
-    }
-  }
-  getJsonBody(req) {
-    return req.body;
-  }
-  getRequestMethod(req) {
-    return (req.method || "get").toLowerCase();
-  }
-  createHeaders(headers) {
-    return new HttpHeaders(headers);
-  }
-  createQueryMap(search) {
-    const map2 = /* @__PURE__ */ new Map();
-    if (search) {
-      const params = new HttpParams({
-        fromString: search
-      });
-      params.keys().forEach((p) => map2.set(p, params.getAll(p) || []));
-    }
-    return map2;
-  }
-  createResponse$fromResponseOptions$(resOptions$) {
-    return resOptions$.pipe(map((opts) => new HttpResponse(opts)));
-  }
-  createPassThruBackend() {
-    try {
-      return new HttpXhrBackend(this.xhrFactory);
-    } catch (ex) {
-      ex.message = "Cannot create passThru404 backend; " + (ex.message || "");
-      throw ex;
-    }
-  }
-};
-_HttpClientBackendService.\u0275fac = function HttpClientBackendService_Factory(__ngFactoryType__) {
-  return new (__ngFactoryType__ || _HttpClientBackendService)(\u0275\u0275inject(InMemoryDbService), \u0275\u0275inject(InMemoryBackendConfig, 8), \u0275\u0275inject(XhrFactory));
-};
-_HttpClientBackendService.\u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({
-  token: _HttpClientBackendService,
-  factory: _HttpClientBackendService.\u0275fac
-});
-var HttpClientBackendService = _HttpClientBackendService;
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(HttpClientBackendService, [{
-    type: Injectable
-  }], () => [{
-    type: InMemoryDbService
-  }, {
-    type: InMemoryBackendConfigArgs,
-    decorators: [{
-      type: Inject,
-      args: [InMemoryBackendConfig]
-    }, {
-      type: Optional
-    }]
-  }, {
-    type: XhrFactory
-  }], null);
-})();
-function httpClientInMemBackendServiceFactory(dbService, options, xhrFactory) {
-  return new HttpClientBackendService(dbService, options, xhrFactory);
-}
-var _HttpClientInMemoryWebApiModule = class _HttpClientInMemoryWebApiModule {
-  /**
-   *  Redirect the Angular `HttpClient` XHR calls
-   *  to in-memory data store that implements `InMemoryDbService`.
-   *  with class that implements InMemoryDbService and creates an in-memory database.
-   *
-   *  Usually imported in the root application module.
-   *  Can import in a lazy feature module too, which will shadow modules loaded earlier
-   *
-   *  Note: If you use the `FetchBackend`, make sure forRoot is invoked after in the providers list
-   *
-   * @param dbCreator - Class that creates seed data for in-memory database. Must implement
-   *     InMemoryDbService.
-   * @param [options]
-   *
-   * @example
-   * HttpInMemoryWebApiModule.forRoot(dbCreator);
-   * HttpInMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-   */
-  static forRoot(dbCreator, options) {
-    return {
-      ngModule: _HttpClientInMemoryWebApiModule,
-      providers: [{
-        provide: InMemoryDbService,
-        useClass: dbCreator
-      }, {
-        provide: InMemoryBackendConfig,
-        useValue: options
-      }, {
-        provide: HttpBackend,
-        useFactory: httpClientInMemBackendServiceFactory,
-        deps: [InMemoryDbService, InMemoryBackendConfig, XhrFactory]
-      }]
-    };
-  }
-  /**
-   *
-   * Enable and configure the in-memory web api in a lazy-loaded feature module.
-   * Same as `forRoot`.
-   * This is a feel-good method so you can follow the Angular style guide for lazy-loaded modules.
-   */
-  static forFeature(dbCreator, options) {
-    return _HttpClientInMemoryWebApiModule.forRoot(dbCreator, options);
-  }
-};
-_HttpClientInMemoryWebApiModule.\u0275fac = function HttpClientInMemoryWebApiModule_Factory(__ngFactoryType__) {
-  return new (__ngFactoryType__ || _HttpClientInMemoryWebApiModule)();
-};
-_HttpClientInMemoryWebApiModule.\u0275mod = /* @__PURE__ */ \u0275\u0275defineNgModule({
-  type: _HttpClientInMemoryWebApiModule
-});
-_HttpClientInMemoryWebApiModule.\u0275inj = /* @__PURE__ */ \u0275\u0275defineInjector({});
-var HttpClientInMemoryWebApiModule = _HttpClientInMemoryWebApiModule;
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(HttpClientInMemoryWebApiModule, [{
-    type: NgModule
-  }], null, null);
-})();
-var _InMemoryWebApiModule = class _InMemoryWebApiModule {
-  /**
-   *  Redirect BOTH Angular `Http` and `HttpClient` XHR calls
-   *  to in-memory data store that implements `InMemoryDbService`.
-   *  with class that implements InMemoryDbService and creates an in-memory database.
-   *
-   *  Usually imported in the root application module.
-   *  Can import in a lazy feature module too, which will shadow modules loaded earlier
-   *
-   *  Note: If you use the `FetchBackend`, make sure forRoot is invoked after in the providers list
-   *
-   * @param dbCreator - Class that creates seed data for in-memory database. Must implement
-   *     InMemoryDbService.
-   * @param [options]
-   *
-   * @example
-   * InMemoryWebApiModule.forRoot(dbCreator);
-   * InMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-   */
-  static forRoot(dbCreator, options) {
-    return {
-      ngModule: _InMemoryWebApiModule,
-      providers: [{
-        provide: InMemoryDbService,
-        useClass: dbCreator
-      }, {
-        provide: InMemoryBackendConfig,
-        useValue: options
-      }, {
-        provide: HttpBackend,
-        useFactory: httpClientInMemBackendServiceFactory,
-        deps: [InMemoryDbService, InMemoryBackendConfig, XhrFactory]
-      }]
-    };
-  }
-  /**
-   *
-   * Enable and configure the in-memory web api in a lazy-loaded feature module.
-   * Same as `forRoot`.
-   * This is a feel-good method so you can follow the Angular style guide for lazy-loaded modules.
-   */
-  static forFeature(dbCreator, options) {
-    return _InMemoryWebApiModule.forRoot(dbCreator, options);
-  }
-};
-_InMemoryWebApiModule.\u0275fac = function InMemoryWebApiModule_Factory(__ngFactoryType__) {
-  return new (__ngFactoryType__ || _InMemoryWebApiModule)();
-};
-_InMemoryWebApiModule.\u0275mod = /* @__PURE__ */ \u0275\u0275defineNgModule({
-  type: _InMemoryWebApiModule
-});
-_InMemoryWebApiModule.\u0275inj = /* @__PURE__ */ \u0275\u0275defineInjector({});
-var InMemoryWebApiModule = _InMemoryWebApiModule;
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(InMemoryWebApiModule, [{
-    type: NgModule
-  }], null, null);
-})();
-
-// src/app/in-memory-data-service.service.ts
-var InMemoryDataService = class _InMemoryDataService {
-  constructor() {
-  }
-  createDb() {
-    const heroes = [
-      {
-        id: 12,
-        name: "Dr. Nice",
-        year: 2010,
-        publisher: { id: 3, name: "Image Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 9999,
-          ranking: 0
-        }
-      },
-      {
-        id: 13,
-        name: "Bombasto",
-        year: 2010,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 9950,
-          ranking: 3
-        }
-      },
-      {
-        id: 14,
-        name: "Celeritas",
-        year: 2010,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 9998,
-          ranking: 2
-        }
-      },
-      {
-        id: 15,
-        name: "Magneta",
-        year: 2010,
-        publisher: { id: 3, name: "Image Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 8e3,
-          ranking: 4
-        }
-      },
-      {
-        id: 16,
-        name: "RubberMan",
-        year: 2e3,
-        publisher: { id: 3, name: "Image Comics" },
-        tophero: false,
-        statistics: {
-          popularity: 8999,
-          ranking: 4
-        }
-      },
-      {
-        id: 17,
-        name: "Dynama",
-        year: 2024,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: false,
-        statistics: {
-          popularity: 7e3,
-          ranking: 0
-        }
-      },
-      {
-        id: 18,
-        name: "Dr. IQ",
-        year: 2024,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: false,
-        statistics: {
-          popularity: 6e3,
-          ranking: 0
-        }
-      },
-      {
-        id: 19,
-        name: "Magma",
-        year: 2024,
-        publisher: { id: 2, name: "DC Comics" },
-        tophero: false,
-        statistics: {
-          popularity: 5e3,
-          ranking: 0
-        }
-      },
-      {
-        id: 20,
-        name: "Tornado",
-        year: 2024,
-        publisher: { id: 2, name: "DC Comics" },
-        tophero: false,
-        statistics: {
-          popularity: 4e3,
-          ranking: 0
-        }
-      },
-      {
-        id: 21,
-        name: "Magneto",
-        year: 2024,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: false,
-        statistics: {
-          popularity: 3e3,
-          ranking: 0
-        }
-      }
-    ];
-    const publishers = [
-      { id: 1, name: "Marvel Comics" },
-      { id: 2, name: "DC Comics" },
-      { id: 3, name: "Image Comics" }
-    ];
-    const topheroes = [
-      {
-        id: 12,
-        name: "Dr. Nice",
-        year: 2010,
-        publisher: { id: 3, name: "Image Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 9999,
-          ranking: 1
-        }
-      },
-      {
-        id: 13,
-        name: "Bombasto",
-        year: 2010,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 9950,
-          ranking: 3
-        }
-      },
-      {
-        id: 14,
-        name: "Celeritas",
-        year: 2010,
-        publisher: { id: 1, name: "Marvel Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 9998,
-          ranking: 2
-        }
-      },
-      {
-        id: 15,
-        name: "Magneta",
-        year: 2010,
-        publisher: { id: 3, name: "Image Comics" },
-        tophero: true,
-        statistics: {
-          popularity: 8e3,
-          ranking: 4
-        }
-      }
-    ];
-    return { heroes, publishers, topheroes };
-  }
-  genId(heroes) {
-    return heroes.length > 0 ? Math.max(...heroes.map((hero) => hero.id)) + 1 : 11;
-  }
-  post(reqInfo) {
-    const collectionName = reqInfo.collectionName;
-    const collection = reqInfo.collection;
-    const newHero = reqInfo.utils.getJsonBody(reqInfo.req);
-    newHero.id = this.genId(collection);
-    collection.push(newHero);
-    return reqInfo.utils.createResponse$(() => ({
-      body: newHero,
-      status: 201
-    }));
-  }
-  put(reqInfo) {
-    const collectionName = reqInfo.collectionName;
-    const heroes = reqInfo.collection;
-    const heroUpdate = reqInfo.utils.getJsonBody(reqInfo.req);
-    if (heroes.some((h) => h.id === heroUpdate.id)) {
-      let heroTmp = heroes.find((h) => h.id === heroUpdate.id);
-      if (heroTmp) {
-        heroTmp.name = heroUpdate.name;
-        heroTmp.year = heroUpdate.year;
-        heroTmp.publisher = heroUpdate.publisher;
-        return reqInfo.utils.createResponse$(() => ({
-          body: heroUpdate,
-          status: 201
-        }));
-      }
-    }
-    return reqInfo.utils.createResponse$(() => ({
-      body: { message: "Hero not Found" },
-      status: 404
-    }));
-  }
-  delete(reqInfo) {
-    const collectionName = reqInfo.collectionName;
-    const heroes = reqInfo.collection;
-    const heroIdDelete = reqInfo.id || -1;
-    if (!heroes.some((h) => h.id === heroIdDelete)) {
-      return reqInfo.utils.createResponse$(() => ({
-        body: "Hero not found",
-        status: 404
-      }));
-    }
-    const index = heroes.findIndex((h) => h.id === heroIdDelete);
-    if (index === -1) {
-      return reqInfo.utils.createResponse$(() => ({
-        body: "Hero not found",
-        status: 404
-      }));
-    } else {
-      heroes.splice(index, 1);
-      return reqInfo.utils.createResponse$(() => ({
-        body: "Hero has been deleted!",
-        status: 200
-      }));
-    }
-  }
-  static \u0275fac = function InMemoryDataService_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _InMemoryDataService)();
-  };
-  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _InMemoryDataService, factory: _InMemoryDataService.\u0275fac, providedIn: "root" });
-};
 
 // node_modules/@angular/common/fesm2022/http/testing.mjs
 var HttpTestingController = class {
@@ -46480,9 +53271,9 @@ var _HttpClientTestingBackend = class _HttpClientTestingBackend {
   match(match2) {
     const results = this._match(match2);
     results.forEach((result) => {
-      const index = this.open.indexOf(result);
-      if (index !== -1) {
-        this.open.splice(index, 1);
+      const index2 = this.open.indexOf(result);
+      if (index2 !== -1) {
+        this.open.splice(index2, 1);
       }
     });
     return results;
@@ -46605,10 +53396,12 @@ var appConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideHttpClientTesting(),
-    importProvidersFrom(HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-      dataEncapsulation: false
-    }))
+    provideHttpClientTesting()
+    // importProvidersFrom(
+    //   HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
+    //     dataEncapsulation: false,
+    //   })
+    // ),
   ]
 };
 
@@ -46923,13 +53716,6 @@ bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err))
 @angular/forms/fesm2022/forms.mjs:
   (**
    * @license Angular v18.2.1
-   * (c) 2010-2024 Google LLC. https://angular.io/
-   * License: MIT
-   *)
-
-angular-in-memory-web-api/fesm2022/angular-in-memory-web-api.mjs:
-  (**
-   * @license Angular v0.0.0
    * (c) 2010-2024 Google LLC. https://angular.io/
    * License: MIT
    *)
