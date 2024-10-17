@@ -51682,19 +51682,9 @@ var HeroesService = class _HeroesService {
     }), map((response) => {
       const { data, error, status } = response;
       let heroesMapper = [];
-      if (data && data?.length > 0) {
-        heroesMapper = data?.map((h) => HeroAdapter.mapHeroResponseToHero(h));
+      if (data?.length === 0) {
       }
-      return heroesMapper.map((hero) => {
-        const _a = hero, { comicPublishers } = _a, rest = __objRest(_a, ["comicPublishers"]);
-        return __spreadProps(__spreadValues({}, rest), {
-          // Copiar las demás propiedades
-          comicPublishers,
-          // Cambiar `publishers` a `publisher`
-          isSelected: false
-          // Añadir la propiedad `isSelected`
-        });
-      });
+      return data?.map((h) => HeroAdapter.mapHeroResponseToHero(h)) || [];
     }), catchError((err) => {
       const error = new Error(err);
       return throwError(() => err);
@@ -52651,13 +52641,13 @@ var _c3 = (a0) => ({ "fade-in": a0 });
 function DashboardComponent_div_17_button_2_Template(rf, ctx) {
   if (rf & 1) {
     const _r2 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "button", 21);
+    \u0275\u0275elementStart(0, "button", 20);
     \u0275\u0275listener("click", function DashboardComponent_div_17_button_2_Template_button_click_0_listener() {
       const hero_r3 = \u0275\u0275restoreView(_r2).$implicit;
       const ctx_r3 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r3.currentSelected(hero_r3));
     });
-    \u0275\u0275elementStart(1, "input", 22);
+    \u0275\u0275elementStart(1, "input", 21);
     \u0275\u0275listener("click", function DashboardComponent_div_17_button_2_Template_input_click_1_listener() {
       const hero_r3 = \u0275\u0275restoreView(_r2).$implicit;
       const ctx_r3 = \u0275\u0275nextContext(2);
@@ -52680,7 +52670,7 @@ function DashboardComponent_div_17_button_2_Template(rf, ctx) {
     const hero_r3 = ctx.$implicit;
     const ctx_r3 = \u0275\u0275nextContext(2);
     \u0275\u0275classProp("selected", hero_r3 === ctx_r3.selectedHero);
-    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(9, _c3, hero_r3 === ctx_r3.selectedHero && ctx_r3.isDeleted))("appTooltip", "Top #" + hero_r3.heroStatistics.ranking);
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(9, _c3, hero_r3.isDeleted))("appTooltip", "Top #" + hero_r3.heroStatistics.ranking);
     \u0275\u0275advance();
     \u0275\u0275propertyInterpolate1("name", "selectedHero", hero_r3.id, "");
     \u0275\u0275twoWayProperty("ngModel", hero_r3.isSelected);
@@ -52693,7 +52683,7 @@ function DashboardComponent_div_17_button_2_Template(rf, ctx) {
 function DashboardComponent_div_17_app_dashboard_hero_details_3_Template(rf, ctx) {
   if (rf & 1) {
     const _r5 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "app-dashboard-hero-details", 23);
+    \u0275\u0275elementStart(0, "app-dashboard-hero-details", 22);
     \u0275\u0275listener("onDeleteHero", function DashboardComponent_div_17_app_dashboard_hero_details_3_Template_app_dashboard_hero_details_onDeleteHero_0_listener($event) {
       \u0275\u0275restoreView(_r5);
       const ctx_r3 = \u0275\u0275nextContext(2);
@@ -52708,15 +52698,16 @@ function DashboardComponent_div_17_app_dashboard_hero_details_3_Template(rf, ctx
 }
 function DashboardComponent_div_17_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 16)(1, "div", 17);
-    \u0275\u0275template(2, DashboardComponent_div_17_button_2_Template, 6, 11, "button", 18);
+    \u0275\u0275elementStart(0, "div", 15)(1, "div", 16);
+    \u0275\u0275template(2, DashboardComponent_div_17_button_2_Template, 6, 11, "button", 17);
     \u0275\u0275elementEnd();
-    \u0275\u0275template(3, DashboardComponent_div_17_app_dashboard_hero_details_3_Template, 1, 1, "app-dashboard-hero-details", 19);
-    \u0275\u0275element(4, "app-spinner", 20);
+    \u0275\u0275template(3, DashboardComponent_div_17_app_dashboard_hero_details_3_Template, 1, 1, "app-dashboard-hero-details", 18);
+    \u0275\u0275element(4, "app-spinner", 19);
     \u0275\u0275elementEnd();
   }
   if (rf & 2) {
     const ctx_r3 = \u0275\u0275nextContext();
+    \u0275\u0275property("ngClass", \u0275\u0275pureFunction1(5, _c3, ctx_r3.isDeletedAll));
     \u0275\u0275advance(2);
     \u0275\u0275property("ngForOf", ctx_r3.topheroes);
     \u0275\u0275advance();
@@ -52728,7 +52719,7 @@ function DashboardComponent_div_17_Template(rf, ctx) {
 function DashboardComponent_app_confirm_modal_18_Template(rf, ctx) {
   if (rf & 1) {
     const _r6 = \u0275\u0275getCurrentView();
-    \u0275\u0275elementStart(0, "app-confirm-modal", 24);
+    \u0275\u0275elementStart(0, "app-confirm-modal", 23);
     \u0275\u0275listener("confirm", function DashboardComponent_app_confirm_modal_18_Template_app_confirm_modal_confirm_0_listener($event) {
       \u0275\u0275restoreView(_r6);
       const ctx_r3 = \u0275\u0275nextContext();
@@ -52742,7 +52733,7 @@ function DashboardComponent_app_confirm_modal_18_Template(rf, ctx) {
 }
 function DashboardComponent_ng_template_19_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275elementStart(0, "div", 25)(1, "p", 26);
+    \u0275\u0275elementStart(0, "div", 24)(1, "p", 25);
     \u0275\u0275text(2, " No top heroes available ");
     \u0275\u0275elementEnd()();
   }
@@ -52764,6 +52755,8 @@ var DashboardComponent = class _DashboardComponent {
   isSelectedTopHero = false;
   showModal = false;
   topHeroes$;
+  isDeletedAll = false;
+  selectedHeroes = [];
   // service: IHeroService;
   constructor(apiHeroesService, topheroService, spinnerService, actionsService) {
     this.apiHeroesService = apiHeroesService;
@@ -52774,7 +52767,20 @@ var DashboardComponent = class _DashboardComponent {
   ngOnInit() {
     this.actionsService.setOptions(HeroActions.ListTopHeroes);
     this.isLoadingSpinner = true;
-    this.topHeroSubscription = this.apiHeroesService.getHeroes().pipe(map((heroes) => {
+    this.topHeroSubscription = this.apiHeroesService.getHeroes().pipe(map((heroesMapper) => {
+      return heroesMapper.map((hero) => {
+        const _a = hero, { comicPublishers } = _a, rest = __objRest(_a, ["comicPublishers"]);
+        return __spreadProps(__spreadValues({}, rest), {
+          // Copiar las demás propiedades
+          comicPublishers,
+          // Cambiar `publishers` a `publisher`
+          isSelected: false,
+          // Añadir la propiedad `isSelected`
+          isDeleted: false
+          // Añadir la propiedad `isDeleted`
+        });
+      });
+    }), map((heroes) => {
       return heroes.filter((h) => h.isTophero);
     }), map((topheroes) => {
       return topheroes.sort((a, b) => {
@@ -52891,6 +52897,27 @@ var DashboardComponent = class _DashboardComponent {
         return;
       }
       if (topHeroesToDelete.length > 1) {
+        if (this.isSelectedAll()) {
+          this.isDeletedAll = true;
+          setTimeout(() => {
+            this.isDeletedAll = false;
+            this.topheroes = [];
+          }, 1e3);
+          return;
+        }
+        const selectedToDeleted = this.getSelectedHeroes();
+        if (selectedToDeleted && selectedToDeleted.length > 0) {
+          selectedToDeleted.forEach((hero) => {
+            hero.isDeleted = true;
+          });
+          setTimeout(() => {
+            selectedToDeleted.forEach((h) => {
+              const index2 = this.getHeroIndex(h.id);
+              this.topheroes.splice(index2, 1);
+            });
+          }, 1e3);
+          return;
+        }
         const idsToDelete = topHeroesToDelete.map((hero) => hero.id);
         this.topheroService.deleteHeroesByIds(idsToDelete).subscribe((areHeroesDeleted) => {
           console.log(areHeroesDeleted);
@@ -52898,76 +52925,29 @@ var DashboardComponent = class _DashboardComponent {
             if (this.topheroes?.some((h) => h.id === id)) {
               this.topheroes.splice(Number(this.getHeroIndex(id)), 1);
             }
+            this.isDeletedAll = true;
           });
         });
         return;
       }
     }
   }
+  isSelectedAll() {
+    return this.topheroes.every((h) => h.isSelected);
+  }
+  getSelectedHeroes() {
+    this.selectedHeroes = this.topheroes.filter((h) => {
+      return h.isSelected;
+    });
+    return this.selectedHeroes || [];
+  }
   getHeroIndex(heroId) {
     return this.topheroes?.findIndex((h) => h.id === heroId);
-  }
-  restoreHeroes() {
-    if (this.topheroes?.length <= 0) {
-      const restoreHeroes = [
-        {
-          id: 12,
-          name: "Dr. Nice",
-          year: 2010,
-          comicPublishers: { id: 3, name: "Image Comics" },
-          isTophero: true,
-          heroStatistics: {
-            id: 1,
-            popularity: 9999,
-            ranking: 1
-          }
-        },
-        {
-          id: 13,
-          name: "Bombasto",
-          year: 2010,
-          comicPublishers: { id: 1, name: "Marvel Comics" },
-          isTophero: true,
-          heroStatistics: {
-            id: 2,
-            popularity: 9950,
-            ranking: 3
-          }
-        },
-        {
-          id: 14,
-          name: "Celeritas",
-          year: 2010,
-          comicPublishers: { id: 1, name: "Marvel Comics" },
-          isTophero: true,
-          heroStatistics: {
-            id: 3,
-            popularity: 9998,
-            ranking: 2
-          }
-        },
-        {
-          id: 15,
-          name: "Magneta",
-          year: 2010,
-          comicPublishers: { id: 3, name: "Image Comics" },
-          isTophero: true,
-          heroStatistics: {
-            id: 4,
-            popularity: 8e3,
-            ranking: 4
-          }
-        }
-      ];
-      this.topheroService.save(restoreHeroes).subscribe((heroes) => {
-        this.topheroes = heroes;
-      });
-    }
   }
   static \u0275fac = function DashboardComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DashboardComponent)(\u0275\u0275directiveInject(HeroesService), \u0275\u0275directiveInject(TopHeroService), \u0275\u0275directiveInject(SpinnerService), \u0275\u0275directiveInject(ActionsService));
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 21, vars: 12, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action", 2, "display", "flex", "justify-content", "space-between"], [2, "float", "left", "margin-left", "55px"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel"], ["for", "", 2, "font-weight", "bold", "font-size", "14px", "padding-left", "5px"], [2, "display", "flex", "flex-direction", "row"], [1, "action-sync-container"], [3, "click", "disabled", "ngClass"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], [3, "click"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], ["class", "container_heroes-menu_details", "style", "position: relative", 4, "ngIf", "ngIfElse"], [3, "message", "confirm", 4, "ngIf"], [1, "container_heroes-menu_details", 2, "position", "relative"], [1, "heroes-menu"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "selectedHero", "onDeleteHero", 4, "ngIf"], [3, "isLoading", "message"], [3, "click", "ngClass", "appTooltip"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel", "name"], [3, "onDeleteHero", "selectedHero"], [3, "confirm", "message"], [1, "", 2, "height", "auto", "min-height", "100px", "position", "relative", "text-align", "center"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _DashboardComponent, selectors: [["app-dashboard"]], standalone: true, features: [\u0275\u0275StandaloneFeature], decls: 21, vars: 12, consts: [["heroesNotAvailable", ""], [1, "dashboard-topheroes"], [1, "action", 2, "display", "flex", "justify-content", "space-between"], [2, "float", "left", "margin-left", "55px"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel"], ["for", "", 2, "font-weight", "bold", "font-size", "14px", "padding-left", "5px"], [2, "display", "flex", "flex-direction", "row"], [1, "action-sync-container"], [3, "click", "disabled", "ngClass"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 448 512"], ["d", "M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"], ["xmlns", "http://www.w3.org/2000/svg", "viewBox", "0 0 512 512", 3, "ngClass", "appTooltip"], ["d", "M142.9 142.9c-17.5 17.5-30.1 38-37.8 59.8c-5.9 16.7-24.2 25.4-40.8 19.5s-25.4-24.2-19.5-40.8C55.6 150.7 73.2 122 97.6 97.6c87.2-87.2 228.3-87.5 315.8-1L455 55c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2l0 128c0 13.3-10.7 24-24 24l-8.4 0c0 0 0 0 0 0L344 224c-9.7 0-18.5-5.8-22.2-14.8s-1.7-19.3 5.2-26.2l41.1-41.1c-62.6-61.5-163.1-61.2-225.3 1zM16 312c0-13.3 10.7-24 24-24l7.6 0 .7 0L168 288c9.7 0 18.5 5.8 22.2 14.8s1.7 19.3-5.2 26.2l-41.1 41.1c62.6 61.5 163.1 61.2 225.3-1c17.5-17.5 30.1-38 37.8-59.8c5.9-16.7 24.2-25.4 40.8-19.5s25.4 24.2 19.5 40.8c-10.8 30.6-28.4 59.3-52.9 83.8c-87.2 87.2-228.3 87.5-315.8 1L57 457c-6.9 6.9-17.2 8.9-26.2 5.2S16 449.7 16 440l0-119.6 0-.7 0-7.6z"], ["class", "container_heroes-menu_details", "style", "position: relative", 3, "ngClass", 4, "ngIf", "ngIfElse"], [3, "message", "confirm", 4, "ngIf"], [1, "container_heroes-menu_details", 2, "position", "relative", 3, "ngClass"], [1, "heroes-menu"], [3, "selected", "ngClass", "appTooltip", "click", 4, "ngFor", "ngForOf"], [3, "selectedHero", "onDeleteHero", 4, "ngIf"], [3, "isLoading", "message"], [3, "click", "ngClass", "appTooltip"], ["type", "checkbox", 3, "click", "ngModelChange", "ngModel", "name"], [3, "onDeleteHero", "selectedHero"], [3, "confirm", "message"], [1, "container_heroes-menu_details", 2, "height", "auto", "min-height", "200px", "position", "relative", "text-align", "center", "justify-content", "center", "border", "1px solid #d4d4d4"], [2, "color", "#a8a8a8", "font-weight", "500", "font-size", "18px"]], template: function DashboardComponent_Template(rf, ctx) {
     if (rf & 1) {
       const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275elementStart(0, "div", 1)(1, "h2");
@@ -52997,18 +52977,14 @@ var DashboardComponent = class _DashboardComponent {
       \u0275\u0275element(12, "path", 10);
       \u0275\u0275elementEnd()()();
       \u0275\u0275namespaceHTML();
-      \u0275\u0275elementStart(13, "div", 7)(14, "button", 11);
-      \u0275\u0275listener("click", function DashboardComponent_Template_button_click_14_listener() {
-        \u0275\u0275restoreView(_r1);
-        return \u0275\u0275resetView(ctx.restoreHeroes());
-      });
+      \u0275\u0275elementStart(13, "div", 7)(14, "button");
       \u0275\u0275namespaceSVG();
-      \u0275\u0275elementStart(15, "svg", 12);
-      \u0275\u0275element(16, "path", 13);
+      \u0275\u0275elementStart(15, "svg", 11);
+      \u0275\u0275element(16, "path", 12);
       \u0275\u0275elementEnd()()()()();
-      \u0275\u0275template(17, DashboardComponent_div_17_Template, 5, 4, "div", 14);
+      \u0275\u0275template(17, DashboardComponent_div_17_Template, 5, 7, "div", 13);
       \u0275\u0275elementEnd();
-      \u0275\u0275template(18, DashboardComponent_app_confirm_modal_18_Template, 1, 1, "app-confirm-modal", 15)(19, DashboardComponent_ng_template_19_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
+      \u0275\u0275template(18, DashboardComponent_app_confirm_modal_18_Template, 1, 1, "app-confirm-modal", 14)(19, DashboardComponent_ng_template_19_Template, 3, 0, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
     }
     if (rf & 2) {
       const heroesNotAvailable_r7 = \u0275\u0275reference(20);
