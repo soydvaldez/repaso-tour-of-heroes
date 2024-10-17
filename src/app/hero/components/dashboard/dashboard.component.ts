@@ -47,6 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   showModal: boolean = false;
   topHeroes$!: Observable<Hero[]>;
+  isDeletedAll: boolean = false;
+  selectedHeroes: Hero[] = [];
   // service: IHeroService;
 
   constructor(
@@ -68,10 +70,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.topHeroSubscription = this.apiHeroesService
       .getHeroes()
       .pipe(
+        map((heroesMapper: Hero[]) => {
+          return heroesMapper.map((hero: Hero) => {
+            const { comicPublishers, ...rest } = hero;
+            return {
+              ...rest, // Copiar las demás propiedades
+              comicPublishers: comicPublishers, // Cambiar `publishers` a `publisher`
+              isSelected: false, // Añadir la propiedad `isSelected`
+              isDeleted: false, // Añadir la propiedad `isDeleted`
+            };
+          });
+        }),
         map((heroes: Hero[]) => {
+          // Filtrar Top Heroes
           return heroes.filter((h) => h.isTophero);
         }),
         map((topheroes) => {
+          // Ordenar de menor a mayor:
           return topheroes.sort((a: Hero, b: Hero) => {
             return a.heroStatistics!.ranking - b.heroStatistics!.ranking;
           });
@@ -223,6 +238,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
 
       if (topHeroesToDelete.length > 1) {
+        // Seleccionaron todos?
+        if (this.isSelectedAll()) {
+          this.isDeletedAll = true;
+          setTimeout(() => {
+            this.isDeletedAll = false;
+            this.topheroes = [];
+          }, 1000);
+          return;
+        }
+
+        // Seleccionaron al menos 1. Cual seleccionaron?
+        const selectedToDeleted: Hero[] = this.getSelectedHeroes();
+        if (selectedToDeleted && selectedToDeleted.length > 0) {
+          // prender bandera de borrado
+          selectedToDeleted.forEach((hero) => {
+            hero.isDeleted = true;
+          });
+
+          setTimeout(() => {
+            selectedToDeleted.forEach((h) => {
+              const index = this.getHeroIndex(h.id);
+              this.topheroes.splice(index, 1);
+            });
+          }, 1000);
+          return;
+        }
+
         const idsToDelete = topHeroesToDelete.map((hero) => hero.id);
 
         this.topheroService
@@ -235,7 +277,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               if (this.topheroes?.some((h) => h.id === id)) {
                 this.topheroes.splice(Number(this.getHeroIndex(id)), 1);
               }
-              // Agrega animacion
+              // handle animation
+              this.isDeletedAll = true;
             });
           });
         return;
@@ -243,66 +286,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getHeroIndex(heroId: number) {
-    return this.topheroes?.findIndex((h) => h.id === heroId);
+  isSelectedAll() {
+    return this.topheroes.every((h) => h.isSelected);
   }
 
-  restoreHeroes() {
-    if (this.topheroes?.length <= 0) {
-      const restoreHeroes: Hero[] = [
-        {
-          id: 12,
-          name: 'Dr. Nice',
-          year: 2010,
-          comicPublishers: { id: 3, name: 'Image Comics' },
-          isTophero: true,
-          heroStatistics: {
-            id: 1,
-            popularity: 9999,
-            ranking: 1,
-          },
-        },
-        {
-          id: 13,
-          name: 'Bombasto',
-          year: 2010,
-          comicPublishers: { id: 1, name: 'Marvel Comics' },
-          isTophero: true,
-          heroStatistics: {
-            id: 2,
-            popularity: 9950,
-            ranking: 3,
-          },
-        },
-        {
-          id: 14,
-          name: 'Celeritas',
-          year: 2010,
-          comicPublishers: { id: 1, name: 'Marvel Comics' },
-          isTophero: true,
-          heroStatistics: {
-            id: 3,
-            popularity: 9998,
-            ranking: 2,
-          },
-        },
-        {
-          id: 15,
-          name: 'Magneta',
-          year: 2010,
-          comicPublishers: { id: 3, name: 'Image Comics' },
-          isTophero: true,
-          heroStatistics: {
-            id: 4,
-            popularity: 8000,
-            ranking: 4,
-          },
-        },
-      ];
+  getSelectedHeroes() {
+    this.selectedHeroes = this.topheroes.filter((h) => {
+      return h.isSelected;
+    });
 
-      this.topheroService.save(restoreHeroes).subscribe((heroes: any) => {
-        this.topheroes = heroes;
-      });
-    }
+    return this.selectedHeroes || [];
+  }
+
+  getHeroIndex(heroId: number) {
+    return this.topheroes?.findIndex((h) => h.id === heroId);
   }
 }

@@ -116,18 +116,10 @@ export class HeroesService implements IHeroService {
       map((response) => {
         const { data, error, status } = response;
         let heroesMapper: Hero[] = [];
-        if (data && data?.length > 0) {
-          heroesMapper = data?.map((h) => HeroAdapter.mapHeroResponseToHero(h));
+        if (data?.length === 0) {
+          // throw new Error();
         }
-
-        return heroesMapper.map((hero: Hero) => {
-          const { comicPublishers, ...rest } = hero;
-          return {
-            ...rest, // Copiar las demás propiedades
-            comicPublishers: comicPublishers, // Cambiar `publishers` a `publisher`
-            isSelected: false, // Añadir la propiedad `isSelected`
-          };
-        });
+        return data?.map((h) => HeroAdapter.mapHeroResponseToHero(h)) || [];
       }),
       catchError((err) => {
         const error = new Error(err);

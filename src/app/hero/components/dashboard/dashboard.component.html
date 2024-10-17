@@ -1,9 +1,7 @@
 <div class="dashboard-topheroes">
   <h2>Top of Heroes</h2>
   <div class="action" style="display: flex; justify-content: space-between">
-    <div
-      style="float: left; margin-left: 55px"
-    >
+    <div style="float: left; margin-left: 55px">
       <input
         type="checkbox"
         (click)="selectAllTopheroes()"
@@ -32,7 +30,7 @@
         </button>
       </div>
       <div class="action-sync-container">
-        <button (click)="restoreHeroes()">
+        <button>
           <svg
             [ngClass]="{ sincronized: isSyncronized }"
             [appTooltip]="'restore heroes'"
@@ -50,13 +48,14 @@
   </div>
   <div
     class="container_heroes-menu_details"
+    [ngClass]="{ 'fade-in': isDeletedAll }"
     style="position: relative"
     *ngIf="topheroes && topheroes.length > 0; else heroesNotAvailable"
   >
     <div class="heroes-menu">
       <button
         [class.selected]="hero === selectedHero"
-        [ngClass]="{ 'fade-in': hero === selectedHero && isDeleted }"
+        [ngClass]="{ 'fade-in': hero.isDeleted }"
         *ngFor="let hero of topheroes"
         (click)="currentSelected(hero)"
         [appTooltip]="'Top #' + hero.heroStatistics.ranking + ''"
@@ -94,11 +93,12 @@
     class="container_heroes-menu_details"
     style="
       height: auto;
-      min-height: 100px;
+      min-height: 200px;
       position: relative;
       text-align: center;
+      justify-content: center;
+      border: 1px solid #d4d4d4;
     "
-    class=""
   >
     <p style="color: #a8a8a8; font-weight: 500; font-size: 18px">
       No top heroes available

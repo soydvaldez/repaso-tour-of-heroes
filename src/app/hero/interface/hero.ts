@@ -17,6 +17,7 @@ export interface Hero {
   isTophero: boolean;
   heroStatistics: HeroStatistics;
   isSelected?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface NewHero {
